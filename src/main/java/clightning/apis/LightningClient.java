@@ -1,7 +1,10 @@
 package clightning.apis;
 
 import clightning.AbstractLightningDaemon;
+import clightning.apis.option.FundChannelParams;
 import clightning.apis.response.FeeRate;
+import clightning.apis.response.FundChannel;
+import clightning.apis.response.Funds;
 import clightning.apis.response.LightningAddress;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -119,8 +122,26 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void connect() {
+    public String connect(String id, String host) throws IOException {
+        return connect(id, host, null);
+    }
 
+    /**
+     * TODO: ensure whether there are quotes in the return result of JsonNode.asText()
+     * @param id
+     * @param host
+     * @param port
+     * @return the id of the destination lightning node
+     * @throws IOException
+     */
+    @Override
+    public String connect(String id, String host, Integer port) throws IOException {
+        HashMap params = createParam();
+        params.put("id", id);
+        params.put("host", host);
+        params.put("port", port);
+        JsonNode node = lnd.execute("connect", params, JsonNode.class);
+        return node.get("id").asText();
     }
 
     @Override
@@ -204,8 +225,20 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void fundChannel() {
+    public FundChannel fundChannel(String id, long amountSato) throws IOException {
+        return fundChannel(id, amountSato, null);
+    }
 
+    @Override
+    public FundChannel fundChannel(String id, long amountSato, FundChannelParams optionalParams) throws IOException {
+        HashMap params = createParam();
+        params.put("id", id);
+        params.put("amount", amountSato);
+
+        if (optionalParams != null) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("fundchannel", params, FundChannel.class);
     }
 
     @Override
@@ -259,8 +292,8 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void listFunds() {
-
+    public Funds listFunds() throws IOException {
+        return lnd.execute("listfunds", Funds.class);
     }
 
     @Override

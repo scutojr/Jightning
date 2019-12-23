@@ -1,5 +1,9 @@
 package clightning.apis;
 
+import clightning.apis.response.Funds;
+
+import java.io.IOException;
+
 public interface Utility {
     /**
      * check command_to_check
@@ -41,7 +45,7 @@ public interface Utility {
      * listfunds
      *     Show available funds from the internal wallet
      */
-    void listFunds();
+    Funds listFunds() throws IOException;
 
     /**
      * signmessage message

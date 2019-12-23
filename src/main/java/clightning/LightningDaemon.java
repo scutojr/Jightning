@@ -100,7 +100,7 @@ public class LightningDaemon implements AbstractLightningDaemon {
     }
 
     /**
-     * TODO: handle the Exception
+     * TODO: handle the RemoteException
      *
      * @param method
      * @param params

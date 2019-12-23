@@ -54,7 +54,9 @@ public class LightningForTesting implements AbstractLightningDaemon {
         for (Map.Entry<String, Object> entry : orderedParams.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            kvPairs.add(key + "=" + value);
+            if (value != null) {
+                kvPairs.add(key + "=" + value);
+            }
         }
         StringBuilder sb = new StringBuilder();
 
@@ -72,12 +74,12 @@ public class LightningForTesting implements AbstractLightningDaemon {
         Matcher m = r.matcher(fileName);
         if (m.find()) {
             String method = m.group(1);
-            String[] pairs =  m.group(2) == null ? new String[0] : m.group(2).split("\\s*,\\s*");
+            String[] pairs = m.group(2) == null ? new String[0] : m.group(2).split("\\s*,\\s*");
             HashMap<String, Object> params = new HashMap();
             for (String pair : pairs) {
                 if (pair.isEmpty()) continue;
                 int i = pair.indexOf("=");
-                params.put(pair.substring(0, i), pair.substring(i+1));
+                params.put(pair.substring(0, i), pair.substring(i + 1));
             }
             return getDataFileName(method, params);
         } else {
