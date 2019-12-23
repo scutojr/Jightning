@@ -1,0 +1,19 @@
+{
+  "id": "03045a9d59db9e4b57ff44421aca1092143984c365371792c5f896412cfdb098fb",
+  "alias": "SILENTSCAN",
+  "color": "03045a",
+  "num_peers": 0,
+  "num_pending_channels": 0,
+  "num_active_channels": 0,
+  "num_inactive_channels": 0,
+  "address": [],
+  "binding": [
+
+  ],
+  "version": "v0.7.3",
+  "blockheight": 1523,
+  "network": "regtest",
+  "msatoshi_fees_collected": 0,
+  "fees_collected_msat": "0msat",
+  "warning_bitcoind_sync": "Bitcoind is not up-to-date with network."
+}

@@ -1,0 +1,14 @@
+{
+  "perkb": {
+    "urgent": 1012,
+    "normal": 1012,
+    "slow": 1012,
+    "min_acceptable": 1012,
+    "max_acceptable": 4294967295
+  },
+  "onchain_fee_estimates": {
+    "opening_channel_satoshis": 177,
+    "mutual_close_satoshis": 170,
+    "unilateral_close_satoshis": 151
+  }
+}
