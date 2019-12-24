@@ -1,6 +1,8 @@
 package clightning.apis;
 
+import clightning.apis.response.CheckMessageResult;
 import clightning.apis.response.Funds;
+import clightning.apis.response.SignResult;
 
 import java.io.IOException;
 
@@ -12,10 +14,15 @@ public interface Utility {
     void check();
 
     /**
+     *
+     * https://lightning.readthedocs.io/lightning-checkmessage.7.html
+     *
      * checkmessage message zbase [pubkey]
      *     Verify a digital signature {zbase} of {message} signed with {pubkey}
      */
-    void checkMessage();
+    CheckMessageResult checkMessage(String message, String zbase) throws IOException;
+
+    CheckMessageResult checkMessage(String message, String zbase, String pubKey) throws IOException;
 
     /**
      * getinfo
@@ -48,10 +55,12 @@ public interface Utility {
     Funds listFunds() throws IOException;
 
     /**
+     * https://lightning.readthedocs.io/lightning-signmessage.7.html
+     *
      * signmessage message
      *     Create a digital signature of {message}
      */
-    void signMessage();
+    SignResult signMessage(String message) throws IOException;
 
     /**
      * stop

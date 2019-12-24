@@ -9,7 +9,9 @@ import clightning.apis.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import sun.security.provider.certpath.OCSPResponse;
 
+import javax.annotation.CheckReturnValue;
 import java.io.IOException;
 import java.util.*;
 
@@ -337,8 +339,20 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void checkMessage() {
+    public CheckMessageResult checkMessage(String message, String zbase) throws IOException {
+        return checkMessage(message, zbase, null);
+    }
 
+    @Override
+    public CheckMessageResult checkMessage(String message, String zbase, String pubKey) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("message", message);
+        params.put("zbase", zbase);
+
+        if (Objects.nonNull(pubKey)) {
+            params.put("pubkey", pubKey);
+        }
+        return lnd.execute("checkmessage", params, CheckMessageResult.class);
     }
 
     @Override
@@ -367,8 +381,10 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void signMessage() {
-
+    public SignResult signMessage(String message) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("message", message);
+        return lnd.execute("signmessage", params, SignResult.class);
     }
 
     @Override
