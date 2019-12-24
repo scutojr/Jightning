@@ -1,16 +1,17 @@
 package clightning.apis;
 
 import clightning.AbstractLightningDaemon;
-import clightning.apis.option.FundChannelParams;
-import clightning.apis.response.FeeRate;
-import clightning.apis.response.FundChannel;
-import clightning.apis.response.Funds;
-import clightning.apis.response.LightningAddress;
+import clightning.apis.optional.FundChannelParams;
+import clightning.apis.optional.InvoiceParams;
+import clightning.apis.optional.ListChannelsParams;
+import clightning.apis.optional.PayParams;
+import clightning.apis.response.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 
 public class LightningClient implements Bitcoin, Channel, Network, Payment, Utility, Plugin, Developer {
 
@@ -26,9 +27,17 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
         return new HashMap();
     }
 
+    private <T> List<T> toList(JsonNode array, Class<T> elementType) throws JsonProcessingException {
+        ArrayList<T> list = new ArrayList<>();
+        for (JsonNode node : array) {
+            list.add(mapper.treeToValue(node, elementType));
+        }
+        return list;
+    }
+
     @Override
     public FeeRate feeRates() throws IOException {
-        HashMap params = createParam();
+        Map<String, Object> params = createParam();
         params.put("style", "perkb");
 
         FeeRate feeRate = lnd.execute("feerates", params, FeeRate.class);
@@ -96,9 +105,31 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
 
     }
 
+    /**
+     * TODO: rename response.Channel to avoid conflict with apis.Channel interface
+     *
+     * @return
+     */
     @Override
-    public void listChannels() {
+    public List<clightning.apis.response.Channel> listChannels() throws IOException {
+        return listChannels(null);
+    }
 
+    @Override
+    public List<clightning.apis.response.Channel> listChannels(ListChannelsParams optionalParams) throws IOException {
+        JsonNode response;
+        if (Objects.isNull(optionalParams)) {
+            response = lnd.execute("listchannels", JsonNode.class);
+        } else {
+            response = lnd.execute("listchannels", optionalParams.dump(), JsonNode.class);
+        }
+        JsonNode channels = response.get("channels");
+        if (!channels.isArray()) {
+            throw new RuntimeException(
+                    "channels value of listchannels response must be an array: " + channels.toString()
+            );
+        }
+        return toList(channels, clightning.apis.response.Channel.class);
     }
 
     @Override
@@ -128,6 +159,7 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
 
     /**
      * TODO: ensure whether there are quotes in the return result of JsonNode.asText()
+     *
      * @param id
      * @param host
      * @param port
@@ -136,7 +168,7 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
      */
     @Override
     public String connect(String id, String host, Integer port) throws IOException {
-        HashMap params = createParam();
+        Map<String, Object> params = createParam();
         params.put("id", id);
         params.put("host", host);
         params.put("port", port);
@@ -180,13 +212,41 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void invoice() {
-
+    public SimpleInvoice invoice(long msatoshi, String label, String description) throws IOException {
+        return invoice(msatoshi, label, description, null);
     }
 
     @Override
-    public void listInvoices() {
+    public SimpleInvoice invoice(long msatoshi, String label, String description, InvoiceParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("msatoshi", msatoshi);
+        params.put("label", label);
+        params.put("description", description);
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("invoice", params, SimpleInvoice.class);
+    }
 
+    @Override
+    public List<DetailedInvoice> listInvoices() throws IOException {
+        return listInvoices(null);
+    }
+
+    @Override
+    public List<DetailedInvoice> listInvoices(String label) throws IOException {
+        Map<String, Object> params = createParam();
+        if (Objects.nonNull(label)) {
+            params.put("label", label);
+        }
+        JsonNode node = lnd.execute("listinvoices", params, JsonNode.class);
+        JsonNode invoices = node.get("invoices");
+        if (!invoices.isArray()) {
+            throw new RuntimeException(
+                    "invoices value of listinvoices response must be an array: " + invoices.toString()
+            );
+        }
+        return toList(invoices, DetailedInvoice.class);
     }
 
     @Override
@@ -231,7 +291,7 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
 
     @Override
     public FundChannel fundChannel(String id, long amountSato, FundChannelParams optionalParams) throws IOException {
-        HashMap params = createParam();
+        Map<String, Object> params = createParam();
         params.put("id", id);
         params.put("amount", amountSato);
 
@@ -247,8 +307,18 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void pay() {
+    public PayResult pay(String bolt11) throws IOException {
+        return pay(bolt11, null);
+    }
 
+    @Override
+    public PayResult pay(String bolt11, PayParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("bolt11", bolt11);
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("pay", params, PayResult.class);
     }
 
     @Override

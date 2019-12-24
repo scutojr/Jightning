@@ -3,14 +3,12 @@ package testCase;
 import clightning.AbstractLightningDaemon;
 import clightning.LightningForTesting;
 import clightning.apis.LightningClient;
-import clightning.apis.response.FeeRate;
-import clightning.apis.response.FundChannel;
-import clightning.apis.response.Funds;
-import clightning.apis.response.LightningAddress;
+import clightning.apis.response.*;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 public class TestLightningDaemon {
     private AbstractLightningDaemon lnd;
@@ -19,6 +17,48 @@ public class TestLightningDaemon {
     public TestLightningDaemon() {
         lnd = new LightningForTesting();
         client = new LightningClient(lnd);
+    }
+
+    @Test
+    public void testPay() {
+        String bolt11 = "lnbcrt10u1p0qrdp4pp5270l2ujwnhrdkuw7cq5ttjs3lglm5mnh94k944d5m67h480zyuuqdqyvscsxqyjw5qcqp2xxpkyureu72g7suzwudppj9efwap0cs3k76ngm5ga9d9uzku57tn2dgx45vdgrxmj9nz7082krl7lnxc4c2p9avtzm9gk6j83nsw27sqyu80mu";
+        try {
+            PayResult payResult = client.pay(bolt11);
+            Assert.assertNotNull(payResult);
+        } catch (IOException e) {
+            Assert.fail(e.toString());
+        }
+    }
+
+    @Test
+    public void testListInvoices() {
+        String label = "l";
+        try {
+            List<DetailedInvoice> invoices = client.listInvoices(label);
+            Assert.assertTrue(invoices.size() > 0);
+        } catch (IOException e) {
+            Assert.fail(e.toString());
+        }
+    }
+
+    @Test
+    public void testInvoice() {
+        try {
+            SimpleInvoice invoice = client.invoice(123456789, "l", "d");
+            Assert.assertNotNull(invoice);
+        } catch (IOException e) {
+            Assert.fail(e.toString());
+        }
+    }
+
+    @Test
+    public void testListChannels() {
+        try {
+            List<Channel> channels = client.listChannels();
+            Assert.assertTrue(channels.size() > 0);
+        } catch (IOException e) {
+            Assert.fail(e.toString());
+        }
     }
 
     @Test

@@ -1,5 +1,10 @@
 package clightning.apis;
 
+import clightning.apis.optional.ListChannelsParams;
+
+import java.io.IOException;
+import java.util.List;
+
 public interface Channel {
     /**
      * https://lightning.readthedocs.io/lightning-close.7.html
@@ -55,7 +60,9 @@ public interface Channel {
      *     matching short_channel_id are returned.
      * source: If source is supplied, then only channels leading from that node id are returned.
      */
-    void listChannels();
+    List<clightning.apis.response.Channel> listChannels() throws IOException;
+
+    List<clightning.apis.response.Channel> listChannels(ListChannelsParams optionalParams) throws IOException;
 
     /**
      * listforwards

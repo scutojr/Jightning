@@ -5,40 +5,60 @@ import lombok.Data;
 
 /**
  * {
- *   "peer_id": "0265197a63b374393904a418940500fb840c62f0a0a672ecb69561b491ab241dec",
- *   "connected": true,
- *   "state": "CHANNELD_AWAITING_LOCKIN",
- *   "channel_sat": 10000000,
- *   "our_amount_msat": "10000000000msat",
- *   "channel_total_sat": 10000000,
+ *   "source": "0265197a63b374393904a418940500fb840c62f0a0a672ecb69561b491ab241dec",
+ *   "destination": "03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec",
+ *   "short_channel_id": "204x1x0",
+ *   "public": false,
+ *   "satoshis": 10000000,
  *   "amount_msat": "10000000000msat",
- *   "funding_txid": "4d99cf30a184c5858b313b15298f6c1417d71e0b0d97c6fc690d7e2ce7c8a69a",
- *   "funding_output": 0
- * }
+ *   "message_flags": 1,
+ *   "channel_flags": 0,
+ *   "active": true,
+ *   "last_update": 1577122186,
+ *   "base_fee_millisatoshi": 1,
+ *   "fee_per_millionth": 10,
+ *   "delay": 6,
+ *   "htlc_minimum_msat": "0msat",
+ *   "htlc_maximum_msat": "4294967295msat"
+ * },
  */
 @Data
 public class Channel {
-    private boolean connected;
-    private String state;
+     private String source;
+     private String destination;
 
-    @JsonSetter("peer_id")
-    private String peerId;
+     @JsonSetter("short_channel_id")
+     private String shortChannelId;
 
-    @JsonSetter("channel_sat")
-    private long channelSat;
+     @JsonSetter("public")
+     private boolean isPublic;
 
-    @JsonSetter("our_amount_msat")
-    private String ourAmountMsat;
+     private long satoshis;
 
-    @JsonSetter("channel_total_sat")
-    private long channelTotalSat;
+     @JsonSetter("amount_msat")
+     private String amountMsat;
 
-    @JsonSetter("amount_msat")
-    private String amountMsat;
+     @JsonSetter("message_flags")
+     private int messageFlags;
 
-    @JsonSetter("funding_txid")
-    private String fundingTxId;
+     @JsonSetter("channel_flags")
+     private int channelFlags;
 
-    @JsonSetter("funding_output")
-    private String fundingOutput;
+     private boolean active;
+
+     @JsonSetter("last_update")
+     private int lastUpdate;
+
+     @JsonSetter("base_fee_millisatoshi")
+     private int baseFeeMillisatoshi;
+
+     @JsonSetter("fee_per_millionth")
+     private int feePerMillionth;
+     private int delay;
+
+     @JsonSetter("htlc_minimum_msat")
+     private String htlcMinimumMsat;
+
+     @JsonSetter("htlc_maximum_msat")
+     private String htlcMaximumMsat;
 }

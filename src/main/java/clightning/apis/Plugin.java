@@ -1,7 +1,9 @@
 package clightning.apis;
 
-import clightning.apis.option.FundChannelParams;
+import clightning.apis.optional.FundChannelParams;
+import clightning.apis.optional.PayParams;
 import clightning.apis.response.FundChannel;
+import clightning.apis.response.PayResult;
 
 import java.io.IOException;
 
@@ -59,7 +61,9 @@ public interface Plugin {
      *     the fee leveraged by forwarding nodes. Setting exemptfee allows the maxfeepercent check
      *     to be skipped on fees that are smaller than exemptfee (default: 5000 millisatoshi).
      */
-    void pay();
+    PayResult pay(String bolt11) throws IOException;
+
+    PayResult pay(String bolt11, PayParams optionalParams) throws IOException;
 
     /**
      *paystatus [bolt11]

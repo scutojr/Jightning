@@ -1,13 +1,9 @@
-package clightning.apis.option;
+package clightning.apis.optional;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FundChannelParams implements OptionalParams {
-    private Map<String, Object> params = new HashMap();
-
+public class FundChannelParams extends OptionalParams {
     public static class FeeRate {
         private String value;
 
@@ -85,10 +81,5 @@ public class FundChannelParams implements OptionalParams {
                 .toArray();
         params.put("utxos", uTxOs);
         return this;
-    }
-
-    @Override
-    public Map<String, Object> dump() {
-        return params;
     }
 }
