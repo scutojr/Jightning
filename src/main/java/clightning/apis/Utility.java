@@ -63,10 +63,4 @@ public interface Utility {
      *     Create a digital signature of {message}
      */
     SignResult signMessage(String message) throws IOException;
-
-    /**
-     * stop
-     *     Shut down the lightningd process
-     */
-    void stop();
 }

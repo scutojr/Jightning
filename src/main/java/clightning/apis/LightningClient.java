@@ -300,8 +300,23 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void listPays() {
+    public PayInfo[] listPays() throws IOException {
+        JsonNode node = lnd.execute("listpays", JsonNode.class);
+        return mapper.treeToValue(node.get("pays"), PayInfo[].class);
+    }
 
+    /**
+     *
+     * @param bolt11
+     * @return Pay instance or null if not found
+     */
+    @Override
+    public PayInfo listPays(String bolt11) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("bolt11", bolt11);
+
+        JsonNode pays = lnd.execute("listpays", params, JsonNode.class).get("pays");
+        return pays.size() > 0 ? mapper.treeToValue(pays.get(0), PayInfo.class) : null;
     }
 
     @Override
@@ -407,10 +422,5 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
         Map<String, Object> params = createParam();
         params.put("message", message);
         return lnd.execute("signmessage", params, SignResult.class);
-    }
-
-    @Override
-    public void stop() {
-
     }
 }

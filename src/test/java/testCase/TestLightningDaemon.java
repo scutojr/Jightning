@@ -9,12 +9,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static clightning.apis.response.LightningDaemonInfo.*;
 import static clightning.apis.response.LightningDaemonInfo.BindingWrapper.*;
-import static clightning.apis.response.LightningDaemonInfo.BindingWrapper.Type.LOCAL_SOCKET;
 
 public class TestLightningDaemon {
     private AbstractLightningDaemon lnd;
@@ -34,6 +32,20 @@ public class TestLightningDaemon {
             code.apply();
             Assert.fail("it's supposed to throw an exception!");
         } catch (Exception exp) {
+        }
+    }
+
+    @Test
+    public void testListPays() {
+        String bolt11 = "lnbcrt10u1p0qrdp4pp5270l2ujwnhrdkuw7cq5ttjs3lglm5mnh94k944d5m67h480zyuuqdqyvscsxqyjw5qcqp2xxpkyureu72g7suzwudppj9efwap0cs3k76ngm5ga9d9uzku57tn2dgx45vdgrxmj9nz7082krl7lnxc4c2p9avtzm9gk6j83nsw27sqyu80mu";
+        try {
+            PayInfo[] payInfos = client.listPays();
+            Assert.assertTrue(payInfos.length > 0);
+
+            PayInfo payInfo = client.listPays(bolt11);
+            Assert.assertNotNull(payInfo);
+        } catch (IOException e) {
+            Assert.fail();
         }
     }
 

@@ -3,6 +3,7 @@ package clightning.apis;
 import clightning.apis.optional.FundChannelParams;
 import clightning.apis.optional.PayParams;
 import clightning.apis.response.FundChannel;
+import clightning.apis.response.PayInfo;
 import clightning.apis.response.PayResult;
 
 import java.io.IOException;
@@ -40,7 +41,8 @@ public interface Plugin {
      *listpays [bolt11]
      *    List result of payment {bolt11}, or all
      */
-    void listPays();
+    PayInfo[] listPays() throws IOException;
+    PayInfo listPays(String bolt11) throws IOException;
 
     /**
      * https://lightning.readthedocs.io/lightning-pay.7.html
