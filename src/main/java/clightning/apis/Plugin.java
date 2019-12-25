@@ -5,6 +5,7 @@ import clightning.apis.optional.PayParams;
 import clightning.apis.response.FundChannel;
 import clightning.apis.response.PayInfo;
 import clightning.apis.response.PayResult;
+import clightning.apis.response.PayStatus;
 
 import java.io.IOException;
 
@@ -71,7 +72,9 @@ public interface Plugin {
      *paystatus [bolt11]
      *    Detail status of attempts to pay {bolt11}, or all
      */
-    void payStatus();
+    PayStatus[] payStatus() throws IOException;
+
+    PayStatus payStatus(String bolt11) throws IOException;
 
     /**
      *plugin subcommand=start|stop|startdir|rescan|list

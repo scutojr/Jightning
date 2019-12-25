@@ -6,6 +6,7 @@ import clightning.apis.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.base.Preconditions;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
 
     public LightningClient(AbstractLightningDaemon lnd) {
         this.lnd = lnd;
-        this.mapper = new ObjectMapper();
+        this.mapper = new ObjectMapper().registerModule(new Jdk8Module());
     }
 
     private HashMap createParam() {
@@ -335,8 +336,22 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void payStatus() {
+    public PayStatus[] payStatus() throws IOException {
+        JsonNode node = lnd.execute("paystatus", JsonNode.class);
+        return mapper.treeToValue(node.get("pay"), PayStatus[].class);
+    }
 
+    /**
+     *
+     * @param bolt11
+     * @return PayStatus instance or null if not found
+     */
+    @Override
+    public PayStatus payStatus(String bolt11) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("bolt11", bolt11);
+        JsonNode node = lnd.execute("paystatus", params, JsonNode.class).get("pay");
+        return mapper.treeToValue(node.get(0), PayStatus.class);
     }
 
     @Override

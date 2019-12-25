@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static com.google.common.base.Preconditions.*;
 
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import org.newsclub.net.unix.AFUNIXSocket;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
 
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LightningDaemon implements AbstractLightningDaemon {
     private static Map EMPTY_PARAMS = new HashMap();
     private AtomicInteger id = new AtomicInteger();
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper().registerModule(new Jdk8Module());
     private File udPath;
     private byte[] buffer = new byte[65535];
 

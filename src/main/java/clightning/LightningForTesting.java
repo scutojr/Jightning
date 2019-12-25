@@ -1,6 +1,7 @@
 package clightning;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.regex.Pattern;
 public class LightningForTesting implements AbstractLightningDaemon {
 
     private HashMap<String, String> jsonFiles = new HashMap();
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper().registerModule(new Jdk8Module());
 
     public LightningForTesting() {
         try {

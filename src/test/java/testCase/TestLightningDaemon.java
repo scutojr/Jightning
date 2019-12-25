@@ -36,6 +36,16 @@ public class TestLightningDaemon {
     }
 
     @Test
+    public void testPayStatus() {
+        try {
+            PayStatus[] payStatuses = client.payStatus();
+            Assert.assertNotNull(payStatuses.length > 0);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void testListPays() {
         String bolt11 = "lnbcrt10u1p0qrdp4pp5270l2ujwnhrdkuw7cq5ttjs3lglm5mnh94k944d5m67h480zyuuqdqyvscsxqyjw5qcqp2xxpkyureu72g7suzwudppj9efwap0cs3k76ngm5ga9d9uzku57tn2dgx45vdgrxmj9nz7082krl7lnxc4c2p9avtzm9gk6j83nsw27sqyu80mu";
         try {
