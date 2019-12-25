@@ -48,7 +48,7 @@ public interface Utility {
      * listconfigs [config]
      *     List all configuration options, or with [config], just that one.
      */
-    void listConfigs();
+    Configuration listConfigs() throws IOException;
 
     /**
      * listfunds

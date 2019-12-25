@@ -392,8 +392,9 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void listConfigs() {
-
+    public Configuration listConfigs() throws IOException {
+        JsonNode configs = lnd.execute("listconfigs", JsonNode.class);
+        return new Configuration(configs);
     }
 
     @Override

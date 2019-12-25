@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static clightning.apis.response.LightningDaemonInfo.*;
@@ -33,6 +34,16 @@ public class TestLightningDaemon {
             code.apply();
             Assert.fail("it's supposed to throw an exception!");
         } catch (Exception exp) {
+        }
+    }
+
+    @Test
+    public void testListConfigs() {
+        try {
+            Configuration conf = client.listConfigs();
+            Assert.assertTrue(conf.propNames().hasNext());
+        } catch (IOException e) {
+            Assert.fail();
         }
     }
 
