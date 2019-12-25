@@ -71,7 +71,7 @@ public class LightningForTesting implements AbstractLightningDaemon {
     }
 
     private String normalizeFileName(String fileName) {
-        String regExp = "(\\w+)\\((([\\s,]*\\w+=[\\w-]+[\\s,]*)*)?\\)\\.json";
+        String regExp = "(\\w+)\\((([\\s,]*\\w+=[\\w-\\.]+[\\s,]*)*)?\\)\\.json";
         Pattern r = Pattern.compile(regExp);
         Matcher m = r.matcher(fileName);
         if (m.find()) {

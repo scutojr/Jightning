@@ -360,8 +360,23 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void plugin() {
+    public PluginStatus plugin(PluginCommand command) throws IOException {
+        if (command.getCommand().equals("stop")) {
+            lnd.execute("plugin", command.getParams(), JsonNode.class);
+            command = PluginCommand.list();
+        }
 
+        JsonNode rsp = lnd.execute("plugin", command.getParams(), JsonNode.class);
+        JsonNode plugins = rsp.get("plugins");
+
+        PluginStatus pluginStatus = new PluginStatus();
+        for (JsonNode plugin : plugins) {
+            String name = plugin.get("name").asText();
+            boolean active = plugin.get("active").asBoolean();
+
+            pluginStatus.updatePlugin(name, active);
+        }
+        return pluginStatus;
     }
 
     @Override

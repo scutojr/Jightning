@@ -3,6 +3,7 @@ package testCase;
 import clightning.AbstractLightningDaemon;
 import clightning.LightningForTesting;
 import clightning.apis.LightningClient;
+import clightning.apis.PluginCommand;
 import clightning.apis.optional.LogLevel;
 import clightning.apis.response.*;
 import org.junit.Assert;
@@ -32,6 +33,26 @@ public class TestLightningDaemon {
             code.apply();
             Assert.fail("it's supposed to throw an exception!");
         } catch (Exception exp) {
+        }
+    }
+
+    @Test
+    public void testPlugin() {
+        try {
+            String pluginPath = "helloworld.py";
+            PluginStatus pluginStatus = client.plugin(PluginCommand.list());
+
+            // it should be false, but return true deal to limitation of testing data
+            Assert.assertTrue(pluginStatus.isActive(pluginPath));
+
+            pluginStatus = client.plugin(PluginCommand.start(pluginPath));
+            Assert.assertTrue(pluginStatus.isActive(pluginPath));
+
+            pluginStatus = client.plugin(PluginCommand.stop(pluginPath));
+            // it should be false, but return true deal to limitation of testing data
+            Assert.assertTrue(pluginStatus.isActive(pluginPath));
+        } catch (IOException e) {
+            Assert.fail();
         }
     }
 

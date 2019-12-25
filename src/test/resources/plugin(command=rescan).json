@@ -1,0 +1,20 @@
+{
+  "plugins": [
+    {
+      "name": "/usr/local/bin/../libexec/c-lightning/plugins/fundchannel",
+      "active": true
+    },
+    {
+      "name": "/usr/local/bin/../libexec/c-lightning/plugins/autoclean",
+      "active": true
+    },
+    {
+      "name": "/usr/local/bin/../libexec/c-lightning/plugins/pay",
+      "active": true
+    },
+    {
+      "name": "/root/.lightning/plugins/helloworld.py",
+      "active": true
+    }
+  ]
+}

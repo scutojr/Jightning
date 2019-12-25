@@ -3,10 +3,7 @@ package clightning.apis;
 import clightning.apis.optional.AutoCleanInvoiceParams;
 import clightning.apis.optional.FundChannelParams;
 import clightning.apis.optional.PayParams;
-import clightning.apis.response.FundChannel;
-import clightning.apis.response.PayInfo;
-import clightning.apis.response.PayResult;
-import clightning.apis.response.PayStatus;
+import clightning.apis.response.*;
 
 import java.io.IOException;
 
@@ -85,5 +82,5 @@ public interface Plugin {
      *plugin subcommand=start|stop|startdir|rescan|list
      *    Control plugins (start, stop, startdir, rescan, list)
      */
-    void plugin();
+    PluginStatus plugin(PluginCommand command) throws IOException;
 }
