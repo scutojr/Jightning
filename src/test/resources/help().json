@@ -1,0 +1,287 @@
+{
+    "help": [
+        {
+            "command": "autocleaninvoice [cycle_seconds] [expired_by]",
+            "category": "plugin",
+            "description": "Set up autoclean of expired invoices. ",
+            "verbose": "Perform cleanup every {cycle_seconds} (default 3600), or disable autoclean if 0. Clean up expired invoices that have expired for {expired_by} seconds (default 86400). "
+        },
+        {
+            "command": "check command_to_check",
+            "category": "utility",
+            "description": "Don't run {command_to_check}, just verify parameters.",
+            "verbose": "check command_to_check [parameters...]\n"
+        },
+        {
+            "command": "checkmessage message zbase [pubkey]",
+            "category": "utility",
+            "description": "Verify a digital signature {zbase} of {message} signed with {pubkey}",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "close id [unilateraltimeout] [destination]",
+            "category": "channels",
+            "description": "Close the channel with {id} (either peer ID, channel ID, or short channel ID). Force a unilateral close after {unilateraltimeout} seconds (default 48h). If {destination} address is provided, will be used as output address.",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "connect id [host] [port]",
+            "category": "network",
+            "description": "Connect to {id} at {host} (which can end in ':port' if not default). {id} can also be of the form id@host",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "decodepay bolt11 [description]",
+            "category": "payment",
+            "description": "Decode {bolt11}, using {description} if necessary",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "delexpiredinvoice [maxexpirytime]",
+            "category": "payment",
+            "description": "Delete all expired invoices that expired as of given {maxexpirytime} (a UNIX epoch time), or all expired invoices if not specified",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "delinvoice label status",
+            "category": "payment",
+            "description": "Delete unpaid invoice {label} with {status}",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "dev-listaddrs [bip32_max_index]",
+            "category": "developer",
+            "description": "Show addresses list up to derivation {index} (default is the last bip32 index)",
+            "verbose": "Show addresses of your internal wallet. Use `newaddr` to generate a new address."
+        },
+        {
+            "command": "dev-rescan-outputs ",
+            "category": "developer",
+            "description": "Synchronize the state of our funds with bitcoind",
+            "verbose": "For each output stored in the internal wallet ask `bitcoind` whether we are in sync with its state (spent vs. unspent)"
+        },
+        {
+            "command": "disconnect id [force]",
+            "category": "network",
+            "description": "Disconnect from {id} that has previously been connected to using connect; with {force} set, even if it has a current channel",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "feerates style",
+            "category": "bitcoin",
+            "description": "Return feerate estimates, either satoshi-per-kw ({style} perkw) or satoshi-per-kb ({style} perkb).",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "fundchannel id amount [feerate] [announce] [minconf] [utxos]",
+            "category": "plugin",
+            "description": "Fund channel with {id} using {satoshi} (or 'all'), at optional {feerate}. Only use outputs that have {minconf} confirmations.",
+            "verbose": "Initiaties a channel open with node 'id'. Must be connected to the node and have enough funds available at the requested minimum confirmation depth (minconf)"
+        },
+        {
+            "command": "fundchannel_cancel id [channel_id]",
+            "category": "channels",
+            "description": "Cancel inflight channel establishment with peer {id}.",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "fundchannel_complete id txid txout",
+            "category": "channels",
+            "description": "Complete channel establishment with peer {id} for funding transactionwith {txid}. Returns true on success, false otherwise.",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "fundchannel_start id amount [feerate] [announce] [close_to]",
+            "category": "channels",
+            "description": "Start fund channel with {id} using {amount} satoshis. Returns a bech32 address to use as an output for a funding transaction.",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "getinfo ",
+            "category": "utility",
+            "description": "Show information about this node",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "getlog [level]",
+            "category": "utility",
+            "description": "Show logs, with optional log {level} (info|unusual|debug|io)",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "getroute id msatoshi riskfactor [cltv] [fromid] [fuzzpercent] [exclude] [maxhops]",
+            "category": "channels",
+            "description": "Show route to {id} for {msatoshi}, using {riskfactor} and optional {cltv} (default 9). If specified search from {fromid} otherwise use this node as source. Randomize the route with up to {fuzzpercent} (default 5.0). {exclude} an array of short-channel-id/direction (e.g. [ '564334x877x1/0', '564195x1292x0/1' ]) or node-id from consideration. Set the {maxhops} the route can take (default 20).",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "help [command]",
+            "category": "utility",
+            "description": "List available commands, or give verbose help on one {command}.",
+            "verbose": "help [command]\nWithout [command]:\n  Outputs an array of objects with 'command' and 'description'\nWith [command]:\n  Give a single object containing 'verbose', which completely describes\n  the command inputs and outputs."
+        },
+        {
+            "command": "invoice msatoshi label description [expiry] [fallbacks] [preimage] [exposeprivatechannels]",
+            "category": "payment",
+            "description": "Create an invoice for {msatoshi} with {label} and {description} with optional {expiry} seconds (default 1 week), optional {fallbacks} address list(default empty list) and optional {preimage} (default autogenerated)",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "listchannels [short_channel_id] [source]",
+            "category": "channels",
+            "description": "Show channel {short_channel_id} or {source} (or all known channels, if not specified)",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "listconfigs [config]",
+            "category": "utility",
+            "description": "List all configuration options, or with [config], just that one.",
+            "verbose": "listconfigs [config]\nOutputs an object, with each field a config options\n(Option names which start with # are comments)\nWith [config], object only has that field"
+        },
+        {
+            "command": "listforwards ",
+            "category": "channels",
+            "description": "List all forwarded payments and their information",
+            "verbose": "List all forwarded payments and their information"
+        },
+        {
+            "command": "listfunds ",
+            "category": "utility",
+            "description": "Show available funds from the internal wallet",
+            "verbose": "Returns a list of funds (outputs) that can be used by the internal wallet to open new channels or can be withdrawn, using the `withdraw` command, to another wallet."
+        },
+        {
+            "command": "listinvoices [label]",
+            "category": "payment",
+            "description": "Show invoice {label} (or all, if no {label})",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "listnodes [id]",
+            "category": "network",
+            "description": "Show node {id} (or all, if no {id}), in our local network view",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "listpays [bolt11]",
+            "category": "plugin",
+            "description": "List result of payment {bolt11}, or all",
+            "verbose": "Covers old payments (failed and succeeded) and current ones."
+        },
+        {
+            "command": "listpeers [id] [level]",
+            "category": "network",
+            "description": "Show current peers, if {level} is set, include logs for {id}",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "listsendpays [bolt11] [payment_hash]",
+            "category": "payment",
+            "description": "Show sendpay, old and current, optionally limiting to {bolt11} or {payment_hash}.",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "listtransactions ",
+            "category": "payment",
+            "description": "List transactions that we stored in the wallet",
+            "verbose": "Returns transactions tracked in the wallet. This includes deposits, withdrawals and transactions related to channels. A transaction may have multiple types, e.g., a transaction may both be a close and a deposit if it closes the channel and returns funds to the wallet."
+        },
+        {
+            "command": "newaddr [addresstype]",
+            "category": "bitcoin",
+            "description": "Get a new {bech32, p2sh-segwit} (or all) address to fund a channel (default is bech32)",
+            "verbose": "Generates a new address (or both) that belongs to the internal wallet. Funds sent to these addresses will be managed by lightningd. Use `withdraw` to withdraw funds to an external wallet."
+        },
+        {
+            "command": "pay bolt11 [msatoshi] [label] [riskfactor] [maxfeepercent] [retry_for] [maxdelay] [exemptfee]",
+            "category": "plugin",
+            "description": "Send payment specified by {bolt11} with {amount}",
+            "verbose": "Try to send a payment, retrying {retry_for} seconds before giving up"
+        },
+        {
+            "command": "paystatus [bolt11]",
+            "category": "plugin",
+            "description": "Detail status of attempts to pay {bolt11}, or all",
+            "verbose": "Covers both old payments and current ones."
+        },
+        {
+            "command": "ping id [len] [pongbytes]",
+            "category": "network",
+            "description": "Send peer {id} a ping of length {len} (default 128) asking for {pongbytes} (default 128)",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "plugin subcommand=start|stop|startdir|rescan|list",
+            "category": "plugin",
+            "description": "Control plugins (start, stop, startdir, rescan, list)",
+            "verbose": "Usage :\nplugin start /path/to/a/plugin\n\tadds a new plugin to c-lightning\nplugin stop plugin_name\n\tstops an already registered plugin\nplugin startdir /path/to/a/plugin_dir/\n\tadds a new plugin directory\nplugin rescan\n\tloads not-already-loaded plugins from the default plugins dir\nplugin list\n\tlists all active plugins\n\n"
+        },
+        {
+            "command": "sendpay route payment_hash [label] [msatoshi] [bolt11]",
+            "category": "payment",
+            "description": "Send along {route} in return for preimage of {payment_hash}",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "setchannelfee id [base] [ppm]",
+            "category": "channels",
+            "description": "Sets specific routing fees for channel with {id} (either peer ID, channel ID, short channel ID or 'all'). Routing fees are defined by a fixed {base} (msat) and a {ppm} (proportional per millionth) value. If values for {base} or {ppm} are left out, defaults will be used. {base} can also be defined in other units, for example '1sat'. If {id} is 'all', the fees will be applied for all channels. ",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "signmessage message",
+            "category": "utility",
+            "description": "Create a digital signature of {message}",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "stop ",
+            "category": "utility",
+            "description": "Shut down the lightningd process",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "txdiscard txid",
+            "category": "bitcoin",
+            "description": "Abandon a transaction created by txprepare",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "txprepare outputs [feerate] [minconf] [utxos]",
+            "category": "bitcoin",
+            "description": "Create a transaction, with option to spend in future (either txsend and txdiscard)",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "txsend txid",
+            "category": "bitcoin",
+            "description": "Sign and broadcast a transaction created by txprepare",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "waitanyinvoice [lastpay_index]",
+            "category": "payment",
+            "description": "Wait for the next invoice to be paid, after {lastpay_index} (if supplied)",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "waitinvoice label",
+            "category": "payment",
+            "description": "Wait for an incoming payment matching the invoice with {label}, or if the invoice expires",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "waitsendpay payment_hash [timeout]",
+            "category": "payment",
+            "description": "Wait for payment attempt on {payment_hash} to succeed or fail, but only up to {timeout} seconds.",
+            "verbose": "HELP! Please contribute a description for this json_command!"
+        },
+        {
+            "command": "withdraw destination satoshi [feerate] [minconf] [utxos]",
+            "category": "bitcoin",
+            "description": "Send to {destination} address {satoshi} (or 'all') amount via Bitcoin transaction, at optional {feerate}",
+            "verbose": "Send funds from the internal wallet to the specified address. Either specify a number of satoshis to send or 'all' to sweep all funds in the internal wallet to the address. Only use outputs that have at least {minconf} confirmations."
+        }
+    ],
+    "format-hint": "simple"
+}

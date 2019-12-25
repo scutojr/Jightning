@@ -41,7 +41,8 @@ public interface Utility {
      * help [command]
      *     List available commands, or give verbose help on one {command}.
      */
-    void help();
+    CommandUsage[] help() throws IOException;
+    CommandUsage help(String command) throws IOException;
 
     /**
      * listconfigs [config]

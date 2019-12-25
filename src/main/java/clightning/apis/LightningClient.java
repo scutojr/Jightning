@@ -6,6 +6,7 @@ import clightning.apis.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 
 import java.io.IOException;
 import java.util.*;
@@ -368,8 +369,26 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void help() {
+    public CommandUsage[] help() throws IOException {
+        JsonNode helpRes = lnd.execute("help", JsonNode.class);
+        JsonNode cmds = helpRes.get("help");
+        Preconditions.checkState(cmds.isArray());
 
+        return mapper.treeToValue(cmds, CommandUsage[].class);
+    }
+
+    @Override
+    public CommandUsage help(String command) throws IOException {
+        Preconditions.checkNotNull(command);
+
+        Map<String, Object> params = createParam();
+        params.put("command", command);
+
+        JsonNode helpRes = lnd.execute("help", params, JsonNode.class);
+        JsonNode cmds = helpRes.get("help");
+        Preconditions.checkState(cmds.isArray());
+
+        return mapper.treeToValue(cmds.get(0), CommandUsage.class);
     }
 
     @Override

@@ -37,6 +37,20 @@ public class TestLightningDaemon {
     }
 
     @Test
+    public void testHelp() {
+        try {
+            CommandUsage[] commandUsages = client.help();
+            Assert.assertTrue(commandUsages.length > 0);
+
+            CommandUsage cmd = client.help("listconfigs");
+            Assert.assertNotNull(cmd);
+            // TODO: test input with a non-existed command
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void testGetLog() {
         try {
             LogResult logResult = client.getLog();
