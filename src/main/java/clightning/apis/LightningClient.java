@@ -279,8 +279,13 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void autoCleanInvoice() {
+    public String autoCleanInvoice() throws IOException {
+        return lnd.execute("autocleaninvoice", String.class);
+    }
 
+    @Override
+    public String autoCleanInvoice(AutoCleanInvoiceParams optionalParams) throws IOException {
+        return lnd.execute("autocleaninvoice", optionalParams.dump(), String.class);
     }
 
     @Override

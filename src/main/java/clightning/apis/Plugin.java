@@ -1,5 +1,6 @@
 package clightning.apis;
 
+import clightning.apis.optional.AutoCleanInvoiceParams;
 import clightning.apis.optional.FundChannelParams;
 import clightning.apis.optional.PayParams;
 import clightning.apis.response.FundChannel;
@@ -11,10 +12,14 @@ import java.io.IOException;
 
 public interface Plugin {
     /**
+     * https://lightning.readthedocs.io/lightning-autocleaninvoice.7.html
+     *
      *autocleaninvoice [cycle_seconds] [expired_by]
      *    Set up autoclean of expired invoices.
      */
-    void autoCleanInvoice();
+    String autoCleanInvoice() throws IOException;
+
+    String autoCleanInvoice(AutoCleanInvoiceParams optionalParams) throws IOException;
 
     /**
      *fundchannel id amount [feerate] [announce] [minconf] [utxos]

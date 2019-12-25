@@ -36,10 +36,20 @@ public class TestLightningDaemon {
     }
 
     @Test
+    public void testAutoCleanInvoice() {
+        try {
+            String msg = client.autoCleanInvoice();
+            Assert.assertNotNull(msg);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void testPayStatus() {
         try {
             PayStatus[] payStatuses = client.payStatus();
-            Assert.assertNotNull(payStatuses.length > 0);
+            Assert.assertTrue(payStatuses.length > 0);
         } catch (IOException e) {
             Assert.fail();
         }

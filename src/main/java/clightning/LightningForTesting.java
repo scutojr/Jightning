@@ -1,5 +1,6 @@
 package clightning;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
@@ -91,7 +92,11 @@ public class LightningForTesting implements AbstractLightningDaemon {
     @Override
     public <T> T execute(String method, Map params, Class<T> valueType) throws IOException {
         String fileName = getDataFileName(method, params);
-        return mapper.readValue(jsonFiles.get(fileName), valueType);
+        String content = jsonFiles.get(fileName);
+        if (valueType == String.class)
+            return (T) content;
+        else
+            return mapper.readValue(content, valueType);
     }
 
     @Override
