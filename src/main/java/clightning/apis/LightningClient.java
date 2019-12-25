@@ -1,17 +1,12 @@
 package clightning.apis;
 
 import clightning.AbstractLightningDaemon;
-import clightning.apis.optional.FundChannelParams;
-import clightning.apis.optional.InvoiceParams;
-import clightning.apis.optional.ListChannelsParams;
-import clightning.apis.optional.PayParams;
+import clightning.apis.optional.*;
 import clightning.apis.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import sun.security.provider.certpath.OCSPResponse;
 
-import javax.annotation.CheckReturnValue;
 import java.io.IOException;
 import java.util.*;
 
@@ -356,13 +351,20 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void getInfo() {
-
+    public LightningDaemonInfo getInfo() throws IOException {
+        return lnd.execute("getinfo", LightningDaemonInfo.class);
     }
 
     @Override
-    public void getLog() {
+    public LogResult getLog() throws IOException {
+        return lnd.execute("getlog", LogResult.class);
+    }
 
+    @Override
+    public LogResult getLog(LogLevel level) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("level", level.name());
+        return lnd.execute("getlog", params, LogResult.class);
     }
 
     @Override

@@ -1,8 +1,7 @@
 package clightning.apis;
 
-import clightning.apis.response.CheckMessageResult;
-import clightning.apis.response.Funds;
-import clightning.apis.response.SignResult;
+import clightning.apis.optional.LogLevel;
+import clightning.apis.response.*;
 
 import java.io.IOException;
 
@@ -28,13 +27,15 @@ public interface Utility {
      * getinfo
      *     Show information about this node
      */
-    void getInfo();
+    LightningDaemonInfo getInfo() throws IOException;
 
     /**
      * getlog [level]
      *     Show logs, with optional log {level} (info|unusual|debug|io)
      */
-    void getLog();
+    LogResult getLog() throws IOException;
+
+    LogResult getLog(LogLevel level) throws IOException;
 
     /**
      * help [command]
