@@ -1,0 +1,113 @@
+[
+    {
+        "params": {
+            "command": "rescan"
+        }, 
+        "response": {
+            "plugins": [
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/fundchannel"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/autoclean"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/pay"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/root/.lightning/plugins/helloworld.py"
+                }
+            ]
+        }
+    }, 
+    {
+        "params": {
+            "parameter": "helloworld.py", 
+            "command": "stop"
+        }, 
+        "response": {
+            "": "Successfully stopped helloworld.py."
+        }
+    }, 
+    {
+        "params": {
+            "command": "list"
+        }, 
+        "response": {
+            "plugins": [
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/fundchannel"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/autoclean"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/pay"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/root/.lightning/plugins/helloworld.py"
+                }
+            ]
+        }
+    }, 
+    {
+        "params": {
+            "parameter": "helloworld.py", 
+            "command": "start"
+        }, 
+        "response": {
+            "plugins": [
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/fundchannel"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/autoclean"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/pay"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/bitcoin/helloworld.py"
+                }
+            ]
+        }
+    }, 
+    {
+        "params": {
+            "parameter": ".", 
+            "command": "startdir"
+        }, 
+        "response": {
+            "plugins": [
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/fundchannel"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/autoclean"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/usr/local/bin/../libexec/c-lightning/plugins/pay"
+                }, 
+                {
+                    "active": true, 
+                    "name": "/tmp/ln_plugins/helloworld.py"
+                }
+            ]
+        }
+    }
+]

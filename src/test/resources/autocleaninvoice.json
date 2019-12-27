@@ -1,0 +1,6 @@
+[
+    {
+        "params": {}, 
+        "response": "Autocleaning 86400-second old invoices every 3600 seconds"
+    }
+]

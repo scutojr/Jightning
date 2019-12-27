@@ -1,0 +1,15 @@
+[
+    {
+        "params": {
+            "msatoshi": "123456789", 
+            "description": "d", 
+            "label": "l"
+        }, 
+        "response": {
+            "bolt11": "lnbcrt1234567890p1p0qzyqgpp5e2msnq6kkdzgwaq9q508cw47qgn55359c4ezazwka3aewnkasxaqdqzvsxqyjw5qcqp2adez0mnyesgnd0ej88zhj8zrkwtjjvjphl07m6eg0xxa79ufan3578r2nhfe60u4rame9zxumv2eqxm9djygucfln63zwuwjnf5zstcps4mark", 
+            "payment_hash": "cab7098356b344877405051e7c3abe02274a4685c5722e89d6ec7b974edd81ba", 
+            "expires_at": 1577732744, 
+            "warning_capacity": "No channel with a peer that is not a dead end, has sufficient incoming capacity"
+        }
+    }
+]

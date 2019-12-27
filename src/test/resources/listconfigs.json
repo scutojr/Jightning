@@ -1,0 +1,42 @@
+[
+    {
+        "params": {}, 
+        "response": {
+            "max-locktime-blocks": 2016, 
+            "fee-base": 1, 
+            "funding-confirms": 1, 
+            "watchtime-blocks": 6, 
+            "rescan": 30, 
+            "bitcoin-retry-timeout": 60, 
+            "commit-fee": 500, 
+            "commit-fee-max": 0, 
+            "pid-file": "lightningd-regtest.pid", 
+            "allow-deprecated-apis": true, 
+            "fee-per-satoshi": 10, 
+            "network": "regtest", 
+            "alias": "SILENTSCAN", 
+            "commit-time": 10, 
+            "always-use-proxy": false, 
+            "rgb": "03045a", 
+            "commit-fee-min": 0, 
+            "enable-autotor-v2-mode": "false", 
+            "lightning-dir": "/root/.lightning", 
+            "offline": "false", 
+            "cltv-delta": 6, 
+            "log-prefix": "lightningd(73):", 
+            "autolisten": true, 
+            "max-concurrent-htlcs": 483, 
+            "# version": "v0.7.3", 
+            "encrypted-hsm": false, 
+            "disable-dns": "false", 
+            "cltv-final": 10, 
+            "rpc-file": "lightning-rpc", 
+            "daemon": "false", 
+            "min-capacity-sat": 10000, 
+            "plugin": "/usr/local/bin/../libexec/c-lightning/plugins/pay", 
+            "log-level": "INFO", 
+            "wallet": "sqlite3:///root/.lightning/lightningd.sqlite3", 
+            "ignore-fee-limits": true
+        }
+    }
+]

@@ -1,0 +1,30 @@
+[
+    {
+        "params": {}, 
+        "response": {
+            "channels": [
+                {
+                    "channel_sat": 10000000, 
+                    "channel_total_sat": 10000000, 
+                    "amount_msat": "10000000000msat", 
+                    "state": "CHANNELD_AWAITING_LOCKIN", 
+                    "our_amount_msat": "10000000000msat", 
+                    "connected": true, 
+                    "peer_id": "0265197a63b374393904a418940500fb840c62f0a0a672ecb69561b491ab241dec", 
+                    "funding_txid": "4d99cf30a184c5858b313b15298f6c1417d71e0b0d97c6fc690d7e2ce7c8a69a", 
+                    "funding_output": 0
+                }
+            ], 
+            "outputs": [
+                {
+                    "status": "unconfirmed", 
+                    "amount_msat": "989999846000msat", 
+                    "value": 989999846, 
+                    "txid": "4d99cf30a184c5858b313b15298f6c1417d71e0b0d97c6fc690d7e2ce7c8a69a", 
+                    "address": "bcrt1qql28k2dkhxh8nrfc2lz62kc3uh5wtr56232uga", 
+                    "output": 1
+                }
+            ]
+        }
+    }
+]

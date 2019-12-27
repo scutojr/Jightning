@@ -1,0 +1,40 @@
+[
+    {
+        "params": {
+            "style": "perkb"
+        }, 
+        "response": {
+            "perkb": {
+                "min_acceptable": 1012, 
+                "urgent": 1012, 
+                "max_acceptable": 4294967295, 
+                "slow": 1012, 
+                "normal": 1012
+            }, 
+            "onchain_fee_estimates": {
+                "opening_channel_satoshis": 177, 
+                "unilateral_close_satoshis": 151, 
+                "mutual_close_satoshis": 170
+            }
+        }
+    }, 
+    {
+        "params": {
+            "style": "perkw"
+        }, 
+        "response": {
+            "onchain_fee_estimates": {
+                "opening_channel_satoshis": 177, 
+                "unilateral_close_satoshis": 151, 
+                "mutual_close_satoshis": 170
+            }, 
+            "perkw": {
+                "min_acceptable": 253, 
+                "urgent": 253, 
+                "max_acceptable": 4294967295, 
+                "slow": 253, 
+                "normal": 253
+            }
+        }
+    }
+]

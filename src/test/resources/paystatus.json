@@ -1,0 +1,48 @@
+[
+    {
+        "params": {}, 
+        "response": {
+            "pay": [
+                {
+                    "msatoshi": 1000000, 
+                    "amount_msat": "1000000msat", 
+                    "destination": "0265197a63b374393904a418940500fb840c62f0a0a672ecb69561b491ab241dec", 
+                    "bolt11": "lnbcrt10u1p0qrdp4pp5270l2ujwnhrdkuw7cq5ttjs3lglm5mnh94k944d5m67h480zyuuqdqyvscsxqyjw5qcqp2xxpkyureu72g7suzwudppj9efwap0cs3k76ngm5ga9d9uzku57tn2dgx45vdgrxmj9nz7082krl7lnxc4c2p9avtzm9gk6j83nsw27sqyu80mu", 
+                    "attempts": [
+                        {
+                            "success": {
+                                "msatoshi": 1000000, 
+                                "status": "complete", 
+                                "destination": "0265197a63b374393904a418940500fb840c62f0a0a672ecb69561b491ab241dec", 
+                                "amount_sent_msat": "1000000msat", 
+                                "created_at": 1577170012, 
+                                "amount_msat": "1000000msat", 
+                                "payment_hash": "579ff5724e9dc6db71dec028b5ca11fa3fba6e772d6c5ad5b4debd7a9de22738", 
+                                "bolt11": "lnbcrt10u1p0qrdp4pp5270l2ujwnhrdkuw7cq5ttjs3lglm5mnh94k944d5m67h480zyuuqdqyvscsxqyjw5qcqp2xxpkyureu72g7suzwudppj9efwap0cs3k76ngm5ga9d9uzku57tn2dgx45vdgrxmj9nz7082krl7lnxc4c2p9avtzm9gk6j83nsw27sqyu80mu", 
+                                "payment_preimage": "27bc86806868c03dd63e7910e544f7433b2a949619d0e68ab927244c90d7e551", 
+                                "msatoshi_sent": 1000000, 
+                                "id": 1
+                            }, 
+                            "route": [
+                                {
+                                    "msatoshi": 1000000, 
+                                    "direction": 1, 
+                                    "amount_msat": "1000000msat", 
+                                    "delay": 22, 
+                                    "id": "0265197a63b374393904a418940500fb840c62f0a0a672ecb69561b491ab241dec", 
+                                    "channel": "204x1x0"
+                                }
+                            ], 
+                            "age_in_seconds": 88920, 
+                            "duration_in_seconds": 0, 
+                            "end_time": "2019-12-24T06:46:52.663Z", 
+                            "strategy": "Initial attempt", 
+                            "start_time": "2019-12-24T06:46:52.528Z"
+                        }
+                    ], 
+                    "shadow": "Added 6 cltv delay for shadow to 03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec. Added 6 cltv delay for shadow to 0265197a63b374393904a418940500fb840c62f0a0a672ecb69561b491ab241dec. "
+                }
+            ]
+        }
+    }
+]

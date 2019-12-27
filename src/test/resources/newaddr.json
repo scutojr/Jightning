@@ -1,0 +1,36 @@
+[
+    {
+        "params": {}, 
+        "response": {
+            "bech32": "bcrt1qesq4ffw09fzp2hw75ddrpvjy984vrn7lj744xh", 
+            "address": "bcrt1qesq4ffw09fzp2hw75ddrpvjy984vrn7lj744xh"
+        }
+    }, 
+    {
+        "params": {
+            "addresstype": "p2sh-segwit"
+        }, 
+        "response": {
+            "p2sh-segwit": "2Mvgwq9kkVdKc3zDKNC4zL5Jq8a7s9zweFe", 
+            "address": "2Mvgwq9kkVdKc3zDKNC4zL5Jq8a7s9zweFe"
+        }
+    }, 
+    {
+        "params": {
+            "addresstype": "bech32"
+        }, 
+        "response": {
+            "bech32": "bcrt1qesq4ffw09fzp2hw75ddrpvjy984vrn7lj744xh", 
+            "address": "bcrt1qesq4ffw09fzp2hw75ddrpvjy984vrn7lj744xh"
+        }
+    }, 
+    {
+        "params": {
+            "addresstype": "all"
+        }, 
+        "response": {
+            "p2sh-segwit": "2MtVYqgXe2mn2FoVkuCgyG6QfVwuALJRDSy", 
+            "bech32": "bcrt1qdg99pe33sldywgjl3nuxgm6tluu206rpspyrek"
+        }
+    }
+]

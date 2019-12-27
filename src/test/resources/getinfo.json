@@ -1,0 +1,47 @@
+[
+    {
+        "params": {}, 
+        "response": {
+            "version": "v0.7.3", 
+            "msatoshi_fees_collected": 0, 
+            "color": "03b27d", 
+            "fees_collected_msat": "0msat", 
+            "binding": [
+                {
+                    "type": "ipv6", 
+                    "port": 9735, 
+                    "address": "::"
+                }, 
+                {
+                    "type": "ipv4", 
+                    "port": 9735, 
+                    "address": "0.0.0.0"
+                }, 
+                {
+                    "type": "local socket", 
+                    "socket": "<socket info>"
+                }
+            ], 
+            "alias": "GREENSOUFFLE", 
+            "num_active_channels": 1, 
+            "address": [
+                {
+                    "type": "ipv4", 
+                    "port": 12345, 
+                    "address": "address info"
+                }, 
+                {
+                    "type": "ipv6", 
+                    "port": 12345, 
+                    "address": ":::"
+                }
+            ], 
+            "blockheight": 304, 
+            "num_inactive_channels": 0, 
+            "num_peers": 1, 
+            "id": "03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec", 
+            "network": "regtest", 
+            "num_pending_channels": 0
+        }
+    }
+]

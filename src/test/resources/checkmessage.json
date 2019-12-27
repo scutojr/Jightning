@@ -1,0 +1,12 @@
+[
+    {
+        "params": {
+            "message": "xxyy", 
+            "zbase": "dhybt3bt8dq8wgpk9344puz6bqu7d5bwrakcoes8bbpefmujthokrwn8yroczabc3ij7fsh3gmqzywbqsdgw39ghoxy3jj3zn7kw1apm"
+        }, 
+        "response": {
+            "verified": true, 
+            "pubkey": "03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec"
+        }
+    }
+]

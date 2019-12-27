@@ -1,0 +1,10 @@
+[
+    {
+        "params": {
+            "id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472"
+        }, 
+        "response": {
+            "cancelled": "Channel open canceled by RPC"
+        }
+    }
+]

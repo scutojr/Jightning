@@ -1,0 +1,17 @@
+[
+    {
+        "params": {
+            "id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472"
+        }, 
+        "response": {
+            "channels": [
+                {
+                    "channel_id": "1149dc2b0edcdef64e42f135452670bbd8672d23aafb03789c0e56ba22199607", 
+                    "peer_id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472"
+                }
+            ], 
+            "base": 123456, 
+            "ppm": 10
+        }
+    }
+]

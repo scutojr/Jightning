@@ -1,0 +1,12 @@
+[
+    {
+        "params": {
+            "amount": "1000000", 
+            "id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472"
+        }, 
+        "response": {
+            "funding_address": "bcrt1qnkqn42z563fpsh9e828y74v9puwlw4z8udfn5sxaac4q0w9nrrcq4clngm", 
+            "scriptpubkey": "00209d813aa854d452185cb93a8e4f55850f1df75447e3533a40ddee2a07b8b318f0"
+        }
+    }
+]
