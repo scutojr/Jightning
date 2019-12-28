@@ -26,6 +26,7 @@ public class PayResult {
       @JsonSetter("created_at")
       private long createdAt;
 
+      // TODO: enumeration all the possible state
       private String status;
 
       @JsonSetter("payment_preimage")

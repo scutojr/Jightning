@@ -1,11 +1,16 @@
 package clightning.apis;
 
+import clightning.apis.response.DevAddress;
+
+import java.io.IOException;
+
 public interface Developer {
     /**
      *dev-listaddrs [bip32_max_index]
      *    Show addresses list up to derivation {index} (default is the last bip32 index)
+     * @return
      */
-    void devListAddrs();
+    DevAddress[] devListAddrs(int bip32MaxIndex) throws IOException;
 
     /**
      *dev-rescan-outputs

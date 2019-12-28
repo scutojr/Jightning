@@ -59,6 +59,17 @@ public class TestLightningDaemon {
     }
 
     @Test
+    public void testDevListAddress() {
+        try {
+            int maxCnt = 2;
+            DevAddress[] addrs = client.devListAddrs(maxCnt);
+            Assert.assertTrue(addrs.length <= maxCnt);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void testDiscard() {
         try {
             String txId = "6a2590e344155722db01f295591db34e26cf1a0b6a5accbdf84c29cc9771e73a";

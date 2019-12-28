@@ -1,0 +1,35 @@
+[
+  {
+    "params": {
+      "bip32_max_index": 2
+    },
+    "response": {
+      "addresses": [
+        {
+          "keyidx": 0,
+          "pubkey": "028d6814384b28f3a9fe9fd5fe2e111e9a0572ffec04294f07d8a70b8caf40ec3f",
+          "p2sh": "2N9J8X632xBpCaK2n3Q7bFcEcK3qk2vFYjN",
+          "p2sh_redeemscript": "00145f09fa5e983b4be8f2935da384269445a7b0437f",
+          "bech32": "bcrt1qtuyl5h5c8d973u5ntk3cgf55gknmqsmlkky6qe",
+          "bech32_redeemscript": "5f09fa5e983b4be8f2935da384269445a7b0437f"
+        },
+        {
+          "keyidx": 1,
+          "pubkey": "02771e6b85e147f28daabf4a4ed96e81918c49f7ceb77bd2daf7d66716501b453a",
+          "p2sh": "2N78QZETr9fSxREqgYmzAZz1EirALd9eXUg",
+          "p2sh_redeemscript": "0014fe137aee405e7f27d7a519fd509032f7ccda8a85",
+          "bech32": "bcrt1qlcfh4mjqtelj04a9r874pypj7lxd4z59z66u7c",
+          "bech32_redeemscript": "fe137aee405e7f27d7a519fd509032f7ccda8a85"
+        },
+        {
+          "keyidx": 2,
+          "pubkey": "0247db9aea9721327c043bff13ea5480d3938a6bc9fa2bc917031075eaaef73c0d",
+          "p2sh": "2NEZSJFSCraPfNDYATudvLTPXtqyniThcYy",
+          "p2sh_redeemscript": "001440cac3d45239c05183905f581cc06959db6fae23",
+          "bech32": "bcrt1qgr9v84zj88q9rqustavpesrft8dklt3r3gp0cm",
+          "bech32_redeemscript": "40cac3d45239c05183905f581cc06959db6fae23"
+        }
+      ]
+    }
+  }
+]

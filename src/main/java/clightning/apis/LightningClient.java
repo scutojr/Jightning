@@ -87,6 +87,7 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
 
     /**
      * TODO: add the following data to testing program
+     *
      * @param outputs
      * @return
      * @throws IOException
@@ -101,7 +102,7 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
         Map<String, Object> params = createParam();
 
         ArrayNode os = mapper.createArrayNode();
-        for(Output output : outputs) {
+        for (Output output : outputs) {
             ObjectNode obj = mapper.createObjectNode();
             obj.put(output.getAddress(), output.getAmount());
             os.add(obj);
@@ -273,8 +274,11 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void devListAddrs() {
-
+    public DevAddress[] devListAddrs(int bip32MaxIndex) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("bip32_max_index", bip32MaxIndex);
+        JsonNode rsp = lnd.execute("dev-listaddrs", params, JsonNode.class);
+        return mapper.treeToValue(rsp.get("addresses"), DevAddress[].class);
     }
 
     @Override
