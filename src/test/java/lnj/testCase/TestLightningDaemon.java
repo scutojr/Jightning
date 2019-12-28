@@ -59,11 +59,20 @@ public class TestLightningDaemon {
     }
 
     @Test
+    public void testDevRescanOutput() {
+        try {
+            Assert.assertNotNull(client.devRescanOutputs());
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void testDevListAddress() {
         try {
             int maxCnt = 2;
             DevAddress[] addrs = client.devListAddrs(maxCnt);
-            Assert.assertTrue(addrs.length <= maxCnt);
+            Assert.assertTrue(addrs.length <= maxCnt + 1);
         } catch (IOException e) {
             Assert.fail();
         }

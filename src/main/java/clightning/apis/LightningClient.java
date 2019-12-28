@@ -282,8 +282,9 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void devRescanOutputs() {
-
+    public DevRescanOutput[] devRescanOutputs() throws IOException {
+       JsonNode rsp = lnd.execute("dev-rescan-outputs", JsonNode.class);
+       return mapper.treeToValue(rsp.get("outputs"), DevRescanOutput[].class);
     }
 
     @Override

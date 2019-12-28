@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 public class DevAddress {
-        @JsonSetter("keyIdx")
-        private int keyidx;
+        @JsonSetter("keyidx")
+        private int keyIdx;
 
-        @JsonSetter("pubKey")
-        private String pubkey;
+        @JsonSetter("pubkey")
+        private String pubKey;
 
         private String p2sh;
 

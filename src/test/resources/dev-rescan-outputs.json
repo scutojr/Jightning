@@ -1,0 +1,51 @@
+[
+  {
+    "params": {},
+    "response": {
+      "outputs": [
+        {
+          "txid": "9790451a10359356138ba005632636a42d2f39cb3c32802d14eb028994965033",
+          "output": 0,
+          "oldstate": 2,
+          "newstate": 2
+        },
+        {
+          "txid": "68cc61ad8daee3a4f885d36a8280b297e6b20230181ee901af8cff413cc678d2",
+          "output": 0,
+          "oldstate": 0,
+          "newstate": 0
+        },
+        {
+          "txid": "07763638d014ebe47e07ba0623c645021414c2867811d80e762207360f94bfb5",
+          "output": 1,
+          "oldstate": 0,
+          "newstate": 0
+        },
+        {
+          "txid": "7b65edba8086f692d0f79bfd1e16d9c51178b738ab415df644d982914af798b5",
+          "output": 1,
+          "oldstate": 2,
+          "newstate": 2
+        },
+        {
+          "txid": "ae9791bc4c807758fc72942aeed5fb3e1a8348ed1df9ca2c9a448977117c4a90",
+          "output": 0,
+          "oldstate": 2,
+          "newstate": 2
+        },
+        {
+          "txid": "07961922ba560e9c7803fbaa232d67d8bb70264535f1424ef6dedc0e2bdc4911",
+          "output": 1,
+          "oldstate": 2,
+          "newstate": 2
+        },
+        {
+          "txid": "4d99cf30a184c5858b313b15298f6c1417d71e0b0d97c6fc690d7e2ce7c8a69a",
+          "output": 1,
+          "oldstate": 2,
+          "newstate": 2
+        }
+      ]
+    }
+  }
+]

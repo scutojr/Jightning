@@ -1,6 +1,7 @@
 package clightning.apis;
 
 import clightning.apis.response.DevAddress;
+import clightning.apis.response.DevRescanOutput;
 
 import java.io.IOException;
 
@@ -16,5 +17,5 @@ public interface Developer {
      *dev-rescan-outputs
      *    Synchronize the state of our funds with bitcoind
      */
-    void devRescanOutputs();
+    DevRescanOutput[] devRescanOutputs() throws IOException;
 }
