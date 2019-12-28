@@ -2,6 +2,7 @@ package lnj.testCase;
 
 import clightning.AbstractLightningDaemon;
 import clightning.apis.LightningClient;
+import clightning.apis.Output;
 import clightning.apis.PluginCommand;
 import clightning.apis.optional.LogLevel;
 import clightning.apis.response.*;
@@ -33,6 +34,60 @@ public class TestLightningDaemon {
             code.apply();
             Assert.fail("it's supposed to throw an exception!");
         } catch (Exception exp) {
+        }
+    }
+
+    @Test
+    public void testTxSend() {
+        try {
+            String txId = "07763638d014ebe47e07ba0623c645021414c2867811d80e762207360f94bfb5";
+            Assert.assertNotNull(client.txSend(txId));
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testWithdraw() {
+        try {
+            String destination = "2NCpXca1wqQw4AZAEU7rdtg5bYRjDfp5sPZ";
+            long satoshi = 10000000;
+            Assert.assertNotNull(client.withDraw(destination, satoshi));
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testDiscard() {
+        try {
+            String txId = "6a2590e344155722db01f295591db34e26cf1a0b6a5accbdf84c29cc9771e73a";
+            Assert.assertNotNull(client.txDiscard(txId));
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testTxPrepare() {
+        try {
+            String address = "2NG1hGL3fJ6zM1gS93o3xtXT2cJQydvbv5n";
+            long satoshi = 10000000;
+            TxPrepareResult res = client.txPrepare(new Output[]{new Output(address, satoshi)});
+            Assert.assertNotNull(res);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testNewAddr() {
+        try {
+            Assert.assertNotNull(client.newAddr());
+            Assert.assertNotNull(client.newBench32Addr());
+            Assert.assertNotNull(client.newP2shSegwitAddr());
+        } catch (IOException e) {
+            Assert.fail();
         }
     }
 

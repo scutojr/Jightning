@@ -1,0 +1,15 @@
+[
+  {
+    "params": {
+      "outputs": [
+        {
+          "2NG1hGL3fJ6zM1gS93o3xtXT2cJQydvbv5n": 10000000
+        }
+      ]
+    },
+    "response": {
+      "unsigned_tx": "02000000011149dc2b0edcdef64e42f135452670bbd8672d23aafb03789c0e56ba221996070100000000ffffffff02809698000000000017a914f9bbd6c5d1f426b86928a4bd762622d6218f7d8087bd04d13900000000160014f510c86d748d05d7c48f380b0452adc8a8abf84a00000000",
+      "txid": "6a2590e344155722db01f295591db34e26cf1a0b6a5accbdf84c29cc9771e73a"
+    }
+  }
+]

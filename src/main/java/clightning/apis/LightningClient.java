@@ -3,9 +3,12 @@ package clightning.apis;
 import clightning.AbstractLightningDaemon;
 import clightning.apis.optional.*;
 import clightning.apis.response.*;
+import clightning.apis.response.FeeRate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.base.Preconditions;
 
@@ -47,61 +50,179 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
         return feeRate;
     }
 
+    private class AddrType {
+        final static String BECH32 = "bech32";
+        final static String P2SH_SEGWIT = "p2sh-segwit";
+        final static String ALL = "all";
+    }
+
+    private JsonNode newAddrInternal(String type) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("addresstype", type);
+        return lnd.execute("newaddr", params, JsonNode.class);
+    }
+
     @Override
     public LightningAddress newAddr() throws IOException {
-        HashMap<String, String> params = new HashMap();
-        params.put("addresstype", "all");
-        return lnd.execute("newaddr", params, LightningAddress.class);
+        return mapper.treeToValue(newAddrInternal(AddrType.ALL), LightningAddress.class);
     }
 
     @Override
-    public String newBench32Addr() {
-        return null;
+    public String newBench32Addr() throws IOException {
+        return newAddrInternal(AddrType.BECH32).get("address").asText();
     }
 
     @Override
-    public String newP2shSegwitAddr() {
-        return null;
+    public String newP2shSegwitAddr() throws IOException {
+        return newAddrInternal(AddrType.P2SH_SEGWIT).get("address").asText();
     }
 
     @Override
-    public void txDiscard() {
+    public TxDiscardResult txDiscard(String txId) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("txid", txId);
 
+        return lnd.execute("txdiscard", params, TxDiscardResult.class);
+    }
+
+    /**
+     * TODO: add the following data to testing program
+     * @param outputs
+     * @return
+     * @throws IOException
+     */
+    @Override
+    public TxPrepareResult txPrepare(Output[] outputs) throws IOException {
+        return txPrepare(outputs, null);
     }
 
     @Override
-    public void txPrepare() {
+    public TxPrepareResult txPrepare(Output[] outputs, TxPrepareParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
 
+        ArrayNode os = mapper.createArrayNode();
+        for(Output output : outputs) {
+            ObjectNode obj = mapper.createObjectNode();
+            obj.put(output.getAddress(), output.getAmount());
+            os.add(obj);
+        }
+
+        params.put("outputs", os);
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+
+        return lnd.execute("txprepare", params, TxPrepareResult.class);
     }
 
     @Override
-    public void txSend() {
+    public TxSendResult txSend(String txId) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("txid", txId);
+        return lnd.execute("txsend", params, TxSendResult.class);
+    }
 
+    private WithdrawResutlt withdrawInternal(String destination, Object satoshi, WithdrawParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("destination", destination);
+        params.put("satoshi", satoshi);
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("withdraw", params, WithdrawResutlt.class);
     }
 
     @Override
-    public void close() {
-
+    public WithdrawResutlt withDraw(String destination) throws IOException {
+        return withdrawInternal(destination, "all", null);
     }
 
     @Override
-    public void fundChannelCancel() {
-
+    public WithdrawResutlt withDraw(String destination, WithdrawParams optionalParams) throws IOException {
+        return withdrawInternal(destination, "all", optionalParams);
     }
 
     @Override
-    public void fundChannelComplete() {
-
+    public WithdrawResutlt withDraw(String destination, long satoshi) throws IOException {
+        return withdrawInternal(destination, satoshi, null);
     }
 
     @Override
-    public void fundChannelStart() {
-
+    public WithdrawResutlt withDraw(String destination, long satoshi, WithdrawParams optionalParams) throws IOException {
+        return withdrawInternal(destination, satoshi, optionalParams);
     }
 
     @Override
-    public void getRoute() {
+    public CloseResult close(String channelId) throws IOException {
+        return close(channelId, null);
+    }
 
+    @Override
+    public CloseResult close(String channelId, CloseParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("id", channelId);
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("close", params, CloseResult.class);
+    }
+
+    /**
+     * @param id the node id
+     * @return
+     */
+    @Override
+    public String fundChannelCancel(String id) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("id", id);
+        return lnd.execute("fundchannel_cancel", params, JsonNode.class).get("cancelled").asText();
+    }
+
+    @Override
+    public FundChannelCompleteResult fundChannelComplete(String id, String txId, int txOut) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("id", id);
+        params.put("txid", txId);
+        params.put("txout", txOut);
+
+        return lnd.execute("fundchannel_complete", params, FundChannelCompleteResult.class);
+    }
+
+    @Override
+    public FundChannelStartResult fundChannelStart(String id, long amount) throws IOException {
+        return fundChannelStart(id, amount, null);
+    }
+
+    @Override
+    public FundChannelStartResult fundChannelStart(String id, long amount, FundChannelStartParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("id", id);
+        params.put("amount", amount);
+
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("fundchannel_start", params, FundChannelStartResult.class);
+    }
+
+    @Override
+    public Route[] getRoute(String id, long msatoshi, double riskFactor) throws IOException {
+        return getRoute(id, msatoshi, riskFactor, null);
+    }
+
+    @Override
+    public Route[] getRoute(String id, long msatoshi, double riskFactor, GetRouteParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("id", id);
+        params.put("msatoshi", msatoshi);
+        params.put("riskfactor", riskFactor);
+
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+
+        JsonNode rsp = lnd.execute("getroute", params, JsonNode.class);
+        return mapper.treeToValue(rsp.get("route"), Route[].class);
     }
 
     /**
@@ -137,8 +258,18 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void setChannelFee() {
+    public SetChannelFeeResult setChannelFee(String channelIdOrPeerId) throws IOException {
+        return setChannelFee(channelIdOrPeerId, null);
+    }
 
+    @Override
+    public SetChannelFeeResult setChannelFee(String channelIdOrPeerId, SetChannelFeeParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("id", channelIdOrPeerId);
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("setchannelfee", params, SetChannelFeeResult.class);
     }
 
     @Override
@@ -312,7 +443,6 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     /**
-     *
      * @param bolt11
      * @return Pay instance or null if not found
      */
@@ -347,7 +477,6 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     /**
-     *
      * @param bolt11
      * @return PayStatus instance or null if not found
      */

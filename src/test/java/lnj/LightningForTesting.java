@@ -1,7 +1,6 @@
 package lnj;
 
 import clightning.AbstractLightningDaemon;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -13,10 +12,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +31,27 @@ public class LightningForTesting implements AbstractLightningDaemon {
         }
     }
 
+    /**
+     *
+     mapper.convertValue(params, new TypeReference<Map<String, Object>>() {})
+     * @param node
+     * @return
+     */
+    private Map<String, Object> safeJsNodeToMap(JsonNode node) {
+        Map<String, Object> map = new HashMap<>();
+        Iterator<String> it = node.fieldNames();
+        while (it.hasNext()) {
+            String field = it.next();
+            JsonNode value = node.get(field);
+            if (value.isTextual()) {
+                map.put(field, value.asText()); // avoid extra quote from the toString() of textual json node
+            } else {
+                map.put(field, value);
+            }
+        }
+        return map;
+    }
+
     private void loadJsonFiles() throws URISyntaxException, IOException {
         URL url = LightningForTesting.class.getClassLoader().getResource(".");
         DirectoryStream<Path> paths = Files.newDirectoryStream(Paths.get(url.toURI()));
@@ -48,7 +65,7 @@ public class LightningForTesting implements AbstractLightningDaemon {
                     JsonNode response = node.get("response");
                     String nameAsId = getDataFileName(
                             method,
-                            mapper.convertValue(params, new TypeReference<Map<String, Object>>() {})
+                            safeJsNodeToMap(params)
                     );
                     jsonFiles.put(nameAsId, response.toString());
                 }

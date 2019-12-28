@@ -3,30 +3,18 @@ package clightning.apis.optional;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class FundChannelParams extends OptionalParams {
-
-    public FundChannelParams setFeeRate(FeeRate feeRate) {
+public class TxPrepareParams extends OptionalParams {
+    public TxPrepareParams setFeeRate(FeeRate feeRate) {
         params.put("feerate", feeRate.toString());
         return this;
     }
 
-    public FundChannelParams setAnnounce(boolean announce) {
-        params.put("announce", announce);
-        return this;
-    }
-
-    public FundChannelParams setMinConf(int minConf) {
+    public TxPrepareParams setMinConfirmation(int minConf) {
         params.put("minconf", minConf);
         return this;
     }
 
-    /**
-     * TODO: ensure the array format is acceptable to the lightning feerate rpc
-     *
-     * @param uTxO
-     * @return
-     */
-    public FundChannelParams setUTxOs(UTxO... uTxO) {
+    public TxPrepareParams setUTxO(UTxO... uTxO) {
         String[] uTxOs = (String[]) Arrays.asList(uTxO)
                 .stream()
                 .map(t -> t.toString())

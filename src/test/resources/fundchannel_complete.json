@@ -2,7 +2,7 @@
     {
         "params": {
             "id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472", 
-            "txout": "0", 
+            "txout": 0, 
             "txid": "6a2590e344155722db01f295591db34e26cf1a0b6a5accbdf84c29cc9771e73a"
         }, 
         "response": {
