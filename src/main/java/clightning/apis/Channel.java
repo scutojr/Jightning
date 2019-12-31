@@ -75,8 +75,32 @@ public interface Channel {
     /**
      * listforwards
      * List all forwarded payments and their information
+     *
+     *
+     * {
+     *     "forwards": [
+     *         {
+     *             "payment_hash": <sha256>, // optional
+     *             "in_channel": <short channel id>,
+     *             "out_channel": <short channel id>, // optional
+     *             "in_msatoshi": <long>,
+     *             "in_msat": <String>,
+     *             optional{
+     *                 "out_msatoshi": long,
+     *                 "out_msat": String
+     *                 "fee": long,
+     *                 "fee_msat": String
+     *             }
+     *             "status": String,
+     *             "failcode": int  // optional
+     *             "failreason", string  // optional
+     *             "received_time":  double,  // optional
+     *             "resolved_time":  double,  // optional
+     *         }
+     *     ]
+     * }
      */
-    void listForwards();
+    Forward[] listForwards() throws IOException;
 
     /**
      * https://lightning.readthedocs.io/lightning-setchannelfee.7.html

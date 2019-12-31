@@ -1,0 +1,22 @@
+[
+  {
+    "params": {},
+    "response": {
+      "payments": [
+        {
+          "id": 1,
+          "payment_hash": "579ff5724e9dc6db71dec028b5ca11fa3fba6e772d6c5ad5b4debd7a9de22738",
+          "destination": "0265197a63b374393904a418940500fb840c62f0a0a672ecb69561b491ab241dec",
+          "msatoshi": 1000000,
+          "amount_msat": "1000000msat",
+          "msatoshi_sent": 1000000,
+          "amount_sent_msat": "1000000msat",
+          "created_at": 1577170012,
+          "status": "complete",
+          "payment_preimage": "27bc86806868c03dd63e7910e544f7433b2a949619d0e68ab927244c90d7e551",
+          "bolt11": "lnbcrt10u1p0qrdp4pp5270l2ujwnhrdkuw7cq5ttjs3lglm5mnh94k944d5m67h480zyuuqdqyvscsxqyjw5qcqp2xxpkyureu72g7suzwudppj9efwap0cs3k76ngm5ga9d9uzku57tn2dgx45vdgrxmj9nz7082krl7lnxc4c2p9avtzm9gk6j83nsw27sqyu80mu"
+        }
+      ]
+    }
+  }
+]

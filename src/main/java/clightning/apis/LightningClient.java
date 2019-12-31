@@ -254,8 +254,9 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void listForwards() {
-
+    public Forward[] listForwards() throws IOException {
+        JsonNode rsp = lnd.execute("listforwards", JsonNode.class);
+        return mapper.treeToValue(rsp.get("forwards"), Forward[].class);
     }
 
     @Override
@@ -283,8 +284,8 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
 
     @Override
     public DevRescanOutput[] devRescanOutputs() throws IOException {
-       JsonNode rsp = lnd.execute("dev-rescan-outputs", JsonNode.class);
-       return mapper.treeToValue(rsp.get("outputs"), DevRescanOutput[].class);
+        JsonNode rsp = lnd.execute("dev-rescan-outputs", JsonNode.class);
+        return mapper.treeToValue(rsp.get("outputs"), DevRescanOutput[].class);
     }
 
     @Override
@@ -312,38 +313,102 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void disconnect() {
-
+    public void disconnect(String id) throws IOException {
+        disconnect(id, false);
     }
 
     @Override
-    public void listNodes() {
-
+    public void disconnect(String id, boolean force) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("id", id);
+        params.put("force", force);
+        lnd.execute("disconnect", params, JsonNode.class);
     }
 
     @Override
-    public void listPeers() {
-
+    public Node[] listNodes() throws IOException {
+        return listNodes(null);
     }
 
     @Override
-    public void ping() {
-
+    public Node[] listNodes(String id) throws IOException {
+        JsonNode rsp;
+        if (Objects.nonNull(id)) {
+            Map<String, Object> params = createParam();
+            params.put("id", id);
+            rsp = lnd.execute("listnodes", params, JsonNode.class);
+        } else {
+            rsp = lnd.execute("listnodes", JsonNode.class);
+        }
+        return mapper.treeToValue(rsp.get("nodes"), Node[].class);
     }
 
     @Override
-    public void decodePay() {
-
+    public Peer[] listPeers() throws IOException {
+        return listPeers(null);
     }
 
     @Override
-    public void delExpiredInvoice() {
-
+    public Peer[] listPeers(ListPeersParams optionalParams) throws IOException {
+        JsonNode rsp;
+        String method = "listpeers";
+        if (Objects.nonNull(optionalParams)) {
+            rsp = lnd.execute(method, optionalParams.dump(), JsonNode.class);
+        } else {
+            rsp = lnd.execute(method, JsonNode.class);
+        }
+        return mapper.treeToValue(rsp.get("peers"), Peer[].class);
     }
 
     @Override
-    public void delInvoice() {
+    public int ping(String id) throws IOException {
+        return ping(id, null);
+    }
 
+    @Override
+    public int ping(String id, PingParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("id", id);
+
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("ping", params, JsonNode.class).get("totlen").asInt();
+    }
+
+    @Override
+    public Bolt11 decodePay(String bolt11) throws IOException {
+        return decodePay(bolt11, null);
+    }
+
+    @Override
+    public Bolt11 decodePay(String bolt11, String description) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("bolt11", bolt11);
+        if (Objects.nonNull(description)) {
+            params.put("description", description);
+        }
+        return lnd.execute("decodepay", params, Bolt11.class);
+    }
+
+    @Override
+    public void delExpiredInvoice() throws IOException {
+        lnd.execute("delexpiredinvoice", JsonNode.class);
+    }
+
+    @Override
+    public void delExpiredInvoice(int maxExpiryTimeSec) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("maxexpirytime", maxExpiryTimeSec);
+        lnd.execute("delexpiredinvoice", params, JsonNode.class);
+    }
+
+    @Override
+    public DetailedInvoice delInvoice(String label, InvoiceStatus status) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("label", label);
+        params.put("status", status);
+        return lnd.execute("delinvoice", params, DetailedInvoice.class);
     }
 
     @Override
@@ -385,33 +450,73 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public void listSendPays() {
-
+    public PayResult[] listSendPays() throws IOException {
+        return listSendPays(null);
     }
 
     @Override
-    public void listTransactions() {
+    public PayResult[] listSendPays(ListSendPaysParams optionalParams) throws IOException {
+        JsonNode node;
+        if (Objects.nonNull(optionalParams)) {
+            node = lnd.execute("listsendpays", optionalParams.dump(), JsonNode.class);
+        } else {
+            node = lnd.execute("listsendpays", JsonNode.class);
+        }
+        return mapper.treeToValue(node.get("payments"), PayResult[].class);
+    }
 
+
+    @Override
+    public Transaction[] listTransactions() throws IOException {
+        JsonNode rsp = lnd.execute("listtransactions", JsonNode.class);
+        return mapper.treeToValue(rsp.get("transactions"), Transaction[].class);
     }
 
     @Override
-    public void sendPay() {
-
+    public SendPayResult sendPay(Route[] route, String paymentHash) throws IOException {
+        return sendPay(route, paymentHash, null);
     }
 
     @Override
-    public void waitAnyInvoice() {
+    public SendPayResult sendPay(Route[] route, String paymentHash, SendPayParams optionalParams) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("route", route);
+        params.put("payment_hash", paymentHash);
 
+        if (Objects.nonNull(optionalParams)) {
+            params.putAll(optionalParams.dump());
+        }
+        return lnd.execute("sendpay", params, SendPayResult.class);
     }
 
     @Override
-    public void waitInvoice() {
+    public DetailedInvoice waitAnyInvoice(int lastPayIndex) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("lastpay_index", lastPayIndex);
 
+        return lnd.execute("waitanyinvoice", params, DetailedInvoice.class);
     }
 
     @Override
-    public void waitSendPay() {
+    public DetailedInvoice waitInvoice(String label) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("label", label);
+        return lnd.execute("waitinvoice", params, DetailedInvoice.class);
+    }
 
+    @Override
+    public PayResult waitSendPay(String paymentHash) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("payment_hash", paymentHash);
+        return lnd.execute("waitsendpay", params, PayResult.class);
+    }
+
+    @Override
+    public PayResult waitSendPay(String paymentHash, long timeout) throws IOException {
+        Map<String, Object> params = createParam();
+        params.put("payment_hash", paymentHash);
+        params.put("timeout", timeout);
+        return lnd.execute("waitsendpay", params, PayResult.class);
     }
 
     @Override

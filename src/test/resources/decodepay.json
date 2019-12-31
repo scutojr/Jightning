@@ -1,0 +1,20 @@
+[
+  {
+    "params": {
+      "bolt11": "lnbcrt10u1p0qnafrpp5tsqkl3x0txc9u8ece0v42jw59vjzsz6p9gzkrjwuewl0xuqdzt6qdqgw3jhxapkxqyjw5qcqp2jj2v76sukafth2yqumhr5e7syppv5a7fuv9e4ueshtnhjaq2q2wr8l2s63epzdvcpntz73ap0zz4dxjvw3haadc49wx9vv7yr4fd0tcpkvl405"
+    },
+    "response": {
+      "currency": "bcrt",
+      "created_at": 1577710883,
+      "expiry": 604800,
+      "payee": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472",
+      "msatoshi": 1000000,
+      "amount_msat": "1000000msat",
+      "description": "test6",
+      "min_final_cltv_expiry": 10,
+      "features": "",
+      "payment_hash": "5c016fc4cf59b05e1f38cbd95549d42b24280b412a0561c9dccbbef3700d12f4",
+      "signature": "30450221009494cf6a1cb752bba880e6ee3a67d02042ca77c9e30b9af330bae779740a029c022033fd50d4721135980cd62f47a17885569a4c746fdeb7152b8c5633c41d52d7af"
+    }
+  }
+]

@@ -1,8 +1,9 @@
 package clightning.apis;
 
 import clightning.apis.optional.InvoiceParams;
-import clightning.apis.response.DetailedInvoice;
-import clightning.apis.response.SimpleInvoice;
+import clightning.apis.optional.ListSendPaysParams;
+import clightning.apis.optional.SendPayParams;
+import clightning.apis.response.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,19 +13,23 @@ public interface Payment {
      * decodepay bolt11 [description]
      * Decode {bolt11}, using {description} if necessary
      */
-    void decodePay();
+    Bolt11 decodePay(String bolt11) throws IOException;
+    Bolt11 decodePay(String bolt11, String description) throws IOException;
 
     /**
+     * https://lightning.readthedocs.io/lightning-delexpiredinvoice.7.html
+     *
      * delexpiredinvoice [maxexpirytime]
      * Delete all expired invoices that expired as of given {maxexpirytime} (a UNIX epoch time), or all expired invoices if not specified
      */
-    void delExpiredInvoice();
+    void delExpiredInvoice() throws IOException;
+    void delExpiredInvoice(int maxExpiryTimeSec) throws IOException;
 
     /**
      * delinvoice label status
      * Delete unpaid invoice {label} with {status}
      */
-    void delInvoice();
+    DetailedInvoice delInvoice(String label, InvoiceStatus status) throws IOException;
 
     /**
      * https://lightning.readthedocs.io/lightning-invoice.7.html
@@ -66,35 +71,45 @@ public interface Payment {
      * listsendpays [bolt11] [payment_hash]
      * Show sendpay, old and current, optionally limiting to {bolt11} or {payment_hash}.
      */
-    void listSendPays();
+    PayResult[] listSendPays() throws IOException;
+
+    PayResult[] listSendPays(ListSendPaysParams optionalParams) throws IOException;
 
     /**
      * listtransactions
      * List transactions that we stored in the wallet
      */
-    void listTransactions();
+    Transaction[] listTransactions() throws IOException;
 
     /**
+     *
+     * lightning-cli sendpay '[{"msatoshi": 11, "direction": 1, "amount_msat": "11msat", "delay": 9, "id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472", "channel": "507x1x0"}]' d18ba6bf223f94c5ead6aba6d95d98fbe88b2a30087fa9c7ee8a4f8b21a95363
+     *
      * sendpay route payment_hash [label] [msatoshi] [bolt11]
      * Send along {route} in return for preimage of {payment_hash}
      */
-    void sendPay();
+    SendPayResult sendPay(Route[] route, String paymentHash) throws IOException;
+
+    SendPayResult sendPay(Route[] route, String paymentHash, SendPayParams optionalParams) throws IOException;
 
     /**
      * waitanyinvoice [lastpay_index]
      * Wait for the next invoice to be paid, after {lastpay_index} (if supplied)
      */
-    void waitAnyInvoice();
+    DetailedInvoice waitAnyInvoice(int lastPayIndex) throws IOException;
 
     /**
+     * https://lightning.readthedocs.io/lightning-waitanyinvoice.7.html
+     *
      * waitinvoice label
      * Wait for an incoming payment matching the invoice with {label}, or if the invoice expires
      */
-    void waitInvoice();
+    DetailedInvoice waitInvoice(String label) throws IOException;
 
     /**
      * waitsendpay payment_hash [timeout]
      * Wait for payment attempt on {payment_hash} to succeed or fail, but only up to {timeout} seconds.
      */
-    void waitSendPay();
+    PayResult waitSendPay(String paymentHash) throws IOException;
+    PayResult waitSendPay(String paymentHash, long timeout) throws IOException;
 }

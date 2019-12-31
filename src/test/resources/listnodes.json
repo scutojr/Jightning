@@ -1,0 +1,27 @@
+[
+  {
+    "params": {},
+    "response": {
+      "nodes": [
+        {
+          "nodeid": "03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec",
+          "alias": "GREENSOUFFLE",
+          "color": "03b27d",
+          "last_timestamp": 1577689479,
+          "globalfeatures": "28a2",
+          "features": "28a2",
+          "addresses": []
+        },
+        {
+          "nodeid": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472",
+          "alias": "ORANGETRINITY",
+          "color": "036c07",
+          "last_timestamp": 1577689479,
+          "globalfeatures": "28a2",
+          "features": "28a2",
+          "addresses": []
+        }
+      ]
+    }
+  }
+]

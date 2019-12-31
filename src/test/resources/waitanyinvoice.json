@@ -1,0 +1,21 @@
+[
+  {
+    "params": {
+      "lastpay_index": 4
+    },
+    "response": {
+      "label": "test6",
+      "bolt11": "lnbcrt10u1p0qnafrpp5tsqkl3x0txc9u8ece0v42jw59vjzsz6p9gzkrjwuewl0xuqdzt6qdqgw3jhxapkxqyjw5qcqp2jj2v76sukafth2yqumhr5e7syppv5a7fuv9e4ueshtnhjaq2q2wr8l2s63epzdvcpntz73ap0zz4dxjvw3haadc49wx9vv7yr4fd0tcpkvl405",
+      "payment_hash": "5c016fc4cf59b05e1f38cbd95549d42b24280b412a0561c9dccbbef3700d12f4",
+      "msatoshi": 1000000,
+      "amount_msat": "1000000msat",
+      "status": "paid",
+      "pay_index": 5,
+      "msatoshi_received": 1000000,
+      "amount_received_msat": "1000000msat",
+      "paid_at": 1577784624,
+      "description": "test6",
+      "expires_at": 1578315683
+    }
+  }
+]

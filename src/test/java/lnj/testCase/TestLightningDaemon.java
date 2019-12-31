@@ -1,13 +1,18 @@
 package lnj.testCase;
 
 import clightning.AbstractLightningDaemon;
+import clightning.apis.InvoiceStatus;
 import clightning.apis.LightningClient;
 import clightning.apis.Output;
 import clightning.apis.PluginCommand;
+import clightning.apis.optional.ListPeersParams;
 import clightning.apis.optional.LogLevel;
+import clightning.apis.optional.PingParams;
 import clightning.apis.response.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lnj.LightningForTesting;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,6 +39,142 @@ public class TestLightningDaemon {
             code.apply();
             Assert.fail("it's supposed to throw an exception!");
         } catch (Exception exp) {
+        }
+    }
+
+    @Test
+    public void testWait() {
+        String paymentHash = "6c7c87c865703a3ac4fe487bd2f0b8718bae180cf032cb8ba2ff979d81e7940d";
+        String label = "test3";
+        int lastPayIndex = 4;
+        try {
+            Assert.assertNotNull(client.waitSendPay(paymentHash));
+            Assert.assertNotNull(client.waitInvoice(label));
+            Assert.assertNotNull(client.waitAnyInvoice(lastPayIndex));
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Ignore // can not match the data file right now
+    @Test
+    public void testSendPay() {
+        ObjectMapper mapper = new ObjectMapper();
+        String rawRoute = "[{\"msatoshi\": 11, \"direction\": 1, \"amount_msat\": \"11msat\", \"delay\": 9, \"id\": \"036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472\", \"channel\": \"507x1x0\"}]";
+
+        try {
+            Route[] route = mapper.readValue(rawRoute, Route[].class);
+            String paymentHash = "d18ba6bf223f94c5ead6aba6d95d98fbe88b2a30087fa9c7ee8a4f8b21a95363";
+            SendPayResult result = client.sendPay(route, paymentHash);
+            Assert.assertNotNull(result);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testListTransactions() {
+        try {
+            Transaction[] transactions = client.listTransactions();
+            Assert.assertTrue(transactions.length > 0);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testListSendPays() {
+        try {
+            PayResult[] results = client.listSendPays();
+            Assert.assertTrue(results.length > 0);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testDelInvoice() {
+        try {
+            String label = "l";
+            InvoiceStatus status = InvoiceStatus.unpaid;
+            DetailedInvoice invoice = client.delInvoice(label, status);
+            Assert.assertNotNull(invoice);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testDelExpiredInvoice() {
+        try {
+            client.delExpiredInvoice();
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testDecodePay() {
+        try {
+            String bolt11 = "lnbcrt10u1p0qnafrpp5tsqkl3x0txc9u8ece0v42jw59vjzsz6p9gzkrjwuewl0xuqdzt6qdqgw3jhxapkxqyjw5qcqp2jj2v76sukafth2yqumhr5e7syppv5a7fuv9e4ueshtnhjaq2q2wr8l2s63epzdvcpntz73ap0zz4dxjvw3haadc49wx9vv7yr4fd0tcpkvl405";
+            Assert.assertNotNull(client.decodePay(bolt11));
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testListNodes() {
+        try {
+            Node[] nodes = client.listNodes();
+            Assert.assertTrue(nodes.length > 0);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testDisconnect() {
+        try {
+            String id = "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472";
+            client.disconnect(id);
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testListForwards() {
+        try {
+            // not enough testing data
+            Assert.assertTrue(
+                    client.listForwards().length == 0
+            );
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testPing() {
+        String id = "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472";
+        int len = 123;
+        try {
+            Assert.assertTrue(
+                    client.ping(id, new PingParams().setLen(len)) > 0
+            );
+        } catch (IOException e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testListPeers() {
+        try {
+            Peer[] peers = client.listPeers(new ListPeersParams().setLevel(LogLevel.io));
+            Assert.assertTrue(peers.length > 0);
+        } catch (IOException e) {
+            Assert.fail();
         }
     }
 

@@ -1,0 +1,488 @@
+[
+  {
+    "params": {
+      "level": "io"
+    },
+    "response": {
+      "peers": [
+        {
+          "id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472",
+          "connected": true,
+          "netaddr": [
+            "172.18.0.4:9735"
+          ],
+          "globalfeatures": "",
+          "localfeatures": "28a2",
+          "features": "28a2",
+          "channels": [
+            {
+              "state": "CLOSINGD_COMPLETE",
+              "scratch_txid": "82caf0783590a47d33c9a8509bfd9f9b259b5cf06cab8e9ab6bd741abc11a52c",
+              "channel_id": "3ae77197cc294cf8bdcc5a6a0b1acf264eb31d5995f201db22571544e390256a",
+              "funding_txid": "6a2590e344155722db01f295591db34e26cf1a0b6a5accbdf84c29cc9771e73a",
+              "private": false,
+              "funding_allocation_msat": {
+                "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472": 0,
+                "03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec": 10000000000
+              },
+              "funding_msat": {
+                "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472": "0msat",
+                "03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec": "10000000000msat"
+              },
+              "msatoshi_to_us": 10000000000,
+              "to_us_msat": "10000000000msat",
+              "msatoshi_to_us_min": 10000000000,
+              "min_to_us_msat": "10000000000msat",
+              "msatoshi_to_us_max": 10000000000,
+              "max_to_us_msat": "10000000000msat",
+              "msatoshi_total": 10000000000,
+              "total_msat": "10000000000msat",
+              "dust_limit_satoshis": 546,
+              "dust_limit_msat": "546000msat",
+              "max_htlc_value_in_flight_msat": 18446744073709551615,
+              "max_total_htlc_in_msat": "18446744073709551615msat",
+              "their_channel_reserve_satoshis": 100000,
+              "their_reserve_msat": "100000000msat",
+              "our_channel_reserve_satoshis": 100000,
+              "our_reserve_msat": "100000000msat",
+              "spendable_msatoshi": 4294967295,
+              "spendable_msat": "4294967295msat",
+              "htlc_minimum_msat": 0,
+              "minimum_htlc_in_msat": "0msat",
+              "their_to_self_delay": 6,
+              "our_to_self_delay": 6,
+              "max_accepted_htlcs": 483,
+              "status": [
+                "CHANNELD_AWAITING_LOCKIN:Reconnected, and reestablished.",
+                "CLOSINGD_SIGEXCHANGE:We agreed on a closing fee of 183 satoshi for tx:82caf0783590a47d33c9a8509bfd9f9b259b5cf06cab8e9ab6bd741abc11a52c"
+              ],
+              "in_payments_offered": 0,
+              "in_msatoshi_offered": 0,
+              "in_offered_msat": "0msat",
+              "in_payments_fulfilled": 0,
+              "in_msatoshi_fulfilled": 0,
+              "in_fulfilled_msat": "0msat",
+              "out_payments_offered": 0,
+              "out_msatoshi_offered": 0,
+              "out_offered_msat": "0msat",
+              "out_payments_fulfilled": 0,
+              "out_msatoshi_fulfilled": 0,
+              "out_fulfilled_msat": "0msat",
+              "htlcs": []
+            }
+          ],
+          "log": [
+            {
+              "type": "DEBUG",
+              "time": "0.003754849",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "pid 26282, msgfd 32"
+            },
+            {
+              "type": "DEBUG",
+              "time": "0.035482947",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Handed peer, entering loop"
+            },
+            {
+              "type": "DEBUG",
+              "time": "0.035681908",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_in WIRE_GOSSIP_TIMESTAMP_FILTER"
+            },
+            {
+              "type": "DEBUG",
+              "time": "0.035815432",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_GOSSIP_TIMESTAMP_FILTER"
+            },
+            {
+              "type": "DEBUG",
+              "time": "10.183145140",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_OPEN_CHANNEL"
+            },
+            {
+              "type": "DEBUG",
+              "time": "10.183611135",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_in WIRE_ACCEPT_CHANNEL"
+            },
+            {
+              "type": "DEBUG",
+              "time": "4489.617833452",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_ERROR"
+            },
+            {
+              "type": "DEBUG",
+              "time": "4489.617880374",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "aborted opening negotiation: Channel open canceled by RPC"
+            },
+            {
+              "type": "DEBUG",
+              "time": "9365.387804316",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_OPEN_CHANNEL"
+            },
+            {
+              "type": "DEBUG",
+              "time": "9365.387867376",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_in WIRE_ACCEPT_CHANNEL"
+            },
+            {
+              "type": "DEBUG",
+              "time": "11076.990850829",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "signature 3044022032caeebeed2a4acb961b45698e75188a1dbbd9330e02a04a14b53ae184fb591702206a1a8265c2b28fce1ff9012448c9506eca501a4d974b19652739845d72bd1ac001 on tx 02000000013ae77197cc294cf8bdcc5a6a0b1acf264eb31d5995f201db22571544e390256a0000000000cb6e108001c9959800000000001600149630a4a13cf062dafd5940660c964031399191332da3de20 using key 023d3fda69dfe6f5af6bf9a32c53b954a11b1fead427a1b9638b88a31ab4c3f337"
+            },
+            {
+              "type": "DEBUG",
+              "time": "11076.990926605",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_FUNDING_CREATED"
+            },
+            {
+              "type": "DEBUG",
+              "time": "11077.003830181",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_in WIRE_FUNDING_SIGNED"
+            },
+            {
+              "type": "DEBUG",
+              "time": "11077.007525981",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "pid 27934, msgfd 34"
+            },
+            {
+              "type": "DEBUG",
+              "time": "11077.007539633",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Waiting for funding confirmations"
+            },
+            {
+              "type": "DEBUG",
+              "time": "11077.007541654",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Ignoring fee limits!"
+            },
+            {
+              "type": "DEBUG",
+              "time": "11077.020789348",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "init LOCAL: remote_per_commit = 0323b8aea0557adc83382a9a3ca3e581317263a916dff8b6fbfc8b0213edc8ba0c, old_remote_per_commit = 0323b8aea0557adc83382a9a3ca3e581317263a916dff8b6fbfc8b0213edc8ba0c next_idx_local = 1 next_idx_remote = 1 revocations_received = 0 feerates 253/253 (range 253-4294967295)"
+            },
+            {
+              "type": "DEBUG",
+              "time": "11077.020875211",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "option_static_remotekey = 1"
+            },
+            {
+              "type": "INFO",
+              "time": "157151.921251103",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Peer transient failure in CHANNELD_AWAITING_LOCKIN: disconnect command force=true"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157151.921727570",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Status closed, but not exited. Killing"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157151.923924423",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Will try reconnect in 1 seconds"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.813041477",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Peer has reconnected, state CHANNELD_AWAITING_LOCKIN"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.817554084",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "pid 5279, msgfd 31"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.817600045",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Waiting for funding confirmations"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.817605330",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Ignoring fee limits!"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.907702627",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "init LOCAL: remote_per_commit = 0323b8aea0557adc83382a9a3ca3e581317263a916dff8b6fbfc8b0213edc8ba0c, old_remote_per_commit = 0323b8aea0557adc83382a9a3ca3e581317263a916dff8b6fbfc8b0213edc8ba0c next_idx_local = 1 next_idx_remote = 1 revocations_received = 0 feerates 253/253 (range 253-4294967295)"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.907970891",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "option_static_remotekey = 1"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.915125700",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_CHANNEL_REESTABLISH"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.918395745",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_in WIRE_CHANNEL_REESTABLISH"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.918574424",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Got reestablish commit=1 revoke=0"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.918712844",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "next_revocation_number = 0"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.918846968",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "option_static_remotekey: fields are correct"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.919658582",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_in WIRE_GOSSIP_TIMESTAMP_FILTER"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.920077833",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_GOSSIP_TIMESTAMP_FILTER"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.929334840",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Trying commit"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157153.929580144",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Can't send commit: nothing to send"
+            },
+            {
+              "type": "INFO",
+              "time": "157255.392615085",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "State changed from CHANNELD_AWAITING_LOCKIN to CHANNELD_SHUTTING_DOWN"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.447329006",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Trying commit"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.447614410",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Can't send commit: nothing to send"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.447754878",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_SHUTDOWN"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.457069407",
+              "source": "lightning_channeld-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_in WIRE_SHUTDOWN"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.480076940",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "pid 5294, msgfd 33"
+            },
+            {
+              "type": "INFO",
+              "time": "157255.480951168",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "State changed from CHANNELD_SHUTTING_DOWN to CLOSINGD_SIGEXCHANGE"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.560953264",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "out = 10000000sat/0sat"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.561145909",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "dustlimit = 546sat"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.561514494",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "fee = 183sat"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.562081320",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Making close tx at = 10000000sat/0sat fee 183sat"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.564176189",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "sending fee offer 183sat"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.564741957",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_out WIRE_CLOSING_SIGNED"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.580438317",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "peer_in WIRE_CLOSING_SIGNED"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.580646779",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Making close tx at = 10000000sat/0sat fee 183sat"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.581484423",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Received fee offer 183sat"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.581716089",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "...offer is reasonable"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.581973925",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Their actual closing tx fee is 183sat vs previous 183sat"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.599243471",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Feerange init 0sat-183sat, remote higher"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157255.599356041",
+              "source": "lightning_closingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "Feerange local update 183sat: now 184sat-183sat"
+            },
+            {
+              "type": "INFO",
+              "time": "157255.624562565",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #3:",
+              "log": "State changed from CLOSINGD_SIGEXCHANGE to CLOSINGD_COMPLETE"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157285.816799972",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #4:",
+              "log": "pid 5303, msgfd 32"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157285.869884899",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #4:",
+              "log": "Handed peer, entering loop"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157285.870016231",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #4:",
+              "log": "peer_in WIRE_GOSSIP_TIMESTAMP_FILTER"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157285.870231290",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #4:",
+              "log": "peer_out WIRE_GOSSIP_TIMESTAMP_FILTER"
+            },
+            {
+              "type": "INFO",
+              "time": "157297.372034641",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #4:",
+              "log": "Killing openingd: disconnect command"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157297.372478577",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #4:",
+              "log": "Status closed, but not exited. Killing"
+            },
+            {
+              "type": "INFO",
+              "time": "157297.374588064",
+              "source": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #4:",
+              "log": "disconnect command"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157767.346800265",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #5:",
+              "log": "pid 5376, msgfd 32"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157767.378428728",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #5:",
+              "log": "Handed peer, entering loop"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157767.378613266",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #5:",
+              "log": "peer_in WIRE_GOSSIP_TIMESTAMP_FILTER"
+            },
+            {
+              "type": "DEBUG",
+              "time": "157767.378745560",
+              "source": "lightning_openingd-036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 chan #5:",
+              "log": "peer_out WIRE_GOSSIP_TIMESTAMP_FILTER"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

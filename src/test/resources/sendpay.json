@@ -1,0 +1,21 @@
+[
+
+  {
+    "params": {
+      "route": [{"msatoshi": 11, "direction": 1, "amount_msat": "11msat", "delay": 9, "id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472", "channel": "507x1x0"}],
+      "payment_hash": "d18ba6bf223f94c5ead6aba6d95d98fbe88b2a30087fa9c7ee8a4f8b21a95363"
+    },
+    "response": {
+      "message": "Monitor status with listpayments or waitsendpay",
+      "id": 2,
+      "payment_hash": "d18ba6bf223f94c5ead6aba6d95d98fbe88b2a30087fa9c7ee8a4f8b21a95363",
+      "destination": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472",
+      "msatoshi": 11,
+      "amount_msat": "11msat",
+      "msatoshi_sent": 11,
+      "amount_sent_msat": "11msat",
+      "created_at": 1577691459,
+      "status": "pending"
+    }
+  }
+]
