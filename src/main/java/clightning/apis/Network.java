@@ -14,9 +14,9 @@ public interface Network {
      * connect id [host] [port]
      * Connect to {id} at {host} (which can end in ':port' if not default). {id} can also be of the form id@host
      */
-    String connect(String id, String host) throws IOException;
+    String connect(String id, String host);
 
-    String connect(String id, String host, Integer port) throws IOException;
+    String connect(String id, String host, Integer port);
 
     /**
      * disconnect id [force]
@@ -25,17 +25,17 @@ public interface Network {
      * lightning-cli disconnect 036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472 true
      * {}
      */
-    void disconnect(String id) throws IOException;
+    void disconnect(String id);
 
-    void disconnect(String id, boolean force) throws IOException;
+    void disconnect(String id, boolean force);
 
     /**
      * listnodes [id]
      * Show node {id} (or all, if no {id}), in our local network view
      */
-    Node[] listNodes() throws IOException;
+    Node[] listNodes();
 
-    Node[] listNodes(String id) throws IOException;
+    Node[] listNodes(String id);
 
     /**
      * listpeers [id] [level]
@@ -46,15 +46,15 @@ public interface Network {
      * Supplying level will show log entries related to that peer at the given log level. Valid log levels are “io”,
      * “debug”, “info”, and “unusual”.
      */
-    Peer[] listPeers() throws IOException;
+    Peer[] listPeers();
 
-    Peer[] listPeers(ListPeersParams optionalParams) throws IOException;
+    Peer[] listPeers(ListPeersParams optionalParams);
 
     /**
      * ping id [len] [pongbytes]
      * Send peer {id} a ping of length {len} (default 128) asking for {pongbytes} (default 128)
      */
-    int ping(String id) throws IOException;
+    int ping(String id);
 
-    int ping(String id, PingParams optionalParams) throws IOException;
+    int ping(String id, PingParams optionalParams);
 }

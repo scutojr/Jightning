@@ -2,6 +2,7 @@ package clightning;
 
 import clightning.apis.LightningClient;
 import clightning.apis.response.LightningDaemonInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -15,6 +16,7 @@ import org.newsclub.net.unix.AFUNIXSocketAddress;
 
 import java.io.*;
 import java.net.Socket;
+import java.rmi.Remote;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,31 +112,33 @@ public class LightningDaemon implements AbstractLightningDaemon {
      * @return
      */
     @Override
-    public synchronized <T> T execute(String method, Map params, Class<T> valueType) throws IOException {
-        JsonNode req = createRequest(method, params);
-        JsonNode rsp;
-        Socket socket = AFUNIXSocket.newInstance();
-        socket.connect(new AFUNIXSocketAddress(udPath));
-        sendRequest(req, socket.getOutputStream());
-        rsp = waitForResponse(socket.getInputStream());
-        socket.close();
-        return mapper.treeToValue(rsp.get("result"), valueType);
+    public synchronized <T> T execute(String method, Map params, Class<T> valueType) {
+        try {
+            JsonNode req = createRequest(method, params);
+            JsonNode rsp;
+            Socket socket = AFUNIXSocket.newInstance();
+            socket.connect(new AFUNIXSocketAddress(udPath));
+            sendRequest(req, socket.getOutputStream());
+            rsp = waitForResponse(socket.getInputStream());
+            if (rsp.has("error")) {
+                JsonNode error = rsp.get("error");
+                int code = error.get("code").asInt();
+                String message = error.get("message").asText();
+                throw new RemoteException(message, code);
+            }
+            socket.close();
+            return mapper.treeToValue(rsp.get("result"), valueType);
+        } catch (IOException e) {
+            throw new RemoteException(e);
+        }
     }
 
     @Override
-    public synchronized <T> T execute(String method, Class<T> valueType) throws IOException {
+    public synchronized <T> T execute(String method, Class<T> valueType) {
         return execute(method, EMPTY_PARAMS, valueType);
     }
 
     public LightningClient getLightningClient() {
         return new LightningClient(this);
-    }
-
-    public static void main(String args[]) throws IOException {
-        LightningDaemon lnd = new LightningDaemon();
-        for (int i = 0; i < 10; i++) {
-            LightningDaemonInfo rsp = lnd.execute("getinfo", LightningDaemonInfo.class);
-            System.out.println(rsp.getId());
-        }
     }
 }

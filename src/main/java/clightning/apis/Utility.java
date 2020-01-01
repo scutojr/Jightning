@@ -8,59 +8,59 @@ import java.io.IOException;
 public interface Utility {
     /**
      * check command_to_check
-     *     Don't run {command_to_check}, just verify parameters.
+     * Don't run {command_to_check}, just verify parameters.
      */
     void check();
 
     /**
-     *
      * https://lightning.readthedocs.io/lightning-checkmessage.7.html
-     *
+     * <p>
      * checkmessage message zbase [pubkey]
-     *     Verify a digital signature {zbase} of {message} signed with {pubkey}
+     * Verify a digital signature {zbase} of {message} signed with {pubkey}
      */
-    CheckMessageResult checkMessage(String message, String zbase) throws IOException;
+    CheckMessageResult checkMessage(String message, String zbase);
 
-    CheckMessageResult checkMessage(String message, String zbase, String pubKey) throws IOException;
+    CheckMessageResult checkMessage(String message, String zbase, String pubKey);
 
     /**
      * getinfo
-     *     Show information about this node
+     * Show information about this node
      */
-    LightningDaemonInfo getInfo() throws IOException;
+    LightningDaemonInfo getInfo();
 
     /**
      * getlog [level]
-     *     Show logs, with optional log {level} (info|unusual|debug|io)
+     * Show logs, with optional log {level} (info|unusual|debug|io)
      */
-    LogResult getLog() throws IOException;
+    LogResult getLog();
 
-    LogResult getLog(LogLevel level) throws IOException;
+    LogResult getLog(LogLevel level);
 
     /**
      * help [command]
-     *     List available commands, or give verbose help on one {command}.
+     * List available commands, or give verbose help on one {command}.
      */
-    CommandUsage[] help() throws IOException;
-    CommandUsage help(String command) throws IOException;
+    CommandUsage[] help();
+
+    CommandUsage help(String command);
 
     /**
      * listconfigs [config]
-     *     List all configuration options, or with [config], just that one.
+     * List all configuration options, or with [config], just that one.
      */
-    Configuration listConfigs() throws IOException;
+    Configuration listConfigs();
 
     /**
      * listfunds
-     *     Show available funds from the internal wallet
+     * Show available funds from the internal wallet
      */
-    Funds listFunds() throws IOException;
+    Funds listFunds();
 
     /**
      * https://lightning.readthedocs.io/lightning-signmessage.7.html
-     *
+     * <p>
      * signmessage message
-     *     Create a digital signature of {message}
+     * Create a digital signature of {message}
      */
-    SignResult signMessage(String message) throws IOException;
+    SignResult signMessage(String message);
 }

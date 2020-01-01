@@ -1,6 +1,7 @@
 package lnj;
 
 import clightning.AbstractLightningDaemon;
+import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -115,17 +116,17 @@ public class LightningForTesting implements AbstractLightningDaemon {
     }
 
     @Override
-    public <T> T execute(String method, Map params, Class<T> valueType) throws IOException {
+    public <T> T execute(String method, Map params, Class<T> valueType) {
         String fileName = getDataFileName(method, params);
         String content = jsonFiles.get(fileName);
         if (valueType == String.class)
             return (T) content;
         else
-            return mapper.readValue(content, valueType);
+            return JsonUtil.convert(content, valueType);
     }
 
     @Override
-    public <T> T execute(String method, Class<T> valueType) throws IOException {
+    public <T> T execute(String method, Class<T> valueType) {
         return execute(method, new HashMap(), valueType);
     }
 }

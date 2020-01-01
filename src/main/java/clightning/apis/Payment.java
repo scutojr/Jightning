@@ -13,23 +13,25 @@ public interface Payment {
      * decodepay bolt11 [description]
      * Decode {bolt11}, using {description} if necessary
      */
-    Bolt11 decodePay(String bolt11) throws IOException;
-    Bolt11 decodePay(String bolt11, String description) throws IOException;
+    Bolt11 decodePay(String bolt11);
+
+    Bolt11 decodePay(String bolt11, String description);
 
     /**
      * https://lightning.readthedocs.io/lightning-delexpiredinvoice.7.html
-     *
+     * <p>
      * delexpiredinvoice [maxexpirytime]
      * Delete all expired invoices that expired as of given {maxexpirytime} (a UNIX epoch time), or all expired invoices if not specified
      */
-    void delExpiredInvoice() throws IOException;
-    void delExpiredInvoice(int maxExpiryTimeSec) throws IOException;
+    void delExpiredInvoice();
+
+    void delExpiredInvoice(int maxExpiryTimeSec);
 
     /**
      * delinvoice label status
      * Delete unpaid invoice {label} with {status}
      */
-    DetailedInvoice delInvoice(String label, InvoiceStatus status) throws IOException;
+    DetailedInvoice delInvoice(String label, InvoiceStatus status);
 
     /**
      * https://lightning.readthedocs.io/lightning-invoice.7.html
@@ -55,61 +57,61 @@ public interface Payment {
      * use unpublished channels only if there are no published channels. If true unpublished
      * channels are always considered as a route hint candidate; if false, never.
      */
-    SimpleInvoice invoice(long msatoshi, String label, String description) throws IOException;
+    SimpleInvoice invoice(long msatoshi, String label, String description);
 
-    SimpleInvoice invoice(long msatoshi, String label, String description, InvoiceParams optionalParams) throws IOException;
+    SimpleInvoice invoice(long msatoshi, String label, String description, InvoiceParams optionalParams);
 
     /**
      * listinvoices [label]
      * Show invoice {label} (or all, if no {label})
      */
-    List<DetailedInvoice> listInvoices() throws IOException;
+    DetailedInvoice[] listInvoices();
 
-    List<DetailedInvoice> listInvoices(String label) throws IOException;
+    DetailedInvoice[] listInvoices(String label);
 
     /**
      * listsendpays [bolt11] [payment_hash]
      * Show sendpay, old and current, optionally limiting to {bolt11} or {payment_hash}.
      */
-    PayResult[] listSendPays() throws IOException;
+    PayResult[] listSendPays();
 
-    PayResult[] listSendPays(ListSendPaysParams optionalParams) throws IOException;
+    PayResult[] listSendPays(ListSendPaysParams optionalParams);
 
     /**
      * listtransactions
      * List transactions that we stored in the wallet
      */
-    Transaction[] listTransactions() throws IOException;
+    Transaction[] listTransactions();
 
     /**
-     *
      * lightning-cli sendpay '[{"msatoshi": 11, "direction": 1, "amount_msat": "11msat", "delay": 9, "id": "036c0793141c045a9e1e50efaa2740def367800580ecad7d31268103f9b9e97472", "channel": "507x1x0"}]' d18ba6bf223f94c5ead6aba6d95d98fbe88b2a30087fa9c7ee8a4f8b21a95363
-     *
+     * <p>
      * sendpay route payment_hash [label] [msatoshi] [bolt11]
      * Send along {route} in return for preimage of {payment_hash}
      */
-    SendPayResult sendPay(Route[] route, String paymentHash) throws IOException;
+    SendPayResult sendPay(Route[] route, String paymentHash);
 
-    SendPayResult sendPay(Route[] route, String paymentHash, SendPayParams optionalParams) throws IOException;
+    SendPayResult sendPay(Route[] route, String paymentHash, SendPayParams optionalParams);
 
     /**
      * waitanyinvoice [lastpay_index]
      * Wait for the next invoice to be paid, after {lastpay_index} (if supplied)
      */
-    DetailedInvoice waitAnyInvoice(int lastPayIndex) throws IOException;
+    DetailedInvoice waitAnyInvoice(int lastPayIndex);
 
     /**
      * https://lightning.readthedocs.io/lightning-waitanyinvoice.7.html
-     *
+     * <p>
      * waitinvoice label
      * Wait for an incoming payment matching the invoice with {label}, or if the invoice expires
      */
-    DetailedInvoice waitInvoice(String label) throws IOException;
+    DetailedInvoice waitInvoice(String label);
 
     /**
      * waitsendpay payment_hash [timeout]
      * Wait for payment attempt on {payment_hash} to succeed or fail, but only up to {timeout} seconds.
      */
-    PayResult waitSendPay(String paymentHash) throws IOException;
-    PayResult waitSendPay(String paymentHash, long timeout) throws IOException;
+    PayResult waitSendPay(String paymentHash);
+
+    PayResult waitSendPay(String paymentHash, long timeout);
 }
