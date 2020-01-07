@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  node1:
+    image: lightning:v0.7.3
+    entrypoint: bash -c "sleep 2 && bitcoind -daemon -connect=node2 -regtest && lightningd --network=regtest"
+    volumes:
+      - ~/.m2:/root/.m2
+      - ../../:/root/project
+    depends_on:
+      - node2
+    networks:
+      - regtest
+    container_name: node1
+
+  node2:
+    image: lightning:v0.7.3
+    entrypoint: bash -c "bitcoind -daemon -regtest && lightningd --network=regtest"
+    volumes:
+      - ~/.m2:/root/.m2
+      - ../../:/root/project
+    networks:
+      - regtest
+    container_name: node2
+
+  node3:
+    image: lightning:v0.7.3
+    entrypoint: bash -c "sleep 2 && bitcoind -daemon -connect=node2 -regtest && lightningd --network=regtest"
+    volumes:
+      - ~/.m2:/root/.m2
+      - ../../:/root/project
+    depends_on:
+      - node2
+    networks:
+      - regtest
+    container_name: node3
+
+networks:
+  regtest: 
