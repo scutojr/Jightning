@@ -2,7 +2,7 @@ FROM centos:7
 
 ARG BTC_VERSION
 
-ADD resource/epel-release-7-12.noarch.rpm /tmp/
+ADD pel-release-7-12.noarch.rpm /tmp/
 
 RUN rpm -Uvh /tmp/epel-release-7-12.noarch.rpm && \
     yum update -y

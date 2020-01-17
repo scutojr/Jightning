@@ -3,7 +3,9 @@ version: '3.4'
 services:
   node1:
     image: lightning:v0.7.3
-    entrypoint: bash -c "sleep 2 && bitcoind -daemon -connect=node2 -regtest && lightningd --network=regtest"
+    entrypoint: bash -c "sleep 2 && bitcoind -daemon -connect=node2 -regtest && sleep 2 && lightningd --network=regtest"
+    ports:
+      - "5005:5005"
     volumes:
       - ~/.m2:/root/.m2
       - ../../:/root/project
@@ -15,7 +17,9 @@ services:
 
   node2:
     image: lightning:v0.7.3
-    entrypoint: bash -c "bitcoind -daemon -regtest && lightningd --network=regtest"
+    entrypoint: bash -c "bitcoind -daemon -regtest && sleep 2 && lightningd --network=regtest"
+    ports:
+      - "5006:5005"
     volumes:
       - ~/.m2:/root/.m2
       - ../../:/root/project
@@ -25,7 +29,9 @@ services:
 
   node3:
     image: lightning:v0.7.3
-    entrypoint: bash -c "sleep 2 && bitcoind -daemon -connect=node2 -regtest && lightningd --network=regtest"
+    entrypoint: bash -c "sleep 2 && bitcoind -daemon -connect=node2 -regtest && sleep 2 && lightningd --network=regtest"
+    ports:
+      - "5007:5005"
     volumes:
       - ~/.m2:/root/.m2
       - ../../:/root/project
