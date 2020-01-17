@@ -6,7 +6,7 @@ package clightning.apis.optional;
  * command will wait indefinitely until the peer is online and can negotiate a mutual close.
  * The default is 2 days (172800 seconds).
  * <p>
- * The destination can be of any Bitcoin accepted type, including bech32. If it isn’t specified,
+ * The destination can be of any Bitcoin accepted type, including bech32. If it isn't specified,
  * the default is a c-lightning wallet address.
  */
 public class CloseParams extends OptionalParams {

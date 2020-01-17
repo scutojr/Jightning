@@ -43,8 +43,8 @@ public interface Network {
      * <p>
      * Supplying id will filter the results to only return data on a node with a matching id, if one exists.
      * <p>
-     * Supplying level will show log entries related to that peer at the given log level. Valid log levels are “io”,
-     * “debug”, “info”, and “unusual”.
+     * Supplying level will show log entries related to that peer at the given log level. Valid log levels are "io",
+     * "debug", "info", and "unusual".
      */
     Peer[] listPeers();
 

@@ -3,6 +3,8 @@ package clightning.apis.response;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Data;
 
+import java.util.Optional;
+
 @Data
 public class SimpleInvoice {
       @JsonSetter("payment_hash")
@@ -15,5 +17,5 @@ public class SimpleInvoice {
       private String bolt11;
 
       @JsonSetter("warning_capacity")
-      private String warningCapacity;
+      private Optional<String> warningCapacity;
 }

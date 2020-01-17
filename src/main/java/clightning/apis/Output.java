@@ -13,8 +13,11 @@ public class Output {
         amount = satoshi;
     }
 
-    public Output(String address, String amount) {
+    public Output(String address, String display) {
         this.address = address;
-        display = amount;
+        display = display;
+        assert display.endsWith("msat");
+        String value = display.substring(0, display.length() - "msat".length());
+        amount = Long.parseLong(value) / 1000;
     }
 }

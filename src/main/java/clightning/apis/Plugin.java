@@ -34,7 +34,7 @@ public interface Plugin {
      * <p>
      * minconf: the minimum number of confirmations that used outputs should have, default to 1
      * <p>
-     * utxos: specifies the utxos to be used to fund the channel, as an array of “txid:vout”.
+     * utxos: specifies the utxos to be used to fund the channel, as an array of "txid:vout".
      */
     FundChannel fundChannel(String id, long amountSato);
 

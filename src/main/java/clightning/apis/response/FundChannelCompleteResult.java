@@ -8,6 +8,6 @@ public class FundChannelCompleteResult {
     @JsonSetter("channel_id")
     private String channelId;
 
-    @JsonSetter("commitmentsSecured")
-    private boolean commitments_secured;
+    @JsonSetter("commitments_secured")
+    private boolean commitmentsSecured;
 }

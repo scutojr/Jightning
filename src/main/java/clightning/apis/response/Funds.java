@@ -1,7 +1,10 @@
 package clightning.apis.response;
 
+import clightning.apis.ChannelState;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Data;
+
+import java.util.Optional;
 
 @Data
 public class Funds {
@@ -24,7 +27,10 @@ public class Funds {
     @Data
     public static class Channel {
         private boolean connected;
-        private String state;
+        private ChannelState state;
+
+        @JsonSetter("short_channel_id")
+        private Optional<String> shortChannelId; // only available when state is CHANNELD_NORMAL
 
         @JsonSetter("peer_id")
         private String peerId;

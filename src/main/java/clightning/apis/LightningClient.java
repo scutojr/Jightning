@@ -145,8 +145,8 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
     }
 
     @Override
-    public CloseResult close(String channelId) {
-        return close(channelId, null);
+    public CloseResult close(String channelOrNodeId) {
+        return close(channelOrNodeId, null);
     }
 
     @Override
@@ -293,7 +293,9 @@ public class LightningClient implements Bitcoin, Channel, Network, Payment, Util
         Map<String, Object> params = createParam();
         params.put("id", id);
         params.put("host", host);
-        params.put("port", port);
+        if (Objects.nonNull(port)) {
+            params.put("port", port);
+        }
         JsonNode node = lnd.execute("connect", params, JsonNode.class);
         return node.get("id").asText();
     }

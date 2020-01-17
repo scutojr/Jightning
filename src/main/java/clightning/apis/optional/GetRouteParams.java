@@ -38,7 +38,7 @@ public class GetRouteParams extends OptionalParams {
     }
 
     /**
-     * exclude is a JSON array of short-channel-id/direction (e.g. [ “564334x877x1/0”, “564195x1292x0/1” ]) or
+     * exclude is a JSON array of short-channel-id/direction (e.g. ["564334x877x1/0", "564195x1292x0/1"]) or
      * node-id which should be excluded from consideration for routing. The default is not to exclude any channels
      * or nodes. Note if the source or destination is excluded, the command result is undefined.
      *

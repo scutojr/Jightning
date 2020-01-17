@@ -42,7 +42,7 @@ public interface Bitcoin {
      * <p>
      * minconf specifies the minimum number of confirmations that used outputs should have. Default is 1.
      * <p>
-     * utxos specifies the utxos to be used to fund the transaction, as an array of “txid:vout”
+     * utxos specifies the utxos to be used to fund the transaction, as an array of "txid:vout"
      */
     TxPrepareResult txPrepare(Output[] outputs);
 
@@ -62,7 +62,7 @@ public interface Bitcoin {
     /**
      * https://lightning.readthedocs.io/lightning-withdraw.7.html
      * <p>
-     * sends funds from c-lightning’s internal wallet to the address specified in destination.
+     * sends funds from c-lightning's internal wallet to the address specified in destination.
      * <p>
      * withdraw destination satoshi [feerate] [minconf] [utxos]
      * Send to {destination} address {satoshi} (or 'all') amount via Bitcoin transaction, at optional {feerate}

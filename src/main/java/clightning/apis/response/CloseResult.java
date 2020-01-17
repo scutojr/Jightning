@@ -10,5 +10,5 @@ public class CloseResult {
       @JsonSetter("txid")
       private String txId;
 
-      private String type; // TODO: classify the type sucha as "mutual"
+      private String type; // TODO: classify the type such as "mutual"
 }

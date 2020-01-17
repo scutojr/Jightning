@@ -3,9 +3,6 @@ package clightning.apis;
 import clightning.apis.optional.*;
 import clightning.apis.response.*;
 
-import java.io.IOException;
-import java.util.List;
-
 public interface Channel {
     /**
      * https://lightning.readthedocs.io/lightning-close.7.html
@@ -110,7 +107,7 @@ public interface Channel {
      * Sets specific routing fees for channel with {id} (either peer ID, channel ID, short channel ID or 'all'). Routing fees are defined by a fixed {base} (msat) and a {ppm} (proportional per millionth) value. If values for {base} or {ppm} are left out, defaults will be used. {base} can also be defined in other units, for example '1sat'. If {id} is 'all', the fees will be applied for all channels.
      * <p>
      * id is required and should contain a scid (short channel ID), channel id or peerid (pubkey) of the channel
-     * to be modified. If id is set to “all”, the fees for all channels are updated that are in state CHANNELD_NORMAL
+     * to be modified. If id is set to "all", the fees for all channels are updated that are in state CHANNELD_NORMAL
      * or CHANNELD_AWAITING_LOCKIN.
      */
     SetChannelFeeResult setChannelFee(String channelIdOrPeerId);
