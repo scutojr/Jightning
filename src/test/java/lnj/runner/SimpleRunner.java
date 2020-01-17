@@ -3,7 +3,7 @@ package lnj.runner;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import lnj.testCase.TestLightningDaemon;
+import lnj.unit.TestLightningDaemon;
 
 public class SimpleRunner {
     public static void main(String[] args) {
