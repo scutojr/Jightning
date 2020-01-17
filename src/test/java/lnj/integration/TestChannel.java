@@ -4,11 +4,14 @@ import clightning.LightningDaemon;
 import clightning.apis.ChannelState;
 import clightning.apis.LightningClient;
 import clightning.apis.Output;
+import clightning.apis.optional.ListChannelsParams;
+import clightning.apis.optional.SetChannelFeeParams;
 import clightning.apis.response.*;
 import lnj.utils.BitcoinUtils;
 import lnj.utils.LightningUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -39,6 +42,37 @@ public class TestChannel {
     public void setUp() throws IOException {
         LightningDaemon lnd = new LightningDaemon();
         client = lnd.getLightningClient();
+    }
+
+    @Test
+    @Ignore
+    public void testListForwards() {
+        // TODO: call the method will cause the lightning daemon exit unexpectedly
+    }
+
+    @Test
+    public void testSetChannelFee() {
+        SetChannelFeeParams params = new SetChannelFeeParams().setBase(2);
+        for (Channel channel : client.listChannels()) {
+            client.setChannelFee(channel.getShortChannelId(), params);
+        }
+    }
+
+    @Test
+    public void testListChannels() {
+        Channel[] channels = client.listChannels();
+        for (Channel channel : channels) {
+            ListChannelsParams p1 = new ListChannelsParams()
+                    .setShortChannelId(channel.getShortChannelId());
+            Assert.assertTrue(
+                    client.listChannels(p1).length > 0
+            );
+            ListChannelsParams p2 = new ListChannelsParams()
+                    .setSource(channel.getSource());
+            Assert.assertTrue(
+                    client.listChannels(p2).length > 0
+            );
+        }
     }
 
     @Test
@@ -90,7 +124,7 @@ public class TestChannel {
         // generate the block and then assert the state of the funding channel
         boolean isSuccess = false;
         Funds.Channel channel = null;
-        for(int i = 0; i < 60 ; i++) {
+        for (int i = 0; i < 60; i++) {
             for (Funds.Channel c : client.listFunds().getChannels()) {
                 if (c.getPeerId().equals(destNodeId)) {
                     channel = c;

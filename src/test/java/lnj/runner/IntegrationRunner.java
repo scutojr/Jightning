@@ -8,7 +8,7 @@ import com.googlecode.jsonrpc4j.ProxyUtil;
 import com.googlecode.jsonrpc4j.StreamServer;
 import lnj.PaymentService;
 import lnj.PaymentServiceImpl;
-import lnj.integration.TestBitcoinApi;
+import lnj.integration.TestBitcoin;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -66,7 +66,7 @@ public class IntegrationRunner extends Runner {
 
     @Override
     public void run(RunNotifier runNotifier) {
-        Result res = JUnitCore.runClasses(TestBitcoinApi.class);
+        Result res = JUnitCore.runClasses(TestBitcoin.class);
         for(Failure failure : res.getFailures()) {
             System.out.println(failure.getTrace());
         }

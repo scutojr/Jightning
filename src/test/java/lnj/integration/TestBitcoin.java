@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 //@RunWith(IntegrationRunner.class)
-public class TestBitcoinApi {
+public class TestBitcoin {
     private PaymentService paymentService;
     private static LightningClient client;
 
