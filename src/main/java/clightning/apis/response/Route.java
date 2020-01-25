@@ -1,8 +1,6 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -12,7 +10,7 @@ public class Route {
     private int direction;
     private long msatoshi;
 
-    @JsonSetter("amount_msat")
+    @JsonProperty("amount_msat")
     private String amountMsat;
 
     private int delay;

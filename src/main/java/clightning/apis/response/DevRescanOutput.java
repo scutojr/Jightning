@@ -1,18 +1,18 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class DevRescanOutput {
-        @JsonSetter("txid")
+        @JsonProperty("txid")
         private String txId;
 
         private int output;
 
-        @JsonSetter("oldstate")
+        @JsonProperty("oldstate")
         private int oldState;
 
-        @JsonSetter("newstate")
+        @JsonProperty("newstate")
         private int newState;
 }

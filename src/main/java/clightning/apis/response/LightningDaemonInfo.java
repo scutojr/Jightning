@@ -1,7 +1,7 @@
 package clightning.apis.response;
 
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import lombok.Data;
 import lombok.Getter;
@@ -16,16 +16,16 @@ public class LightningDaemonInfo {
     private String alias;
     private String color;
 
-    @JsonSetter("num_peers")
+    @JsonProperty("num_peers")
     private int numPeers;
 
-    @JsonSetter("num_pending_channels")
+    @JsonProperty("num_pending_channels")
     private int numPendingChannels;
 
-    @JsonSetter("num_active_channels")
+    @JsonProperty("num_active_channels")
     private int numActiveChannels;
 
-    @JsonSetter("num_inactive_channels")
+    @JsonProperty("num_inactive_channels")
     private int numInactiveChannels;
 
     private Address address[];
@@ -34,13 +34,13 @@ public class LightningDaemonInfo {
     private int blockheight;
     private String network;
 
-    @JsonSetter("msatoshi_fees_collected")
+    @JsonProperty("msatoshi_fees_collected")
     private int msatoshiFeesCollected;
 
-    @JsonSetter("fees_collected_msat")
+    @JsonProperty("fees_collected_msat")
     private String feesCollectedMsat;
 
-    @JsonSetter("warning_bitcoind_sync")
+    @JsonProperty("warning_bitcoind_sync")
     private String warningBitcoindSync;
 
     /**

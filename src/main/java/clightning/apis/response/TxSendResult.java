@@ -1,6 +1,6 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 // TODO: merge common implementation as one
@@ -8,6 +8,6 @@ import lombok.Data;
 public class TxSendResult {
     private String tx; // TODO: decode it into transaction instance
 
-    @JsonSetter("txid")
+    @JsonProperty("txid")
     private String txId;
 }

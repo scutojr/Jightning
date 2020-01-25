@@ -1,6 +1,6 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -20,19 +20,19 @@ public class LogResult {
 
         // TODO: data and numSkipped is not always existed. redesign it.
         private String data = "";
-        @JsonSetter("num_skipped")
+        @JsonProperty("num_skipped")
         private int numSkipped = 0;
     }
 
-    @JsonSetter("created_at")
+    @JsonProperty("created_at")
     private String createdAt;
 
-    @JsonSetter("bytes_used")
+    @JsonProperty("bytes_used")
     private long bytesUsed;
 
-    @JsonSetter("bytes_max")
+    @JsonProperty("bytes_max")
     private long bytesMax;
 
-    @JsonSetter("log")
+    @JsonProperty("log")
     private Log[] logs;
 }

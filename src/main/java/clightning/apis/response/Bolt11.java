@@ -1,6 +1,6 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
@@ -9,7 +9,7 @@ import java.util.Optional;
 public class Bolt11 {
     private String currency;
 
-    @JsonSetter("created_at")
+    @JsonProperty("created_at")
     private long createdAt;
 
     private int expiry; // the number of seconds this is valid after timestamp.
@@ -17,17 +17,17 @@ public class Bolt11 {
 
     private Optional<Long> msatoshi;
 
-    @JsonSetter("amount_msat")
+    @JsonProperty("amount_msat")
     private Optional<String> amountMsat;
 
     private String description;
 
-    @JsonSetter("min_final_cltv_expiry")
+    @JsonProperty("min_final_cltv_expiry")
     private int minFinalCltvExpiry;
 
     private String features;
 
-    @JsonSetter("payment_hash")
+    @JsonProperty("payment_hash")
     private String paymentHash;
 
     private String signature;
@@ -51,19 +51,19 @@ public class Bolt11 {
 
     @Data
     public static class Route {
-        @JsonSetter("pubkey")
+        @JsonProperty("pubkey")
         private String pubKey;
 
-        @JsonSetter("short_channel_id")
+        @JsonProperty("short_channel_id")
         private String shortChannelId;
 
-        @JsonSetter("fee_base_msat")
+        @JsonProperty("fee_base_msat")
         private long feeBaseMsat;
 
-        @JsonSetter("fee_proportional_millionths")
+        @JsonProperty("fee_proportional_millionths")
         private long feeProportionalMillionths;
 
-        @JsonSetter("cltv_expiry_delta")
+        @JsonProperty("cltv_expiry_delta")
         private int cltvExpiryDelta;
     }
 

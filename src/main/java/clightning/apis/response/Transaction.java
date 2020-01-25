@@ -1,6 +1,6 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
@@ -9,16 +9,16 @@ import java.util.Optional;
 public class Transaction {
     private String hash;
 
-    @JsonSetter("rawtx")
+    @JsonProperty("rawtx")
     private String rawTx;
 
-    @JsonSetter("blockheight")
+    @JsonProperty("blockheight")
     private int blockHeight;
 
-    @JsonSetter("txindex")
+    @JsonProperty("txindex")
     private int txIndex;
 
-    @JsonSetter("locktime")
+    @JsonProperty("locktime")
     private long lockTime;
 
     private int version;
@@ -31,7 +31,7 @@ public class Transaction {
 
     @Data
     public static class Input {
-        @JsonSetter("txid")
+        @JsonProperty("txid")
         private String txId;
 
         private int index;

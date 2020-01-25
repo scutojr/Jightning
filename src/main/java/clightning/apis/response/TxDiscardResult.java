@@ -1,11 +1,11 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TxDiscardResult {
-    @JsonSetter("unsigned_tx")
+    @JsonProperty("unsigned_tx")
     private String unsignedTx; // TODO: decode it into transaction instance
 
-    @JsonSetter("txid")
+    @JsonProperty("txid")
     private String txId;
 }

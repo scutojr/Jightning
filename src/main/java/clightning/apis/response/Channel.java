@@ -1,6 +1,6 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -27,38 +27,38 @@ public class Channel {
      private String source;
      private String destination;
 
-     @JsonSetter("short_channel_id")
+     @JsonProperty("short_channel_id")
      private String shortChannelId;
 
-     @JsonSetter("public")
+     @JsonProperty("public")
      private boolean isPublic;
 
      private long satoshis;
 
-     @JsonSetter("amount_msat")
+     @JsonProperty("amount_msat")
      private String amountMsat;
 
-     @JsonSetter("message_flags")
+     @JsonProperty("message_flags")
      private int messageFlags;
 
-     @JsonSetter("channel_flags")
+     @JsonProperty("channel_flags")
      private int channelFlags;
 
      private boolean active;
 
-     @JsonSetter("last_update")
+     @JsonProperty("last_update")
      private int lastUpdate;
 
-     @JsonSetter("base_fee_millisatoshi")
+     @JsonProperty("base_fee_millisatoshi")
      private int baseFeeMillisatoshi;
 
-     @JsonSetter("fee_per_millionth")
+     @JsonProperty("fee_per_millionth")
      private int feePerMillionth;
      private int delay;
 
-     @JsonSetter("htlc_minimum_msat")
+     @JsonProperty("htlc_minimum_msat")
      private String htlcMinimumMsat;
 
-     @JsonSetter("htlc_maximum_msat")
+     @JsonProperty("htlc_maximum_msat")
      private String htlcMaximumMsat;
 }

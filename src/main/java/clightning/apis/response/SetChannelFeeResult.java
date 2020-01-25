@@ -1,6 +1,6 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -11,10 +11,10 @@ public class SetChannelFeeResult {
 
     @Data
     public static class Channel {
-        @JsonSetter("peer_id")
+        @JsonProperty("peer_id")
         private String peerId;
 
-        @JsonSetter("channel_id")
+        @JsonProperty("channel_id")
         private String channelId;
     }
 }

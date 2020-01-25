@@ -1,13 +1,13 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class TxPrepareResult {
-    @JsonSetter("unsigned_tx")
+    @JsonProperty("unsigned_tx")
     private String unsignedTx;
 
-    @JsonSetter("txid")
+    @JsonProperty("txid")
     private String txId;
 }
