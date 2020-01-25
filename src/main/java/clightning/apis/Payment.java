@@ -5,9 +5,6 @@ import clightning.apis.optional.ListSendPaysParams;
 import clightning.apis.optional.SendPayParams;
 import clightning.apis.response.*;
 
-import java.io.IOException;
-import java.util.List;
-
 public interface Payment {
     /**
      * decodepay bolt11 [description]

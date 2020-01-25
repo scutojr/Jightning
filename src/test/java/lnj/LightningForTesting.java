@@ -54,7 +54,7 @@ public class LightningForTesting implements AbstractLightningDaemon {
     }
 
     private void loadJsonFiles() throws URISyntaxException, IOException {
-        URL url = LightningForTesting.class.getClassLoader().getResource(".");
+        URL url = LightningForTesting.class.getClassLoader().getResource("./api_data");
         DirectoryStream<Path> paths = Files.newDirectoryStream(Paths.get(url.toURI()));
         for (Path path : paths) {
             String fileName = path.getFileName().toString();

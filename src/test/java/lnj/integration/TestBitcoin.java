@@ -5,32 +5,26 @@ import clightning.apis.LightningClient;
 import clightning.apis.Output;
 import clightning.apis.response.TxPrepareResult;
 import lnj.PaymentService;
-import lnj.runner.IntegrationRunner;
+import lnj.LightningTestingServer;
 import lnj.utils.BitcoinUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
 //@RunWith(IntegrationRunner.class)
 public class TestBitcoin {
-    private PaymentService paymentService;
-    private static LightningClient client;
+    private LightningClient client;
 
-    static {
+    @Before
+    public void setUp() {
         try {
             client = new LightningDaemon().getLightningClient();
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail();
         }
-    }
-
-    @Before
-    public void setUp() {
-        paymentService = IntegrationRunner.paymentService;
     }
 
     @Test

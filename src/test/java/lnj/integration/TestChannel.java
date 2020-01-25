@@ -19,16 +19,6 @@ import java.util.Arrays;
 
 public class TestChannel {
     private LightningClient client;
-//    private static LightningClient client;
-//
-//    static {
-//        try {
-//            client = new LightningDaemon().getLightningClient();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Assert.fail();
-//        }
-//    }
 
     private void sleep(long milliSec) {
         try {

@@ -1,31 +1,19 @@
-package lnj.runner;
+package lnj;
 
 import clightning.LightningDaemon;
 import clightning.apis.LightningClient;
-import com.googlecode.jsonrpc4j.JsonRpcClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
-import com.googlecode.jsonrpc4j.ProxyUtil;
 import com.googlecode.jsonrpc4j.StreamServer;
-import lnj.PaymentService;
-import lnj.PaymentServiceImpl;
-import lnj.integration.TestBitcoin;
-import org.junit.runner.Description;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.Runner;
-import org.junit.runner.notification.Failure;
-import org.junit.runner.notification.RunNotifier;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 
-public class IntegrationRunner extends Runner {
-    public static PaymentService paymentService;
-    private static StreamServer server;
+public class LightningTestingServer {
+    private StreamServer server;
 
-    static {
+    public LightningTestingServer() {
         try {
             server = getServer();
         } catch (IOException e) {
@@ -34,31 +22,24 @@ public class IntegrationRunner extends Runner {
         }
     }
 
-    public static StreamServer getServer() throws IOException {
+    public StreamServer getServer() throws IOException {
         LightningDaemon lightningDaemon = new LightningDaemon();
         LightningClient client = lightningDaemon.getLightningClient();
-        PaymentServiceImpl paymentServiceImpl = new PaymentServiceImpl(client);
-        JsonRpcServer server = new JsonRpcServer(paymentServiceImpl);
+        JsonRpcServer server = new JsonRpcServer(
+                new ObjectMapper().registerModule(new Jdk8Module()),
+                client
+        );
 
         int maxThreads = 1;
         // TODO: set the port by property
-        int port = 12345;
+        int port = 5556;
         ServerSocket ss = new ServerSocket(port);
         StreamServer streamServer = new StreamServer(server, maxThreads, ss);
         streamServer.start();
         return streamServer;
     }
 
-    @Override
-    public Description getDescription() {
-        return null;
-    }
-
-    @Override
-    public void run(RunNotifier runNotifier) {
-        Result res = JUnitCore.runClasses(TestBitcoin.class);
-        for(Failure failure : res.getFailures()) {
-            System.out.println(failure.getTrace());
-        }
+    public static void main(String[] args) {
+        LightningTestingServer server = new LightningTestingServer();
     }
 }
