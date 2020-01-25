@@ -2,7 +2,7 @@ package clightning.apis.optional;
 
 public class InvoiceParams extends OptionalParams {
     public InvoiceParams setExpiry(int expiry, ExpiryUnit unit) {
-        params.put("expiry", unit.getSign());
+        params.put("expiry", expiry + unit.getSign());
         return this;
     }
 

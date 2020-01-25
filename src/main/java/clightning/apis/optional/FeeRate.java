@@ -1,5 +1,8 @@
 package clightning.apis.optional;
 
+import lombok.Data;
+
+@Data
 public class FeeRate {
     private String value;
 
