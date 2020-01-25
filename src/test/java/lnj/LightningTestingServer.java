@@ -28,16 +28,6 @@ public class IntegrationRunner extends Runner {
     static {
         try {
             server = getServer();
-            JsonRpcClient client = new JsonRpcClient();
-            // TODO: get the host and port from the properties
-            Socket s = new Socket();
-            s.connect(new InetSocketAddress("localhost", 12345));
-            PaymentService service = ProxyUtil.createClientProxy(
-                    IntegrationRunner.class.getClassLoader(),
-                    PaymentService.class,
-                    client,
-                    s
-            );
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
