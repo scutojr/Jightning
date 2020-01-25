@@ -26,6 +26,8 @@ def create_channel(ln_containers, fund_satoshi=15*1000*1000):
     assert fund_satoshi <= 16777215, 'fund capacity can not exceed %s satoshi' % fund_satoshi
     for i, c in enumerate(ln_containers):
         next = (i + 1) % len(ln_containers)
+        if next + 1 == i:
+            break
         peer = ln_containers[next]
         ln_id = get_ln_id(peer)
         docker_exec(c.id, 'lightning-cli connect %s@%s' % (ln_id, peer.names))

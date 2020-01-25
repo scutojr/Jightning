@@ -3,7 +3,8 @@ import json
 import subprocess
 
 
-LN_NODE_NAMES = ['node1', 'node2', 'node3']
+#LN_NODE_NAMES = ['node1', 'node2', 'node3']
+LN_NODE_NAMES = ['node1', 'node2']
 
 
 class Container:
