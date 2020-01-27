@@ -1,49 +1,49 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
 
 @Data
 public class Forward {
-    @JsonSetter("payment_hash")
+    @JsonProperty("payment_hash")
     private String paymentHash;
 
-    @JsonSetter("in_channel")
+    @JsonProperty("in_channel")
     private String inChannel;
 
-    @JsonSetter("out_channel")
+    @JsonProperty("out_channel")
     private String outChannel;
 
-    @JsonSetter("in_msatoshi")
+    @JsonProperty("in_msatoshi")
     private long inMsatoshi;
 
-    @JsonSetter("in_msat")
+    @JsonProperty("in_msat")
     private String inMsat;
 
-    @JsonSetter("out_msatoshi")
+    @JsonProperty("out_msatoshi")
     private Optional<Long> outMsatoshi;
 
-    @JsonSetter("out_msat")
+    @JsonProperty("out_msat")
     private Optional<String> outMsat;
 
     private Optional<Long> fee;
 
-    @JsonSetter("fee_msat")
+    @JsonProperty("fee_msat")
     private Optional<String> feeMsat;
 
     private String status;
 
-    @JsonSetter("failcode")
+    @JsonProperty("failcode")
     private Optional<Integer> failCode;
 
-    @JsonSetter("failreason")
+    @JsonProperty("failreason")
     private Optional<String> failReason;
 
-    @JsonSetter("received_time")
+    @JsonProperty("received_time")
     private Optional<Double> receivedTime;
 
-    @JsonSetter("resolved_time")
+    @JsonProperty("resolved_time")
     private Optional<Double> resolvedTime;
 }

@@ -1,29 +1,29 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class FeeRate {
 
-    @JsonSetter("onchain_fee_estimates")
+    @JsonProperty("onchain_fee_estimates")
     private OnChainFee onChainFeeEstimates;
 
-    @JsonSetter("perkw")
+    @JsonProperty("perkw")
     private PerUnitFee perKw;
 
-    @JsonSetter("perkb")
+    @JsonProperty("perkb")
     private PerUnitFee perKb;
 
     @Data
     public static class OnChainFee {
-        @JsonSetter("opening_channel_satoshis")
+        @JsonProperty("opening_channel_satoshis")
         private int openingChannelSatoshis;
 
-        @JsonSetter("mutual_close_satoshis")
+        @JsonProperty("mutual_close_satoshis")
         private int mutualCloseSatoshis;
 
-        @JsonSetter("unilateral_close_satoshis")
+        @JsonProperty("unilateral_close_satoshis")
         private int unilateralCloseSatoshis;
     }
 
@@ -33,10 +33,10 @@ public class FeeRate {
         private int normal;
         private int slow;
 
-        @JsonSetter("min_acceptable")
+        @JsonProperty("min_acceptable")
         private long minAcceptable;
 
-        @JsonSetter("max_acceptable")
+        @JsonProperty("max_acceptable")
         private long maxAcceptable;
     }
 }

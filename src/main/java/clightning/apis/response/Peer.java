@@ -1,7 +1,7 @@
 package clightning.apis.response;
 
 import clightning.apis.Output;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
@@ -47,13 +47,13 @@ public class Peer {
     private String id;
     private boolean connected;
 
-    @JsonSetter("netaddr")
+    @JsonProperty("netaddr")
     private Optional<String[]> netaddr; // [ "172.18.0.4:9735"]
 
-    @JsonSetter("globalfeatures")
+    @JsonProperty("globalfeatures")
     private Optional<String> globalfeatures;
 
-    @JsonSetter("localfeatures")
+    @JsonProperty("localfeatures")
     private Optional<String> localfeatures;
 
     private Optional<String> features;
@@ -64,23 +64,23 @@ public class Peer {
     public static class Channel {
         private String state; // CLOSINGD_COMPLETE
 
-        @JsonSetter("scratch_txid")
+        @JsonProperty("scratch_txid")
         private Optional<String> scratch_txid;
 
         private Optional<String> owner;
 
-        @JsonSetter("short_channel_id")
+        @JsonProperty("short_channel_id")
         private Optional<String> short_channel_id;
 
         private Optional<Integer> direction; // 0 or 1
 
-        @JsonSetter("channel_id")
+        @JsonProperty("channel_id")
         private String channel_id;
 
-        @JsonSetter("funding_txid")
+        @JsonProperty("funding_txid")
         private String funding_txid;
 
-        @JsonSetter("private")
+        @JsonProperty("private")
         private boolean isPrivate;
         /**
          * ": {
@@ -89,7 +89,7 @@ public class Peer {
          * },
          */
         @JsonDeserialize(using = OutputDeserializer.class)
-        @JsonSetter("funding_allocation_msat")
+        @JsonProperty("funding_allocation_msat")
         private Output[] funding_allocation_msat;
 
         /**
@@ -99,76 +99,76 @@ public class Peer {
          * },
          */
         @JsonDeserialize(using = OutputDeserializer.class)
-        @JsonSetter("funding_msat")
+        @JsonProperty("funding_msat")
         private Output[] funding_msat;
 
-        @JsonSetter("msatoshi_to_us")
+        @JsonProperty("msatoshi_to_us")
         private long msatoshi_to_us;
 
-        @JsonSetter("to_us_msat")
+        @JsonProperty("to_us_msat")
         private String to_us_msat;
 
-        @JsonSetter("msatoshi_to_us_min")
+        @JsonProperty("msatoshi_to_us_min")
         private long msatoshi_to_us_min;
 
-        @JsonSetter("min_to_us_msat")
+        @JsonProperty("min_to_us_msat")
         private String min_to_us_msat;
 
-        @JsonSetter("msatoshi_to_us_max")
+        @JsonProperty("msatoshi_to_us_max")
         private long msatoshi_to_us_max;
 
-        @JsonSetter("max_to_us_msat")
+        @JsonProperty("max_to_us_msat")
         String max_to_us_msat;
 
-        @JsonSetter("msatoshi_total")
+        @JsonProperty("msatoshi_total")
         long msatoshi_total;
 
-        @JsonSetter("total_msat")
+        @JsonProperty("total_msat")
         String total_msat;
 
-        @JsonSetter("dust_limit_satoshis")
+        @JsonProperty("dust_limit_satoshis")
         long dust_limit_satoshis;
 
-        @JsonSetter("dust_limit_msat")
+        @JsonProperty("dust_limit_msat")
         String dust_limit_msat;
 
-        @JsonSetter("max_htlc_value_in_flight_msat")
+        @JsonProperty("max_htlc_value_in_flight_msat")
         long max_htlc_value_in_flight_msat;
 
-        @JsonSetter("max_total_htlc_in_msat")
+        @JsonProperty("max_total_htlc_in_msat")
         String max_total_htlc_in_msat;
 
-        @JsonSetter("their_channel_reserve_satoshis")
+        @JsonProperty("their_channel_reserve_satoshis")
         long their_channel_reserve_satoshis;
 
-        @JsonSetter("their_reserve_msat")
+        @JsonProperty("their_reserve_msat")
         String their_reserve_msat;
 
-        @JsonSetter("our_channel_reserve_satoshis")
+        @JsonProperty("our_channel_reserve_satoshis")
         long our_channel_reserve_satoshis;
 
-        @JsonSetter("our_reserve_msat")
+        @JsonProperty("our_reserve_msat")
         String our_reserve_msat;
 
-        @JsonSetter("spendable_msatoshi")
+        @JsonProperty("spendable_msatoshi")
         long spendable_msatoshi;
 
-        @JsonSetter("spendable_msat")
+        @JsonProperty("spendable_msat")
         String spendable_msat;
 
-        @JsonSetter("htlc_minimum_msat")
+        @JsonProperty("htlc_minimum_msat")
         long htlc_minimum_msat;
 
-        @JsonSetter("minimum_htlc_in_msat")
+        @JsonProperty("minimum_htlc_in_msat")
         String minimum_htlc_in_msat;
 
-        @JsonSetter("their_to_self_delay")
+        @JsonProperty("their_to_self_delay")
         int their_to_self_delay;
 
-        @JsonSetter("our_to_self_delay")
+        @JsonProperty("our_to_self_delay")
         int our_to_self_delay;
 
-        @JsonSetter("max_accepted_htlcs")
+        @JsonProperty("max_accepted_htlcs")
         int max_accepted_htlcs;
         /**
          * ": [
@@ -178,40 +178,40 @@ public class Peer {
          */
         String[] status;
 
-        @JsonSetter("in_payments_offered")
+        @JsonProperty("in_payments_offered")
         long in_payments_offered;
 
-        @JsonSetter("in_msatoshi_offered")
+        @JsonProperty("in_msatoshi_offered")
         long in_msatoshi_offered;
 
-        @JsonSetter("in_offered_msat")
+        @JsonProperty("in_offered_msat")
         String in_offered_msat;
 
-        @JsonSetter("in_payments_fulfilled")
+        @JsonProperty("in_payments_fulfilled")
         long in_payments_fulfilled;
 
-        @JsonSetter("in_msatoshi_fulfilled")
+        @JsonProperty("in_msatoshi_fulfilled")
         long in_msatoshi_fulfilled;
 
-        @JsonSetter("in_fulfilled_msat")
+        @JsonProperty("in_fulfilled_msat")
         String in_fulfilled_msat;
 
-        @JsonSetter("out_payments_offered")
+        @JsonProperty("out_payments_offered")
         long out_payments_offered;
 
-        @JsonSetter("out_msatoshi_offered")
+        @JsonProperty("out_msatoshi_offered")
         long out_msatoshi_offered;
 
-        @JsonSetter("out_offered_msat")
+        @JsonProperty("out_offered_msat")
         String out_offered_msat;
 
-        @JsonSetter("out_payments_fulfilled")
+        @JsonProperty("out_payments_fulfilled")
         long out_payments_fulfilled;
 
-        @JsonSetter("out_msatoshi_fulfilled")
+        @JsonProperty("out_msatoshi_fulfilled")
         long out_msatoshi_fulfilled;
 
-        @JsonSetter("out_fulfilled_msat")
+        @JsonProperty("out_fulfilled_msat")
         String out_fulfilled_msat;
 
         HTLC[] htlcs;
@@ -224,17 +224,17 @@ public class Peer {
         private long id;
         private long msatoshi;
 
-        @JsonSetter("amount_msat")
+        @JsonProperty("amount_msat")
         private String amount_msat;
 
         private long expiry;
 
-        @JsonSetter("payment_hash")
+        @JsonProperty("payment_hash")
         private String payment_hash;
 
         private String state;
 
-        @JsonSetter("local_trimmed")
+        @JsonProperty("local_trimmed")
         private boolean local_trimmed = false;
     }
 }

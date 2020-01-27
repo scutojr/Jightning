@@ -1,11 +1,11 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LightningAddress {
     private String bech32;
 
-    @JsonSetter("p2sh-segwit")
+    @JsonProperty("p2sh-segwit")
     private String p2shSegwit;
 
     public String getBech32() {

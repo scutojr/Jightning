@@ -1,6 +1,7 @@
 package clightning;
 
 import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -104,6 +105,6 @@ public class LightningDaemon implements AbstractLightningDaemon {
     }
 
     public LightningClient getLightningClient() {
-        return new LightningClient(this);
+        return new LightningClientImpl(this);
     }
 }

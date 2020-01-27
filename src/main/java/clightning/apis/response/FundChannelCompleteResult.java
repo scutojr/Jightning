@@ -1,13 +1,13 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class FundChannelCompleteResult {
-    @JsonSetter("channel_id")
+    @JsonProperty("channel_id")
     private String channelId;
 
-    @JsonSetter("commitments_secured")
+    @JsonProperty("commitments_secured")
     private boolean commitmentsSecured;
 }

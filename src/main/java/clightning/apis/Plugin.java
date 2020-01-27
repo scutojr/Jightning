@@ -5,8 +5,6 @@ import clightning.apis.optional.FundChannelParams;
 import clightning.apis.optional.PayParams;
 import clightning.apis.response.*;
 
-import java.io.IOException;
-
 public interface Plugin {
     /**
      * https://lightning.readthedocs.io/lightning-autocleaninvoice.7.html

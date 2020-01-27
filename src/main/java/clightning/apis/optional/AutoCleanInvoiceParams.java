@@ -6,7 +6,7 @@ public class AutoCleanInvoiceParams extends OptionalParams {
      * @param cycleSeconds default to 3600, one hour
      * @return
      */
-    public AutoCleanInvoiceParams setCycleSeconds(long cycleSeconds) {
+    public AutoCleanInvoiceParams setCycleSeconds(int cycleSeconds) {
         params.put("cycle_seconds", cycleSeconds);
         return this;
     }
@@ -16,8 +16,8 @@ public class AutoCleanInvoiceParams extends OptionalParams {
      * @param expiredBy default to 86400, one day
      * @return
      */
-    public AutoCleanInvoiceParams setExpiredBy(long expiredBy) {
-        params.put("expired_by ", expiredBy);
+    public AutoCleanInvoiceParams setExpiredBy(int expiredBy) {
+        params.put("expired_by", expiredBy);
         return this;
     }
 }

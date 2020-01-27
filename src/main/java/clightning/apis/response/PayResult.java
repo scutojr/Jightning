@@ -1,6 +1,6 @@
 package clightning.apis.response;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -8,28 +8,28 @@ public class PayResult {
 
       private int id;
 
-      @JsonSetter("payment_hash")
+      @JsonProperty("payment_hash")
       private String paymentHash;
 
       private String destination;
       private long msatoshi;
 
-      @JsonSetter("amount_msat")
+      @JsonProperty("amount_msat")
       private String amountMsat;
 
-      @JsonSetter("msatoshi_sent")
+      @JsonProperty("msatoshi_sent")
       private long msatoshiSent;
 
-      @JsonSetter("amount_sent_msat")
+      @JsonProperty("amount_sent_msat")
       private String amountSentMsat;
 
-      @JsonSetter("created_at")
+      @JsonProperty("created_at")
       private long createdAt;
 
       // TODO: enumeration all the possible state
       private String status;
 
-      @JsonSetter("payment_preimage")
+      @JsonProperty("payment_preimage")
       private String paymentPreimage;
       private String bolt11;
 }

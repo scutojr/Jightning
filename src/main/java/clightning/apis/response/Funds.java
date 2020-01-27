@@ -1,7 +1,7 @@
 package clightning.apis.response;
 
 import clightning.apis.ChannelState;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
@@ -29,28 +29,28 @@ public class Funds {
         private boolean connected;
         private ChannelState state;
 
-        @JsonSetter("short_channel_id")
+        @JsonProperty("short_channel_id")
         private Optional<String> shortChannelId; // only available when state is CHANNELD_NORMAL
 
-        @JsonSetter("peer_id")
+        @JsonProperty("peer_id")
         private String peerId;
 
-        @JsonSetter("channel_sat")
+        @JsonProperty("channel_sat")
         private long channelSat;
 
-        @JsonSetter("our_amount_msat")
+        @JsonProperty("our_amount_msat")
         private String ourAmountMsat;
 
-        @JsonSetter("channel_total_sat")
+        @JsonProperty("channel_total_sat")
         private long channelTotalSat;
 
-        @JsonSetter("amount_msat")
+        @JsonProperty("amount_msat")
         private String amountMsat;
 
-        @JsonSetter("funding_txid")
+        @JsonProperty("funding_txid")
         private String fundingTxId;
 
-        @JsonSetter("funding_output")
+        @JsonProperty("funding_output")
         private String fundingOutput;
     }
 
@@ -69,19 +69,19 @@ public class Funds {
     @Data
     public static class TxOutput {
 
-        @JsonSetter("txid")
+        @JsonProperty("txid")
         private String txId;
 
         private int output;
         private long value;
 
-        @JsonSetter("amount_msat")
+        @JsonProperty("amount_msat")
         private String amountMsat;
 
         private String address;
         private String status;
 
-        @JsonSetter("blockheight")
+        @JsonProperty("blockheight")
         private int blockHeight;
     }
 }
