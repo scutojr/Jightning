@@ -1,14 +1,12 @@
 package lnj.unit;
 
 import clightning.AbstractLightningDaemon;
-import clightning.apis.InvoiceStatus;
-import clightning.apis.LightningClient;
-import clightning.apis.Output;
-import clightning.apis.PluginCommand;
+import clightning.apis.*;
 import clightning.apis.optional.ListPeersParams;
 import clightning.apis.optional.LogLevel;
 import clightning.apis.optional.PingParams;
 import clightning.apis.response.*;
+import clightning.apis.response.Channel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lnj.LightningForTesting;
 import org.junit.Assert;
@@ -26,7 +24,7 @@ public class TestLightningDaemon {
 
     public TestLightningDaemon() {
         lnd = new LightningForTesting();
-        client = new LightningClient(lnd);
+        client = new LightningClientImpl(lnd);
     }
 
     private interface CodeWrapper {

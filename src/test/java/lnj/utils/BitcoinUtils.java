@@ -10,8 +10,11 @@ public class BitcoinUtils {
     private static String exec(String cmd) throws IOException {
         Process proc = Runtime.getRuntime().exec(cmd);
         String response = IOUtils.toString(proc.getInputStream(), "utf-8");
-        assert proc.exitValue() == 0;
         return response;
+    }
+
+    public static void confirm() throws IOException {
+        generateToAddress(100, getNewAddress());
     }
 
     public static void generateToAddress(int blockCnt, String address) throws IOException {
@@ -21,7 +24,8 @@ public class BitcoinUtils {
 
     public static String getNewAddress() throws IOException {
         String cmd = "bitcoin-cli -regtest getnewaddress";
-        return exec(cmd);
+        String addr = exec(cmd);
+        return addr.substring(0, addr.length() - 1);
     }
 
     public static JsonNode decodeRawTransaction(String hex) throws IOException {

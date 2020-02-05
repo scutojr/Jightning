@@ -4,16 +4,14 @@ import clightning.LightningDaemon;
 import clightning.apis.LightningClient;
 import clightning.apis.Output;
 import clightning.apis.response.TxPrepareResult;
-import lnj.PaymentService;
-import lnj.LightningTestingServer;
 import lnj.utils.BitcoinUtils;
+import lnj.utils.LightningUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
-//@RunWith(IntegrationRunner.class)
 public class TestBitcoin {
     private LightningClient client;
 
@@ -43,9 +41,10 @@ public class TestBitcoin {
             TxPrepareResult res = client.txPrepare(outputs);
             client.txDiscard(res.getTxId());
 
-            addr = BitcoinUtils.getNewAddress();
             res = client.txPrepare(outputs);
             client.txSend(res.getTxId());
+            BitcoinUtils.confirm();
+            Assert.assertTrue(LightningUtils.waitForFundConfirmed());
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail();
@@ -57,6 +56,8 @@ public class TestBitcoin {
         try {
             String addr = BitcoinUtils.getNewAddress();
             client.withDraw(addr, 1000 * 1000);
+            BitcoinUtils.confirm();
+            Assert.assertTrue(LightningUtils.waitForFundConfirmed());
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail();

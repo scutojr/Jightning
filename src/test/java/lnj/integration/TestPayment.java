@@ -3,45 +3,25 @@ package lnj.integration;
 import clightning.LightningDaemon;
 import clightning.apis.InvoiceStatus;
 import clightning.apis.LightningClient;
-import clightning.apis.Payment;
 import clightning.apis.optional.InvoiceParams;
 import clightning.apis.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.util.concurrent.SettableFuture;
-import com.googlecode.jsonrpc4j.JsonRpcClient;
-import com.googlecode.jsonrpc4j.ProxyUtil;
-import lnj.utils.CommonUtils;
-import lnj.utils.LightningUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static lnj.utils.LightningUtils.forEachPeer;
 
 public class TestPayment {
     private LightningClient client;
     private ObjectMapper mapper;
-
-    private Payment getPeer(Socket s) throws IOException {
-        JsonRpcClient rpcClient = new JsonRpcClient();
-        rpcClient.getObjectMapper().registerModule(new Jdk8Module());
-        return ProxyUtil.createClientProxy(
-                TestPayment.class.getClassLoader(),
-                Payment.class,
-                rpcClient,
-                s
-        );
-    }
-
-    private interface Handler {
-        void handle(Payment peer) throws JsonProcessingException;
-    }
-
 
     private String generateLabel() {
         return "label-" + System.currentTimeMillis();
@@ -49,35 +29,6 @@ public class TestPayment {
 
     private String generateLabel(long ts) {
         return "label-" + ts;
-    }
-
-    public void forEachPeer(Handler handler) {
-        Socket s = null;
-        try {
-            String hostname = CommonUtils.getHostname();
-            String[] hosts = LightningUtils.getHosts();
-            Assert.assertTrue(hosts.length > 0);
-
-            for (String host : hosts) {
-                if (hostname.equals(host)) {
-                    continue;
-                }
-                // TODO: get the host and port from the properties
-                s = new Socket(host, 5556);
-                handler.handle(getPeer(s));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
-        } finally {
-            if (Objects.nonNull(s)) {
-                try {
-                    s.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     @Before
@@ -124,7 +75,7 @@ public class TestPayment {
                 waitInvoice.start();
                 Thread.sleep(1 * 1000);
                 client.pay(invoice.getBolt11());
-                isTriggered.get(4, TimeUnit.SECONDS);
+                isTriggered.get(100, TimeUnit.SECONDS);
             } catch (Exception e) {
                 Assert.fail(e.getMessage());
             }
@@ -132,6 +83,7 @@ public class TestPayment {
     }
 
     @Test
+    @Ignore
     public void testListTransactions() {
         Assert.assertTrue(client.listTransactions().length > 0);
     }
@@ -169,6 +121,7 @@ public class TestPayment {
             InvoiceParams params = new InvoiceParams();
             params.setExpiry(expirySecond);
             for (int i = 0; i < cntInvoice; i++) {
+                System.out.println("jladsjfklasjdlfjasdlf: " + i);
                 peer.invoice(msatoshi, generateLabel(now), "desc-" + now, params);
                 now += 1;
             }
@@ -190,7 +143,13 @@ public class TestPayment {
             peer.delExpiredInvoice();
             for (DetailedInvoice invoice : peer.listInvoices()) {
                 if (invoice.getStatus() == InvoiceStatus.unpaid) {
-                    Assert.fail("all the unpaid invoices should be deleted: " + mapper.writeValueAsString(invoice));
+                    String display = "";
+                    try {
+                        display = mapper.writeValueAsString(invoice);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                    Assert.fail("all the unpaid invoices should be deleted: " + display);
                 }
             }
         });
