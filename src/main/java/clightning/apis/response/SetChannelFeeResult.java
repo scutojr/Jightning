@@ -16,5 +16,8 @@ public class SetChannelFeeResult {
 
         @JsonProperty("channel_id")
         private String channelId;
+
+        @JsonProperty("short_channel_id")
+        private String shortChannelId;
     }
 }
