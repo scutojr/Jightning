@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.google.common.primitives.UnsignedInteger;
 import com.googlecode.jsonrpc4j.JsonRpcInterceptor;
 import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
@@ -39,8 +40,25 @@ public class Plugin {
 
     public void run() throws IOException {
         generateManifest();
-//        System.out.println(mapper.writeValueAsString(manifest));
         handleRequests();
+    }
+
+    public void addOption(String name, String default_, String description) {
+        manifest.addOption(name, default_, description, "string");
+    }
+
+    public void addOption(String name, Integer default_, String description) {
+        // TODO: integers ?
+        manifest.addOption(name, default_, description, "integers");
+    }
+
+    public void addOption(String name, UnsignedInteger default_, String description) {
+        // TODO: unsigned integers?
+        manifest.addOption(name, default_, description, "unsigned integers");
+    }
+
+    public void addOption(String name, boolean default_, String description) {
+        manifest.addOption(name, default_, description, "bool");
     }
 
     @RpcMethod(name = GET_MANIFEST)
@@ -87,7 +105,7 @@ public class Plugin {
     }
 
     private void handleRequests() throws IOException {
-        InputStream inputWrapper = new StdInWrapper(in);
+        StdInWrapper input = new StdInWrapper(in);
         server.setInterceptorList(Arrays.asList(new JsonRpcInterceptor() {
             @Override
             public void preHandleJson(JsonNode jsonNode) {
@@ -114,8 +132,8 @@ public class Plugin {
 
             }
         }));
-        while (true) {
-            server.handleRequest(inputWrapper, out);
+        while (!input.isClosed()) {
+            server.handleRequest(input, out);
         }
     }
 
@@ -175,10 +193,12 @@ public class Plugin {
         private byte[] buffer = new byte[65535];
         private byte[] delimiter = "\n\n".getBytes();
 
+        private boolean closed;
         private InputStream in;
 
         public StdInWrapper(InputStream in) {
             this.in = in;
+            closed = false;
         }
 
         private int nextDelimiter() {
@@ -195,6 +215,10 @@ public class Plugin {
                 }
             }
             return -1;
+        }
+
+        public boolean isClosed() {
+            return closed;
         }
 
         @Override
@@ -219,6 +243,7 @@ public class Plugin {
             int c = in.read(buffer, writeIndex, remaining);
             if (c == -1) {
                 if (readIndex >= writeIndex) {
+                    closed = true;
                     return c;
                 }
             } else {
@@ -248,12 +273,14 @@ public class Plugin {
 
     @Getter
     class Manifest {
-        public Manifest() {
-            methods = new ArrayList<>();
-        }
-
         @JsonProperty("rpcmethods")
         private List<Map> methods;
+        private List<Option> options;
+
+        public Manifest() {
+            methods = new ArrayList<>();
+            options = new ArrayList<>();
+        }
 
         void addMethod(String name, String description, String usage, String longDescription) {
             Map<String, String> method = new HashMap<>();
@@ -265,5 +292,26 @@ public class Plugin {
             }
             methods.add(method);
         }
+
+        void addOption(String name, Object default_, String description, String type) {
+            Option option = new Option();
+            option.name = name;
+            option.default_ = default_;
+            option.description = description;
+            option.type = type;
+
+            options.add(option);
+        }
+    }
+
+    @Getter
+    class Option {
+        String name;
+        String type;
+
+        @JsonProperty("default")
+        Object default_;
+
+        String description;
     }
 }
