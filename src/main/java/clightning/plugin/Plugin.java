@@ -27,6 +27,7 @@ public class Plugin {
     private Manifest manifest = new Manifest();
     private ObjectMapper mapper = new ObjectMapper();
     private Map<String, Method> methods = new HashMap<>();
+    private Map<String, Method> subscriptions = new HashMap<>();
     private JsonRpcServer server = new JsonRpcServer(this);
 
     public Plugin() {
@@ -71,7 +72,7 @@ public class Plugin {
         return null;
     }
 
-    private void transformAndInject(JsonNode req) throws IOException {
+    private void transformRpcMethod(JsonNode req) throws IOException {
         //TODO: check null
         String methodName = req.get("method").asText();
         ObjectNode params = (ObjectNode) req.get("params");
@@ -104,13 +105,27 @@ public class Plugin {
         }
     }
 
+    private void transformSubscribe(JsonNode request) {
+        // TODO: validate the topic and raise exception
+        ObjectNode req = (ObjectNode) request;
+        String topic = request.get("method").asText();
+        String internalName = subscriptions.get(topic).getName();
+        req.replace("method", TextNode.valueOf(internalName));
+        // TODO: what if params is null or does not exist?
+        req.replace("params", mapper.createArrayNode().add(req.get("params")));
+    }
+
     private void handleRequests() throws IOException {
         StdInWrapper input = new StdInWrapper(in);
         server.setInterceptorList(Arrays.asList(new JsonRpcInterceptor() {
             @Override
             public void preHandleJson(JsonNode jsonNode) {
                 try {
-                    transformAndInject(jsonNode);
+                    if (jsonNode.has("id")) {
+                        transformRpcMethod(jsonNode);
+                    } else {
+                        transformSubscribe(jsonNode);
+                    }
                 } catch (IOException e) {
                     //TODO log here
                     e.printStackTrace();
@@ -169,9 +184,13 @@ public class Plugin {
     }
 
     private void handleSubscription(Method method, Subscribe annotation) {
+        Topic topic = annotation.value();
+        subscriptions.put(topic.name(), method);
+        manifest.addSubscription(topic.name());
     }
 
     public JsonNode generateManifest() {
+        // TODO: only support public method?
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             Annotation[] annotations = method.getAnnotations();
@@ -276,10 +295,12 @@ public class Plugin {
         @JsonProperty("rpcmethods")
         private List<Map> methods;
         private List<Option> options;
+        private List<String> subscriptions;
 
         public Manifest() {
             methods = new ArrayList<>();
             options = new ArrayList<>();
+            subscriptions = new ArrayList<>();
         }
 
         void addMethod(String name, String description, String usage, String longDescription) {
@@ -301,6 +322,10 @@ public class Plugin {
             option.type = type;
 
             options.add(option);
+        }
+
+        void addSubscription(String topic) {
+            subscriptions.add(topic);
         }
     }
 
