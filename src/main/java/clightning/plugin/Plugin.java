@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 
-public class Plugin {
+public abstract class Plugin {
     private static final String GET_MANIFEST = "getmanifest";
     private static final String INIT = "init";
 
@@ -26,8 +26,9 @@ public class Plugin {
 
     private Manifest manifest = new Manifest();
     private ObjectMapper mapper = new ObjectMapper();
-    private Map<String, Method> methods = new HashMap<>();
+    private Map<String, Method> commands = new HashMap<>();
     private Map<String, Method> subscriptions = new HashMap<>();
+    private Map<String, Method> hooks = new HashMap<>();
     private JsonRpcServer server = new JsonRpcServer(this);
 
     public Plugin() {
@@ -40,7 +41,12 @@ public class Plugin {
     }
 
     public void run() throws IOException {
-        generateManifest();
+        run(false);
+    }
+
+    public void run(boolean dynamic) throws IOException {
+        generateManifest(dynamic);
+        System.out.println(mapper.writeValueAsString(manifest));
         handleRequests();
     }
 
@@ -62,21 +68,23 @@ public class Plugin {
         manifest.addOption(name, default_, description, "bool");
     }
 
-    @RpcMethod(name = GET_MANIFEST)
+    @Command(name = GET_MANIFEST)
     public void getManifest() throws IOException {
         mapper.writeValue(System.out, manifest);
     }
 
-    @RpcMethod
+    protected abstract Object initialize();
+
+    @Command
     public Object init() {
-        return null;
+        return init();
     }
 
-    private void transformRpcMethod(JsonNode req) throws IOException {
+    private void transformCommand(JsonNode req) throws IOException {
         //TODO: check null
         String methodName = req.get("method").asText();
         ObjectNode params = (ObjectNode) req.get("params");
-        Method method = methods.get(methodName);
+        Method method = commands.get(methodName);
         ((ObjectNode) req).replace("method", new TextNode(method.getName()));
         for (Parameter param : method.getParameters()) {
             //TODO: get param name by other way
@@ -115,6 +123,15 @@ public class Plugin {
         req.replace("params", mapper.createArrayNode().add(req.get("params")));
     }
 
+    private void transformHook(JsonNode request) {
+        ObjectNode req = (ObjectNode) request;
+        String topic = req.get("method").asText();
+        Method method = hooks.get(topic);
+        req.replace("method", TextNode.valueOf(method.getName()));
+        // TODO: what if params is null or does not exist?
+        req.replace("params", mapper.createArrayNode().add(req.get("params")));
+    }
+
     private void handleRequests() throws IOException {
         StdInWrapper input = new StdInWrapper(in);
         server.setInterceptorList(Arrays.asList(new JsonRpcInterceptor() {
@@ -122,7 +139,12 @@ public class Plugin {
             public void preHandleJson(JsonNode jsonNode) {
                 try {
                     if (jsonNode.has("id")) {
-                        transformRpcMethod(jsonNode);
+                        String methodName = jsonNode.get("method").asText();
+                        if (commands.containsKey(methodName)) {
+                            transformCommand(jsonNode);
+                        } else {
+                            transformHook(jsonNode);
+                        }
                     } else {
                         transformSubscribe(jsonNode);
                     }
@@ -152,12 +174,12 @@ public class Plugin {
         }
     }
 
-    private void handleRpcMethod(Method method, RpcMethod annotation) {
-        String name = annotation.name().equals("") ? method.getName() : annotation.name();
-        String description = annotation.description();
+    private void registerCommand(Method method, Command cmmand) {
+        String name = cmmand.name().equals("") ? method.getName() : cmmand.name();
+        String description = cmmand.description();
         String longDescription = null;
-        if (!annotation.longDescription().equals("")) {
-            longDescription = annotation.longDescription();
+        if (!cmmand.longDescription().equals("")) {
+            longDescription = cmmand.longDescription();
         }
 
         // generate usage information
@@ -179,31 +201,59 @@ public class Plugin {
                 }
             }
         }
-        methods.put(name, method);
+        if (commands.containsKey(name)) {
+            throw new RuntimeException("command method has been registered: " + name);
+        }
+        commands.put(name, method);
         manifest.addMethod(name, description, String.join(" ", usage), longDescription);
     }
 
-    private void handleSubscription(Method method, Subscribe annotation) {
-        Topic topic = annotation.value();
-        subscriptions.put(topic.name(), method);
-        manifest.addSubscription(topic.name());
+    private void registerSubscription(Method method, Subscribe subscribe) {
+        if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].isAssignableFrom(JsonNode.class)) {
+            String msg = "signature of the subscription method only accept one parameter of type JsonNode";
+            throw new RuntimeException(msg);
+        }
+        String topic = subscribe.value().name();
+        if (subscriptions.containsKey(topic)) {
+            throw new RuntimeException("subscription method has been registered: " + topic);
+        }
+        subscriptions.put(topic, method);
+        manifest.addSubscription(topic);
     }
 
-    public JsonNode generateManifest() {
+    private void registerHook(Method method, Hook hook) {
+        // TODO: validate the input parameter and return value of the hook handler method
+        int c = method.getParameterCount();
+        Class[] ptypes = method.getParameterTypes();
+        Class rtype = method.getReturnType();
+        if (c != 1 || !ptypes[0].isAssignableFrom(JsonNode.class) || rtype == Void.class) {
+            throw new RuntimeException("wrong hook method signature");
+        }
+        String topic = hook.value().name();
+        if (commands.containsKey(topic) || hooks.containsKey(topic)) {
+            throw new RuntimeException("hook method has been registered: " + topic);
+        }
+        hooks.put(topic, method);
+        manifest.addHook(topic);
+    }
+
+    public void generateManifest(boolean dynamic) {
         // TODO: only support public method?
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             Annotation[] annotations = method.getAnnotations();
             for (Annotation annotation : annotations) {
                 Class type = annotation.annotationType();
-                if (type == RpcMethod.class) {
-                    handleRpcMethod(method, (RpcMethod) annotation);
+                if (type == Command.class) {
+                    registerCommand(method, (Command) annotation);
                 } else if (type == Subscribe.class) {
-                    handleSubscription(method, (Subscribe) annotation);
+                    registerSubscription(method, (Subscribe) annotation);
+                } else if (type == Hook.class) {
+                    registerHook(method, (Hook) annotation);
                 }
             }
         }
-        return null;
+        manifest.dynamic = dynamic;
     }
 
     private static class StdInWrapper extends InputStream {
@@ -296,11 +346,15 @@ public class Plugin {
         private List<Map> methods;
         private List<Option> options;
         private List<String> subscriptions;
+        private List<String> hooks;
+        private boolean dynamic;
 
         public Manifest() {
             methods = new ArrayList<>();
             options = new ArrayList<>();
             subscriptions = new ArrayList<>();
+            hooks = new ArrayList<>();
+            dynamic = false;
         }
 
         void addMethod(String name, String description, String usage, String longDescription) {
@@ -326,6 +380,10 @@ public class Plugin {
 
         void addSubscription(String topic) {
             subscriptions.add(topic);
+        }
+
+        void addHook(String topic) {
+            hooks.add(topic);
         }
     }
 

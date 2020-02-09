@@ -1,6 +1,6 @@
 package clightning.plugin;
 
-public enum Topic {
+public enum NotificationTopic {
     warning,
     connect,
     disconnect,
