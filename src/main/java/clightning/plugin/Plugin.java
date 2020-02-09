@@ -3,11 +3,11 @@ package clightning.plugin;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.google.common.primitives.UnsignedInteger;
 import com.googlecode.jsonrpc4j.JsonRpcInterceptor;
-import com.googlecode.jsonrpc4j.JsonRpcParam;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import lombok.Getter;
 
@@ -83,34 +83,27 @@ public abstract class Plugin {
     private void transformCommand(JsonNode req) throws IOException {
         //TODO: check null
         String methodName = req.get("method").asText();
-        ObjectNode params = (ObjectNode) req.get("params");
         Method method = commands.get(methodName);
-        ((ObjectNode) req).replace("method", new TextNode(method.getName()));
-        for (Parameter param : method.getParameters()) {
-            //TODO: get param name by other way
-            Annotation a = param.getAnnotation(JsonRpcParam.class);
-            String paramName = ((JsonRpcParam) a).value();
-//            String paramName = param.getName();
-//            if (Objects.nonNull(a)) {
-//                String n = ((JsonRpcParam) a).value();
-//                if (params.has(n)) {
-//                    JsonNode p = params.get(n);
-//                    params.remove(n);
-//                    params.set(param.getName(), p);
-//                }
-//            }
+        Parameter[] parameters = method.getParameters();
 
-            a = param.getAnnotation(DefaultTo.class);
-            if (Objects.nonNull(a) && !params.has(paramName)) {
-                String defaultValue = ((DefaultTo) a).value();
-                JsonNode node;
+        ObjectNode paramsNode = (ObjectNode) req.get("params");
+        ((ObjectNode) req).replace("method", new TextNode(method.getName()));
+
+        ArrayNode arguments = mapper.createArrayNode();
+        for (Parameter param : parameters) {
+            String paramName = param.getName();
+            DefaultTo def;
+            if (paramsNode.has(paramName)) {
+                arguments.add(paramsNode.get(paramName));
+            } else if ((def = param.getAnnotation(DefaultTo.class)) != null) {
+                String defValue = def.value();
                 if (String.class.isAssignableFrom(param.getType())) {
-                    defaultValue = "\"" + defaultValue + "\"";
+                    defValue = "\"" + defValue + "\"";
                 }
-                node = mapper.readTree(defaultValue);
-                params.replace(paramName, node);
+                arguments.add(mapper.readTree(defValue));
             }
         }
+        ((ObjectNode) req).replace("params", arguments);
     }
 
     private void transformSubscribe(JsonNode request) {
@@ -186,9 +179,7 @@ public abstract class Plugin {
         List<String> usage = new ArrayList<>();
         boolean foundAnnotated = false;
         for (Parameter param : method.getParameters()) {
-            String paramName = param.isAnnotationPresent(JsonRpcParam.class) ?
-                    param.getAnnotation(JsonRpcParam.class).value() :
-                    param.getName();
+            String paramName = param.getName();
             if (param.isAnnotationPresent(DefaultTo.class)) {
                 usage.add("[" + paramName + "]");
                 foundAnnotated = true;
