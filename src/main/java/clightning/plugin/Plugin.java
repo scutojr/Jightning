@@ -46,6 +46,7 @@ public abstract class Plugin {
 
     public void run(boolean dynamic) throws IOException {
         generateManifest(dynamic);
+        // TODO: log debug level
         System.out.println(mapper.writeValueAsString(manifest));
         handleRequests();
     }
@@ -86,24 +87,44 @@ public abstract class Plugin {
         Method method = commands.get(methodName);
         Parameter[] parameters = method.getParameters();
 
-        ObjectNode paramsNode = (ObjectNode) req.get("params");
+        JsonNode params = req.get("params");
         ((ObjectNode) req).replace("method", new TextNode(method.getName()));
 
-        ArrayNode arguments = mapper.createArrayNode();
-        for (Parameter param : parameters) {
-            String paramName = param.getName();
-            DefaultTo def;
-            if (paramsNode.has(paramName)) {
-                arguments.add(paramsNode.get(paramName));
-            } else if ((def = param.getAnnotation(DefaultTo.class)) != null) {
+        if (params.isArray()) {
+            ArrayNode arrayNode = (ArrayNode) params;
+            for (int i = arrayNode.size(); i < parameters.length; i++) {
+                Parameter param = parameters[i];
+                DefaultTo def = param.getAnnotation(DefaultTo.class);
+                if (def == null) {
+                    // TODO: log error here
+                    break;
+                }
                 String defValue = def.value();
                 if (String.class.isAssignableFrom(param.getType())) {
                     defValue = "\"" + defValue + "\"";
                 }
-                arguments.add(mapper.readTree(defValue));
+                arrayNode.add(mapper.readTree(defValue));
             }
+        } else {
+            ArrayNode arguments = mapper.createArrayNode();
+            for (Parameter param : parameters) {
+                String paramName = param.getName();
+                DefaultTo def;
+                if (params.has(paramName)) {
+                    arguments.add(params.get(paramName));
+                } else if ((def = param.getAnnotation(DefaultTo.class)) != null) {
+                    String defValue = def.value();
+                    if (String.class.isAssignableFrom(param.getType())) {
+                        defValue = "\"" + defValue + "\"";
+                    }
+                    arguments.add(mapper.readTree(defValue));
+                } else {
+                    // TODO: log error here
+                    break;
+                }
+            }
+            ((ObjectNode) req).replace("params", arguments);
         }
-        ((ObjectNode) req).replace("params", arguments);
     }
 
     private void transformSubscribe(JsonNode request) {
@@ -113,7 +134,10 @@ public abstract class Plugin {
         String internalName = subscriptions.get(topic).getName();
         req.replace("method", TextNode.valueOf(internalName));
         // TODO: what if params is null or does not exist?
-        req.replace("params", mapper.createArrayNode().add(req.get("params")));
+        JsonNode params = req.get("params");
+        if (!params.isArray()) {
+            req.replace("params", mapper.createArrayNode().add(params));
+        }
     }
 
     private void transformHook(JsonNode request) {
@@ -122,7 +146,10 @@ public abstract class Plugin {
         Method method = hooks.get(topic);
         req.replace("method", TextNode.valueOf(method.getName()));
         // TODO: what if params is null or does not exist?
-        req.replace("params", mapper.createArrayNode().add(req.get("params")));
+        JsonNode params = req.get("params");
+        if (!params.isArray()) {
+            req.replace("params", mapper.createArrayNode().add(params));
+        }
     }
 
     private void handleRequests() throws IOException {
