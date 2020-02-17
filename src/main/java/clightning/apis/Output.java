@@ -2,10 +2,12 @@ package clightning.apis;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -15,7 +17,6 @@ import java.util.Objects;
 
 @Getter
 @JsonSerialize(using = Output.Serializer.class)
-@JsonDeserialize(using = Output.Deserializer.class)
 public class Output {
     private String address;
     private long amount;

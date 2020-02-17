@@ -1,6 +1,7 @@
 package clightning.plugin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -47,7 +48,6 @@ public abstract class Plugin {
     public void run(boolean dynamic) throws IOException {
         generateManifest(dynamic);
         // TODO: log debug level
-        System.out.println(mapper.writeValueAsString(manifest));
         handleRequests();
     }
 
@@ -70,8 +70,8 @@ public abstract class Plugin {
     }
 
     @Command(name = GET_MANIFEST)
-    public void getManifest() throws IOException {
-        mapper.writeValue(System.out, manifest);
+    public Manifest getManifest() {
+        return manifest;
     }
 
     protected abstract Object initialize();
@@ -81,17 +81,11 @@ public abstract class Plugin {
         return init();
     }
 
-    private void transformCommand(JsonNode req) throws IOException {
-        //TODO: check null
-        String methodName = req.get("method").asText();
-        Method method = commands.get(methodName);
+    private void reOrgParams(Method method, ObjectNode request) throws JsonProcessingException {
+        JsonNode paramsNode = request.get("params");
         Parameter[] parameters = method.getParameters();
-
-        JsonNode params = req.get("params");
-        ((ObjectNode) req).replace("method", new TextNode(method.getName()));
-
-        if (params.isArray()) {
-            ArrayNode arrayNode = (ArrayNode) params;
+        if (paramsNode.isArray()) {
+            ArrayNode arrayNode = (ArrayNode) paramsNode;
             for (int i = arrayNode.size(); i < parameters.length; i++) {
                 Parameter param = parameters[i];
                 DefaultTo def = param.getAnnotation(DefaultTo.class);
@@ -110,8 +104,8 @@ public abstract class Plugin {
             for (Parameter param : parameters) {
                 String paramName = param.getName();
                 DefaultTo def;
-                if (params.has(paramName)) {
-                    arguments.add(params.get(paramName));
+                if (paramsNode.has(paramName)) {
+                    arguments.add(paramsNode.get(paramName));
                 } else if ((def = param.getAnnotation(DefaultTo.class)) != null) {
                     String defValue = def.value();
                     if (String.class.isAssignableFrom(param.getType())) {
@@ -123,33 +117,32 @@ public abstract class Plugin {
                     break;
                 }
             }
-            ((ObjectNode) req).replace("params", arguments);
+            ((ObjectNode) request).replace("params", arguments);
         }
     }
 
-    private void transformSubscribe(JsonNode request) {
+    private void transformCommand(JsonNode req) throws JsonProcessingException {
+        String methodName = req.get("method").asText();
+        Method method = commands.get(methodName);
+        ((ObjectNode) req).put("method", method.getName());
+        reOrgParams(method, (ObjectNode) req);
+    }
+
+    private void transformSubscribe(JsonNode request) throws JsonProcessingException {
         // TODO: validate the topic and raise exception
         ObjectNode req = (ObjectNode) request;
         String topic = request.get("method").asText();
-        String internalName = subscriptions.get(topic).getName();
-        req.replace("method", TextNode.valueOf(internalName));
-        // TODO: what if params is null or does not exist?
-        JsonNode params = req.get("params");
-        if (!params.isArray()) {
-            req.replace("params", mapper.createArrayNode().add(params));
-        }
+        Method method = subscriptions.get(topic);
+        req.put("method", method.getName());
+        reOrgParams(method, req);
     }
 
-    private void transformHook(JsonNode request) {
+    private void transformHook(JsonNode request) throws JsonProcessingException {
         ObjectNode req = (ObjectNode) request;
         String topic = req.get("method").asText();
         Method method = hooks.get(topic);
-        req.replace("method", TextNode.valueOf(method.getName()));
-        // TODO: what if params is null or does not exist?
-        JsonNode params = req.get("params");
-        if (!params.isArray()) {
-            req.replace("params", mapper.createArrayNode().add(params));
-        }
+        req.put("method", method.getName());
+        reOrgParams(method, req);
     }
 
     private void handleRequests() throws IOException {
@@ -194,12 +187,12 @@ public abstract class Plugin {
         }
     }
 
-    private void registerCommand(Method method, Command cmmand) {
-        String name = cmmand.name().equals("") ? method.getName() : cmmand.name();
-        String description = cmmand.description();
+    private void registerCommand(Method method, Command command) {
+        String name = command.name().equals("") ? method.getName() : command.name();
+        String description = command.description();
         String longDescription = null;
-        if (!cmmand.longDescription().equals("")) {
-            longDescription = cmmand.longDescription();
+        if (!command.longDescription().equals("")) {
+            longDescription = command.longDescription();
         }
 
         // generate usage information
@@ -223,17 +216,15 @@ public abstract class Plugin {
             throw new RuntimeException("command method has been registered: " + name);
         }
         commands.put(name, method);
-        manifest.addMethod(name, description, String.join(" ", usage), longDescription);
+        if (!name.equals(GET_MANIFEST) && !name.equals(INIT)) {
+            manifest.addCommand(name, description, String.join(" ", usage), longDescription);
+        }
     }
 
     private void registerSubscription(Method method, Subscribe subscribe) {
-        if (method.getParameterCount() != 1 || !method.getParameterTypes()[0].isAssignableFrom(JsonNode.class)) {
-            String msg = "signature of the subscription method only accept one parameter of type JsonNode";
-            throw new RuntimeException(msg);
-        }
         String topic = subscribe.value().name();
         if (subscriptions.containsKey(topic)) {
-            throw new RuntimeException("subscription method has been registered: " + topic);
+            throw new RuntimeException("subscription method has been registered for topic: " + topic);
         }
         subscriptions.put(topic, method);
         manifest.addSubscription(topic);
@@ -242,14 +233,13 @@ public abstract class Plugin {
     private void registerHook(Method method, Hook hook) {
         // TODO: validate the input parameter and return value of the hook handler method
         int c = method.getParameterCount();
-        Class[] ptypes = method.getParameterTypes();
         Class rtype = method.getReturnType();
-        if (c != 1 || !ptypes[0].isAssignableFrom(JsonNode.class) || rtype == Void.class) {
+        if (c != 1 || rtype == Void.class) {
             throw new RuntimeException("wrong hook method signature");
         }
         String topic = hook.value().name();
         if (commands.containsKey(topic) || hooks.containsKey(topic)) {
-            throw new RuntimeException("hook method has been registered: " + topic);
+            throw new RuntimeException("hook method has been registered for topic: " + topic);
         }
         hooks.put(topic, method);
         manifest.addHook(topic);
@@ -354,6 +344,8 @@ public abstract class Plugin {
                 }
                 System.arraycopy(buffer, src, b, off, toRead);
             }
+
+            String req = new String(Arrays.copyOfRange(b, off, off + toRead));
             return toRead;
         }
     }
@@ -361,21 +353,21 @@ public abstract class Plugin {
     @Getter
     class Manifest {
         @JsonProperty("rpcmethods")
-        private List<Map> methods;
+        private List<Map> commands;
         private List<Option> options;
         private List<String> subscriptions;
         private List<String> hooks;
         private boolean dynamic;
 
         public Manifest() {
-            methods = new ArrayList<>();
+            commands = new ArrayList<>();
             options = new ArrayList<>();
             subscriptions = new ArrayList<>();
             hooks = new ArrayList<>();
             dynamic = false;
         }
 
-        void addMethod(String name, String description, String usage, String longDescription) {
+        void addCommand(String name, String description, String usage, String longDescription) {
             Map<String, String> method = new HashMap<>();
             method.put("name", name);
             method.put("description", description);
@@ -383,7 +375,7 @@ public abstract class Plugin {
             if (Objects.nonNull(longDescription)) {
                 method.put("long_description", longDescription);
             }
-            methods.add(method);
+            commands.add(method);
         }
 
         void addOption(String name, Object default_, String description, String type) {

@@ -44,7 +44,7 @@ public class TestPlugin {
         Assert.assertTrue(client.listInvoices().length >= cntInvoice + cntExpired);
 
         client.autoCleanInvoice(new AutoCleanInvoiceParams().setCycleSeconds(1).setExpiredBy(expiredBy));
-        Thread.sleep((invoiceExpiredSec + expiredBy) * 1000);
+        Thread.sleep((invoiceExpiredSec + expiredBy + 5) * 1000);
         Assert.assertTrue(client.listInvoices().length <= cntInvoice);
     }
 

@@ -2,6 +2,7 @@ package clightning;
 
 import clightning.apis.LightningClient;
 import clightning.apis.LightningClientImpl;
+import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -9,7 +10,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static com.google.common.base.Preconditions.*;
 
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LightningDaemon implements AbstractLightningDaemon {
     private static Map EMPTY_PARAMS = new HashMap();
     private AtomicInteger id = new AtomicInteger();
-    private ObjectMapper mapper = new ObjectMapper().registerModule(new Jdk8Module());
+    private ObjectMapper mapper;
 
     private String udsPath;
     private EventLoopGroup group;
@@ -35,6 +35,7 @@ public class LightningDaemon implements AbstractLightningDaemon {
     private Bootstrap bootstrap;
 
     public LightningDaemon() throws IOException {
+        mapper = JsonUtil.mapper;
         udsPath = getUnixDomainPath();
         group = new EpollEventLoopGroup();
         address = new DomainSocketAddress(udsPath);

@@ -15,6 +15,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 public class TestChannel {
@@ -67,6 +68,7 @@ public class TestChannel {
 
     @Test
     public void testGetRoute() {
+        BigDecimal decimal = new BigDecimal("18446744073709551615");
         Peer[] peers = client.listPeers();
         for (Peer peer : peers) {
             final String nodeId = peer.getId();

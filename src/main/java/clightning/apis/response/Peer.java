@@ -11,39 +11,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Data
 public class Peer {
-
-    public static class OutputDeserializer extends JsonDeserializer<Output[]> {
-        @Override
-        public Output[] deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-            List<Output> array = new ArrayList<>();
-
-            while (!p.isClosed()) {
-                JsonToken token = p.nextToken();
-                if (JsonToken.END_OBJECT.equals(token)) {
-                    break;
-                } else if (JsonToken.FIELD_NAME.equals(token)) {
-                    String address = p.currentName();
-                    token = p.nextToken();
-                    Output output;
-                    if (token.isNumeric()) {
-                        output = new Output(address, p.getValueAsLong());
-                    } else {
-                        output = new Output(address, p.getValueAsString());
-                    }
-                    array.add(output);
-                }
-            }
-            Output[] res = array.toArray(new Output[array.size()]);
-            return res;
-        }
-    }
-
     private String id;
     private boolean connected;
 
@@ -88,7 +62,6 @@ public class Peer {
          * "03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec":10000000000 //msatoshi
          * },
          */
-        @JsonDeserialize(using = OutputDeserializer.class)
         @JsonProperty("funding_allocation_msat")
         private Output[] funding_allocation_msat;
 
@@ -98,7 +71,6 @@ public class Peer {
          * "03b27d2edad44bcf65b92605031a5577843b336551deb480e38537a845da6c7aec":"10000000000msat"
          * },
          */
-        @JsonDeserialize(using = OutputDeserializer.class)
         @JsonProperty("funding_msat")
         private Output[] funding_msat;
 
@@ -133,7 +105,7 @@ public class Peer {
         String dust_limit_msat;
 
         @JsonProperty("max_htlc_value_in_flight_msat")
-        long max_htlc_value_in_flight_msat;
+        BigDecimal max_htlc_value_in_flight_msat;
 
         @JsonProperty("max_total_htlc_in_msat")
         String max_total_htlc_in_msat;
