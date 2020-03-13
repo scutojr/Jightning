@@ -1,7 +1,7 @@
 [
     {
         "params": {
-            "command": "rescan"
+            "subcommand": "rescan"
         }, 
         "response": {
             "plugins": [
@@ -26,8 +26,8 @@
     }, 
     {
         "params": {
-            "parameter": "helloworld.py", 
-            "command": "stop"
+            "plugin": "helloworld.py",
+            "subcommand": "stop"
         }, 
         "response": {
             "": "Successfully stopped helloworld.py."
@@ -35,7 +35,7 @@
     }, 
     {
         "params": {
-            "command": "list"
+            "subcommand": "list"
         }, 
         "response": {
             "plugins": [
@@ -60,8 +60,8 @@
     }, 
     {
         "params": {
-            "parameter": "helloworld.py", 
-            "command": "start"
+            "plugin": "helloworld.py",
+            "subcommand": "start"
         }, 
         "response": {
             "plugins": [
@@ -86,9 +86,9 @@
     }, 
     {
         "params": {
-            "parameter": ".", 
-            "command": "startdir"
-        }, 
+            "directory": ".",
+            "subcommand": "startdir"
+        },
         "response": {
             "plugins": [
                 {

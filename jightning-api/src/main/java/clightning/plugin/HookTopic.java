@@ -6,6 +6,4 @@ public enum HookTopic {
     invoice_payment,
     openchannel,
     htlc_accepted,
-    rpc_command,
-    custommsg
 }

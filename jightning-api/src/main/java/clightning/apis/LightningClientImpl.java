@@ -18,8 +18,8 @@ import java.util.Objects;
 
 public class LightningClientImpl implements LightningClient {
 
-    private AbstractLightningDaemon lnd;
-    private ObjectMapper mapper;
+    protected AbstractLightningDaemon lnd;
+    protected ObjectMapper mapper;
 
     public LightningClientImpl(AbstractLightningDaemon lnd) {
         this.lnd = lnd;

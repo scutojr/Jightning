@@ -1,12 +1,10 @@
 package clightning.plugin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.google.common.primitives.UnsignedInteger;
 import com.googlecode.jsonrpc4j.JsonRpcInterceptor;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
@@ -18,13 +16,17 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 
+
+// TODO: add log method that will redirect to the lightning daemon
 public abstract class Plugin {
     private static final String GET_MANIFEST = "getmanifest";
     private static final String INIT = "init";
+    private static byte[] DELIMITER = "\n\n".getBytes();
 
     private InputStream in;
     private OutputStream out;
 
+    private PluginProcessor.PluginMetaInfo metaInfo;
     private Manifest manifest = new Manifest();
     private ObjectMapper mapper = new ObjectMapper();
     private Map<String, Method> commands = new HashMap<>();
@@ -46,9 +48,23 @@ public abstract class Plugin {
     }
 
     public void run(boolean dynamic) throws IOException {
+        String className = getClass().getCanonicalName();
+        metaInfo = PluginProcessor.MetaStore.load().getPluginMetaInfo(className);
+        if (Objects.isNull(metaInfo)) {
+            throw new NullPointerException("PluginMetaInfo is not found for " + className);
+        }
         generateManifest(dynamic);
         // TODO: log debug level
         handleRequests();
+    }
+
+    public void stop() {
+        try {
+            in.close();
+        } catch (IOException e) {
+            // TODO: log here
+            e.printStackTrace();
+        }
     }
 
     public void addOption(String name, String default_, String description) {
@@ -74,14 +90,14 @@ public abstract class Plugin {
         return manifest;
     }
 
-    protected abstract Object initialize();
+    protected abstract Object initialize(JsonNode options, JsonNode configuration);
 
     @Command
-    public Object init() {
-        return init();
+    public Object init(JsonNode options, JsonNode configuration) {
+        return initialize(options, configuration);
     }
 
-    private void reOrgParams(Method method, ObjectNode request) throws JsonProcessingException {
+    private void reOrgParams(Method method, ObjectNode request) throws IOException {
         JsonNode paramsNode = request.get("params");
         Parameter[] parameters = method.getParameters();
         if (paramsNode.isArray()) {
@@ -100,9 +116,16 @@ public abstract class Plugin {
                 arrayNode.add(mapper.readTree(defValue));
             }
         } else {
+            PluginProcessor.MethodSignature signature = metaInfo.get(method.getName());
+            if (Objects.isNull(signature)) {
+                throw new NullPointerException(
+                        "method signature is not found. It may be a bug and please turned to developer"
+                );
+            }
             ArrayNode arguments = mapper.createArrayNode();
-            for (Parameter param : parameters) {
-                String paramName = param.getName();
+            for (int i = 0; i < parameters.length; i++) {
+                Parameter param = parameters[i];
+                String paramName = signature.argName(i);
                 DefaultTo def;
                 if (paramsNode.has(paramName)) {
                     arguments.add(paramsNode.get(paramName));
@@ -117,18 +140,18 @@ public abstract class Plugin {
                     break;
                 }
             }
-            ((ObjectNode) request).replace("params", arguments);
+            request.replace("params", arguments);
         }
     }
 
-    private void transformCommand(JsonNode req) throws JsonProcessingException {
+    private void transformCommand(JsonNode req) throws IOException {
         String methodName = req.get("method").asText();
         Method method = commands.get(methodName);
         ((ObjectNode) req).put("method", method.getName());
         reOrgParams(method, (ObjectNode) req);
     }
 
-    private void transformSubscribe(JsonNode request) throws JsonProcessingException {
+    private void transformSubscribe(JsonNode request) throws IOException {
         // TODO: validate the topic and raise exception
         ObjectNode req = (ObjectNode) request;
         String topic = request.get("method").asText();
@@ -137,7 +160,7 @@ public abstract class Plugin {
         reOrgParams(method, req);
     }
 
-    private void transformHook(JsonNode request) throws JsonProcessingException {
+    private void transformHook(JsonNode request) throws IOException {
         ObjectNode req = (ObjectNode) request;
         String topic = req.get("method").asText();
         Method method = hooks.get(topic);
@@ -183,7 +206,9 @@ public abstract class Plugin {
             }
         }));
         while (!input.isClosed()) {
-            server.handleRequest(input, out);
+            server.handleRequest(input, out); // a '\n' will be written to the end of every response
+            out.write('\n');
+            out.flush();
         }
     }
 
@@ -196,10 +221,13 @@ public abstract class Plugin {
         }
 
         // generate usage information
+        PluginProcessor.MethodSignature signature = metaInfo.get(method.getName());
+        Parameter[] parameters = method.getParameters();
         List<String> usage = new ArrayList<>();
         boolean foundAnnotated = false;
-        for (Parameter param : method.getParameters()) {
-            String paramName = param.getName();
+        for(int i =0;i< parameters.length;i++) {
+            Parameter param = parameters[i];
+            String paramName = signature.argName(i);
             if (param.isAnnotationPresent(DefaultTo.class)) {
                 usage.add("[" + paramName + "]");
                 foundAnnotated = true;
@@ -232,9 +260,8 @@ public abstract class Plugin {
 
     private void registerHook(Method method, Hook hook) {
         // TODO: validate the input parameter and return value of the hook handler method
-        int c = method.getParameterCount();
         Class rtype = method.getReturnType();
-        if (c != 1 || rtype == Void.class) {
+        if (rtype == Void.class) {
             throw new RuntimeException("wrong hook method signature");
         }
         String topic = hook.value().name();
@@ -264,11 +291,10 @@ public abstract class Plugin {
         manifest.dynamic = dynamic;
     }
 
-    private static class StdInWrapper extends InputStream {
+    private class StdInWrapper extends InputStream {
         private int writeIndex = 0;
         private int readIndex = 0;
         private byte[] buffer = new byte[65535];
-        private byte[] delimiter = "\n\n".getBytes();
 
         private boolean closed;
         private InputStream in;
@@ -279,10 +305,10 @@ public abstract class Plugin {
         }
 
         private int nextDelimiter() {
-            for (int i = readIndex; i <= writeIndex - delimiter.length; i++) {
+            for (int i = readIndex; i <= writeIndex - DELIMITER.length; i++) {
                 boolean found = true;
-                for (int j = 0; j < delimiter.length; j++) {
-                    if (buffer[i] != delimiter[j]) {
+                for (int j = 0; j < DELIMITER.length; j++) {
+                    if (buffer[i] != DELIMITER[j]) {
                         found = false;
                         break;
                     }

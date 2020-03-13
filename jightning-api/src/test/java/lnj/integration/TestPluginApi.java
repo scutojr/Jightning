@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 import static lnj.utils.LightningUtils.forEachPeer;
 
-public class TestPlugin {
+public class TestPluginApi {
     private LightningClient client;
 
     @Before

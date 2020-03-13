@@ -53,7 +53,7 @@ def generate_node_host_mapping(ln_containers):
     node_id_to_host = {}
     for c in ln_containers:
         node_id_to_host[get_ln_id(c)] = c.names
-    path = '../src/test/resources/nodeIdToHost.json'.split('/')
+    path = '../jightning-api/src/test/resources/nodeIdToHost.json'.split('/')
     with open(op.join(CWD, *path), 'w') as sink:
         json.dump(node_id_to_host, sink, indent=4)
         sink.flush()

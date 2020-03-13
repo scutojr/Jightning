@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import java.io.*;
 
-public class TestPlugin {
+public class TestPluginModule {
     private ObjectMapper mapper;
     private Thread thread;
     private ChannelMgr channelMgr;
@@ -67,7 +67,7 @@ public class TestPlugin {
     }
 
     @Test
-    public void testKeyWordArgsReqest() throws IOException, InterruptedException {
+    public void testKeyWordArgsRequest() throws IOException, InterruptedException {
         String id = "<peer id>";
         String host = "xx host";
         long defSatoshi = 15000000;
@@ -75,16 +75,14 @@ public class TestPlugin {
 
         ObjectNode params = mapper.createObjectNode();
         params.put("id", id);
-        params.put("host",host);
+        params.put("host", host);
         JsonNode request = rawRequest("createchannel", params, true);
         mapper.writeValue(forwardOut, request);
 
-        Thread.sleep(1000);
-        synchronized (channelMgr) {
-            Assert.assertTrue(channelMgr.id.equals(id));
-            Assert.assertTrue(channelMgr.satoshi == defSatoshi);
-            Assert.assertTrue(channelMgr.fee == defFee);
-        }
+        Thread.sleep(2 * 1000);
+        Assert.assertTrue(channelMgr.getId().equals(id));
+        Assert.assertTrue(channelMgr.getSatoshi() == defSatoshi);
+        Assert.assertTrue(channelMgr.getFee() == defFee);
     }
 
     @Test
@@ -211,11 +209,12 @@ public class TestPlugin {
             this.out = out;
         }
 
+
         /**
          * @return arbitrary data to tell the lightning daemon that this plugin is ready
          */
         @Override
-        protected Object initialize() {
+        protected Object initialize(JsonNode options, JsonNode configuration) {
             return "arbitray data that can be serialized by jsonrpc4j";
         }
 
@@ -228,35 +227,47 @@ public class TestPlugin {
         }
 
         @Command(name = "createchannel")
-        public void createChannel(String id, String host, @DefaultTo("15000000") long satoshi, @DefaultTo("100") int fee) {
+        public synchronized void createChannel(String id, String host, @DefaultTo("15000000") long satoshi, @DefaultTo("100") int fee) {
             this.id = id;
             this.satoshi = satoshi;
             this.fee = fee;
         }
 
         @Command
-        public void logConnect(ConnectInfo info) {
+        public synchronized void logConnect(ConnectInfo info) {
             isLogConnect = true;
         }
 
         @Subscribe(NotificationTopic.connect)
-        public void onConnect(String id, String address) {
+        public synchronized void onConnect(String id, String address) {
             isConnected = true;
         }
 
         @Subscribe(NotificationTopic.invoice_payment)
-        public void onInvoicePaid(JsonNode invoice_payment) {
+        public synchronized void onInvoicePaid(JsonNode invoice_payment) {
             isPaid = true;
         }
 
         @Hook(HookTopic.peer_connected)
-        public Object peerConnectedHook(JsonNode peer) {
+        public synchronized Object peerConnectedHook(JsonNode peer) {
             isPeerConnectedHandled = true;
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode response = mapper.createObjectNode();
             response.put("result", "disconnect");
             response.put("error_message", "this is an error message");
             return response;
+        }
+
+        public synchronized String getId() {
+            return id;
+        }
+
+        public synchronized long getSatoshi() {
+            return satoshi;
+        }
+
+        public synchronized int getFee() {
+            return fee;
         }
     }
 }

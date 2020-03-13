@@ -22,7 +22,7 @@ public class Peer {
     private boolean connected;
 
     @JsonProperty("netaddr")
-    private Optional<String[]> netaddr; // [ "172.18.0.4:9735"]
+    private Optional<String[]> netAddr; // [ "172.18.0.4:9735"]
 
     @JsonProperty("globalfeatures")
     private Optional<String> globalfeatures;
