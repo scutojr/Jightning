@@ -5,7 +5,7 @@ import clightning.apis.response.DevRescanOutput;
 
 import java.io.IOException;
 
-public interface Developer {
+public interface BasedDeveloper {
     /**
      * dev-listaddrs [bip32_max_index]
      * Show addresses list up to derivation {index} (default is the last bip32 index)

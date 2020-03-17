@@ -5,6 +5,8 @@ import clightning.LightningDaemon;
 import clightning.apis.LightningClientImpl;
 import clightning.apis.PluginCommand;
 import clightning.apis.response.Peer;
+import com.google.common.primitives.UnsignedInteger;
+import lnj.Configuration;
 import lnj.plugins.CustomPlugin;
 import lnj.plugins.LightningPluginApi;
 import lnj.utils.LightningUtils;
@@ -19,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class TestPluginModule {
+public class TestBasedPluginModule {
     private static final String DELEGATOR = "plugin_delegator.py";
     private volatile CustomPlugin plugin;
     private PluginClient pluginClient;
@@ -42,12 +44,18 @@ public class TestPluginModule {
             Socket conn = null;
             ServerSocket ss = null;
             try {
+                Configuration conf = new Configuration();
+                int port = conf.getInt(Configuration.CUSTOM_PLUGIN_PORT, 33557);
+
                 ss = new ServerSocket();
-                ss.bind(new InetSocketAddress(33557)); // TODO: add to configuration file
+                ss.bind(new InetSocketAddress(port));
                 conn = ss.accept();
                 plugin = new CustomPlugin(conn.getInputStream(), conn.getOutputStream());
-//                plugin.addOption("option1", 100, "this is option1");
+                plugin.addOption("option1", 100, "this is option1");
                 plugin.addOption("option2", "default value", "this is option2");
+                plugin.addOption("option3", true, "this is option3");
+
+                plugin.logInfo("before running the plugin!");
                 plugin.run(true);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -75,6 +83,7 @@ public class TestPluginModule {
     }
 
     private void stopPlugin() {
+        plugin.logInfo("stopping the plugin!");
         pluginClient.plugin(PluginCommand.stop(DELEGATOR));
         if (Objects.nonNull(plugin)) {
             plugin.stop();
@@ -85,7 +94,7 @@ public class TestPluginModule {
     public void setUp() throws IOException {
         startPlugin();
 
-        URL url = TestPluginModule.class.getClassLoader().getResource(DELEGATOR);
+        URL url = TestBasedPluginModule.class.getClassLoader().getResource(DELEGATOR);
         pluginClient = new PluginClient(new LightningDaemon());
         pluginClient.plugin(PluginCommand.start(url.getPath()));
     }
@@ -97,6 +106,7 @@ public class TestPluginModule {
 
     @Test
     public void testCommand() {
+        plugin.logInfo("testing the plugin rpc command!");
         int initialValue = plugin.getValue();
         int increment = 5;
         int c = 10;
@@ -108,6 +118,8 @@ public class TestPluginModule {
 
     @Test
     public void testSubscribeAndHook() throws InterruptedException {
+        plugin.logInfo("testing the plugin subscription and hook!");
+
         Peer[] peers = pluginClient.listPeers();
         Assert.assertTrue(peers.length > 0);
 

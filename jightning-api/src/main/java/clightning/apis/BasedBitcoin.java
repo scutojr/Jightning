@@ -6,7 +6,7 @@ import clightning.apis.response.*;
 
 import java.io.IOException;
 
-public interface Bitcoin {
+public interface BasedBitcoin {
     /**
      * feerates style
      * Return feerate estimates, either satoshi-per-kw ({style} perkw) or satoshi-per-kb ({style} perkb).

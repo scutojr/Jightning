@@ -13,7 +13,6 @@ public class FundChannelStartResult {
     @JsonProperty("scriptpubkey")
     private String scriptPubKey;
 
-    // TODO: ensure the existence of this field
     @JsonProperty("close_to")
     private Optional<String> closeTo;
 }

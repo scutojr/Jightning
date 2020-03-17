@@ -3,8 +3,7 @@ package lnj.integration;
 import clightning.LightningDaemon;
 import clightning.apis.ChannelState;
 import clightning.apis.LightningClient;
-import clightning.apis.optional.AutoCleanInvoiceParams;
-import clightning.apis.optional.InvoiceParams;
+import clightning.apis.optional.*;
 import clightning.apis.response.Funds;
 import clightning.apis.response.SimpleInvoice;
 import lnj.utils.BitcoinUtils;
@@ -15,11 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static lnj.utils.LightningUtils.forEachPeer;
 
-public class TestPluginApi {
+public class TestBasedPluginApi {
     private LightningClient client;
 
     @Before
@@ -61,6 +62,15 @@ public class TestPluginApi {
         });
     }
 
+    private UTxO[] getUTxOs() {
+        Funds funds = client.listFunds();
+        List<UTxO> utxos = new ArrayList();
+        for (Funds.TxOutput output : funds.getOutputs()) {
+            utxos.add(new UTxO(output.getTxId(), output.getOutput()));
+        }
+        return utxos.toArray(new UTxO[]{});
+    }
+
     @SneakyThrows
     @Test
     public void testFundChannel() {
@@ -69,8 +79,11 @@ public class TestPluginApi {
         String peerId = channel.getPeerId();
         client.close(peerId);
 
+        FundChannelParams params = new FundChannelParams();
+        params.setAnnounce(false).setMinConf(1).setUTxOs(getUTxOs()).setFeeRate(FeeRate.slow());
+
         client.connect(peerId, LightningUtils.getHost(peerId));
-        client.fundChannel(peerId, channel.getChannelTotalSat());
+        client.fundChannel(peerId, channel.getChannelTotalSat(), params);
         BitcoinUtils.generateToAddress(101, BitcoinUtils.getNewAddress());
         Boolean isSucceed = false;
         for (int i = 0; i < 32; i++) {

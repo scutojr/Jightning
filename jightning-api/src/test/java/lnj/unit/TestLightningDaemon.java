@@ -1,12 +1,15 @@
 package lnj.unit;
 
 import clightning.AbstractLightningDaemon;
-import clightning.apis.*;
+import clightning.apis.InvoiceStatus;
+import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
+import clightning.apis.Output;
+import clightning.apis.PluginCommand;
 import clightning.apis.optional.ListPeersParams;
 import clightning.apis.optional.LogLevel;
 import clightning.apis.optional.PingParams;
 import clightning.apis.response.*;
-import clightning.apis.response.Channel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lnj.LightningForTesting;
 import org.junit.Assert;
@@ -380,7 +383,6 @@ public class TestLightningDaemon {
 
             CommandUsage cmd = client.help("listconfigs");
             Assert.assertNotNull(cmd);
-            // TODO: test input with a non-existed command
         } catch (RuntimeException e) {
             Assert.fail();
         }

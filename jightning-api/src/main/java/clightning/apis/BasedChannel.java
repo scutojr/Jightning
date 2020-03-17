@@ -3,7 +3,7 @@ package clightning.apis;
 import clightning.apis.optional.*;
 import clightning.apis.response.*;
 
-public interface Channel {
+public interface BasedChannel {
     /**
      * https://lightning.readthedocs.io/lightning-close.7.html
      * <p>
@@ -66,9 +66,9 @@ public interface Channel {
      * matching short_channel_id are returned.
      * source: If source is supplied, then only channels leading from that node id are returned.
      */
-    clightning.apis.response.Channel[] listChannels();
+    Channel[] listChannels();
 
-    clightning.apis.response.Channel[] listChannels(ListChannelsParams optionalParams);
+    Channel[] listChannels(ListChannelsParams optionalParams);
 
     /**
      * listforwards

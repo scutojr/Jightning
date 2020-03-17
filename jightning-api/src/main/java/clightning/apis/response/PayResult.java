@@ -26,10 +26,15 @@ public class PayResult {
       @JsonProperty("created_at")
       private long createdAt;
 
-      // TODO: enumeration all the possible state
-      private String status;
+      private Status status;
 
       @JsonProperty("payment_preimage")
       private String paymentPreimage;
       private String bolt11;
+
+      public enum Status {
+            pending,
+            complete,
+            failed;
+      }
 }

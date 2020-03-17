@@ -4,6 +4,7 @@ import clightning.plugin.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lnj.Configuration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +18,6 @@ import java.util.List;
 public class CustomPlugin extends Plugin implements LightningPluginApi {
     private int value = 0;
     private volatile boolean running = false;
-    private ObjectMapper mapper = new ObjectMapper();
     private List<JsonNode> connections = new ArrayList<>();
     private List<JsonNode> hooks = new ArrayList<>();
 
@@ -74,9 +74,13 @@ public class CustomPlugin extends Plugin implements LightningPluginApi {
     }
 
     public static void main(String[] args) throws IOException {
+        Configuration conf = new Configuration();
+        int port = Integer.valueOf(conf.get(Configuration.CUSTOM_PLUGIN_PORT));
+
         ServerSocket ss = new ServerSocket();
-        ss.bind(new InetSocketAddress(33557)); // TODO: add to configuration file
+        ss.bind(new InetSocketAddress(port));
         Socket conn = ss.accept();
+
         CustomPlugin plugin = new CustomPlugin(conn.getInputStream(), conn.getOutputStream());
         plugin.addOption("option1", 100, "this is option1");
         plugin.addOption("option2", "default value", "this is option2");

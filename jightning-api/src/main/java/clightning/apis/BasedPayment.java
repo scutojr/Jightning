@@ -5,7 +5,7 @@ import clightning.apis.optional.ListSendPaysParams;
 import clightning.apis.optional.SendPayParams;
 import clightning.apis.response.*;
 
-public interface Payment {
+public interface BasedPayment {
     /**
      * decodepay bolt11 [description]
      * Decode {bolt11}, using {description} if necessary

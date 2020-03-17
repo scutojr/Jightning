@@ -5,7 +5,7 @@ import clightning.apis.optional.FundChannelParams;
 import clightning.apis.optional.PayParams;
 import clightning.apis.response.*;
 
-public interface Plugin {
+public interface BasedPlugin {
     /**
      * https://lightning.readthedocs.io/lightning-autocleaninvoice.7.html
      * <p>

@@ -205,8 +205,12 @@ public class LightningDaemonInfo {
                 this.type = type;
             }
 
+            /**
+             *
+             * @param type
+             * @return Type or null if no Type is not found for type
+             */
             public static Type getType(String type) {
-                // TODO: deal with case of key error
                 return map.get(type);
             }
         }

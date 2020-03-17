@@ -14,11 +14,14 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class LightningTestingServer {
-    private int port = 5556;
+    private int port;
     private JsonRpcServer rpcServer;
 
     public LightningTestingServer() {
         try {
+            Configuration conf = new Configuration();
+            port = conf.getInt(Configuration.LIGHTNING_PROXY_PORT, 5556);
+
             LightningDaemon lightningDaemon = new LightningDaemon();
             LightningClient client = lightningDaemon.getLightningClient();
             rpcServer = new JsonRpcServer(

@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class TestBitcoin {
+public class TestBasedBitcoin {
     private LightningClient client;
 
     @Before

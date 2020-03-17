@@ -1,11 +1,14 @@
 package clightning.plugin;
 
+import clightning.utils.JsonUtil;
+import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.primitives.UnsignedInteger;
 import com.googlecode.jsonrpc4j.JsonRpcInterceptor;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import lombok.Getter;
@@ -17,8 +20,8 @@ import java.lang.reflect.Parameter;
 import java.util.*;
 
 
-// TODO: add log method that will redirect to the lightning daemon
 public abstract class Plugin {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static final String GET_MANIFEST = "getmanifest";
     private static final String INIT = "init";
     private static byte[] DELIMITER = "\n\n".getBytes();
@@ -28,11 +31,12 @@ public abstract class Plugin {
 
     private PluginProcessor.PluginMetaInfo metaInfo;
     private Manifest manifest = new Manifest();
-    private ObjectMapper mapper = new ObjectMapper();
     private Map<String, Method> commands = new HashMap<>();
     private Map<String, Method> subscriptions = new HashMap<>();
     private Map<String, Method> hooks = new HashMap<>();
     private JsonRpcServer server = new JsonRpcServer(this);
+
+    protected ObjectMapper mapper;
 
     public Plugin() {
         this(System.in, System.out);
@@ -41,6 +45,7 @@ public abstract class Plugin {
     public Plugin(InputStream in, OutputStream out) {
         this.in = in;
         this.out = out;
+        mapper = JsonUtil.getMapper();
     }
 
     public void run() throws IOException {
@@ -54,7 +59,7 @@ public abstract class Plugin {
             throw new NullPointerException("PluginMetaInfo is not found for " + className);
         }
         generateManifest(dynamic);
-        // TODO: log debug level
+        logger.info("start plugin with manifest " + mapper.writeValueAsString(manifest));
         handleRequests();
     }
 
@@ -62,8 +67,7 @@ public abstract class Plugin {
         try {
             in.close();
         } catch (IOException e) {
-            // TODO: log here
-            e.printStackTrace();
+            logger.error("error while stop plugin", e);
         }
     }
 
@@ -72,13 +76,7 @@ public abstract class Plugin {
     }
 
     public void addOption(String name, Integer default_, String description) {
-        // TODO: integers ?
-        manifest.addOption(name, default_, description, "integers");
-    }
-
-    public void addOption(String name, UnsignedInteger default_, String description) {
-        // TODO: unsigned integers?
-        manifest.addOption(name, default_, description, "unsigned integers");
+        manifest.addOption(name, default_, description, "int");
     }
 
     public void addOption(String name, boolean default_, String description) {
@@ -97,7 +95,36 @@ public abstract class Plugin {
         return initialize(options, configuration);
     }
 
+    public void logInfo(String message) {
+        log(message, "info");
+    }
+
+    public void logWarn(String message) {
+        log(message, "warn");
+    }
+
+    public void log(String message, String level) {
+        ObjectNode req = mapper.createObjectNode();
+        ObjectNode params = mapper.createObjectNode();
+
+        params.put("level", level);
+        params.put("message", message);
+        req.put("jsonrpc", "2.0");
+        req.put("method", "log");
+        req.replace("params", params);
+        try {
+            mapper.writeValue(out, req);
+            out.write(DELIMITER);
+            out.flush();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void reOrgParams(Method method, ObjectNode request) throws IOException {
+        if (Objects.isNull(method)) {
+            throw new RuntimeException("unknown method from request: " + request);
+        }
         JsonNode paramsNode = request.get("params");
         Parameter[] parameters = method.getParameters();
         if (paramsNode.isArray()) {
@@ -106,7 +133,11 @@ public abstract class Plugin {
                 Parameter param = parameters[i];
                 DefaultTo def = param.getAnnotation(DefaultTo.class);
                 if (def == null) {
-                    // TODO: log error here
+                    logger.error("not enough input argument for request "
+                            + mapper.writeValueAsString(request)
+                            + ".Please pass a current request or"
+                            + "set a default value to the plugin method input parameter by @DefaultTo"
+                    );
                     break;
                 }
                 String defValue = def.value();
@@ -136,7 +167,11 @@ public abstract class Plugin {
                     }
                     arguments.add(mapper.readTree(defValue));
                 } else {
-                    // TODO: log error here
+                    logger.error("not enough input argument for request "
+                            + mapper.writeValueAsString(request)
+                            + ".Please pass a current request or"
+                            + "set a default value to the plugin method input parameter by @DefaultTo"
+                    );
                     break;
                 }
             }
@@ -152,7 +187,6 @@ public abstract class Plugin {
     }
 
     private void transformSubscribe(JsonNode request) throws IOException {
-        // TODO: validate the topic and raise exception
         ObjectNode req = (ObjectNode) request;
         String topic = request.get("method").asText();
         Method method = subscriptions.get(topic);
@@ -171,6 +205,7 @@ public abstract class Plugin {
     private void handleRequests() throws IOException {
         StdInWrapper input = new StdInWrapper(in);
         server.setInterceptorList(Arrays.asList(new JsonRpcInterceptor() {
+            @SneakyThrows
             @Override
             public void preHandleJson(JsonNode jsonNode) {
                 try {
@@ -185,8 +220,12 @@ public abstract class Plugin {
                         transformSubscribe(jsonNode);
                     }
                 } catch (IOException e) {
-                    //TODO log here
-                    e.printStackTrace();
+                    logger.error("error while transforming the request "
+                                    + mapper.writeValueAsString(jsonNode)
+                                    + " into internal format",
+                            e
+                    );
+                    throw e;
                 }
             }
 
@@ -225,7 +264,7 @@ public abstract class Plugin {
         Parameter[] parameters = method.getParameters();
         List<String> usage = new ArrayList<>();
         boolean foundAnnotated = false;
-        for(int i =0;i< parameters.length;i++) {
+        for (int i = 0; i < parameters.length; i++) {
             Parameter param = parameters[i];
             String paramName = signature.argName(i);
             if (param.isAnnotationPresent(DefaultTo.class)) {
@@ -259,7 +298,6 @@ public abstract class Plugin {
     }
 
     private void registerHook(Method method, Hook hook) {
-        // TODO: validate the input parameter and return value of the hook handler method
         Class rtype = method.getReturnType();
         if (rtype == Void.class) {
             throw new RuntimeException("wrong hook method signature");
@@ -273,7 +311,6 @@ public abstract class Plugin {
     }
 
     public void generateManifest(boolean dynamic) {
-        // TODO: only support public method?
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             Annotation[] annotations = method.getAnnotations();
@@ -331,8 +368,6 @@ public abstract class Plugin {
 
         @Override
         public int read() throws IOException {
-            int d = nextDelimiter();
-            //TODO
             throw new RuntimeException("not yet implemented");
         }
 

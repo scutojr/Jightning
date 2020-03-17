@@ -3,6 +3,7 @@ package lnj.integration;
 import clightning.LightningDaemon;
 import clightning.apis.InvoiceStatus;
 import clightning.apis.LightningClient;
+import clightning.apis.optional.ExpiryUnit;
 import clightning.apis.optional.InvoiceParams;
 import clightning.apis.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import static lnj.utils.LightningUtils.forEachPeer;
 
-public class TestPayment {
+public class TestBasedPayment {
     private LightningClient client;
     private ObjectMapper mapper;
 
@@ -166,5 +167,17 @@ public class TestPayment {
             Assert.assertTrue(payResult.getMsatoshiSent() == msatoshi);
             Assert.assertNotNull(client.decodePay(invoice.getBolt11()));
         });
+    }
+
+    @Test
+    public void testInvoice() {
+        long msatoshi = 1000 * 1000;
+        InvoiceParams params = new InvoiceParams();
+
+        params.setExpiry(1, ExpiryUnit.day);
+        params.setFallbacks(client.newBench32Addr(), client.newBench32Addr());
+        params.setExposePrivateChannels(false);
+        SimpleInvoice invoice = client.invoice(msatoshi, generateLabel(), "desc", params);
+        Assert.assertNotNull(invoice);
     }
 }

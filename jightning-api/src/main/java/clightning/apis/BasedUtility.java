@@ -5,7 +5,7 @@ import clightning.apis.response.*;
 
 import java.io.IOException;
 
-public interface Utility {
+public interface BasedUtility {
     /**
      * check command_to_check
      * Don't run {command_to_check}, just verify parameters.

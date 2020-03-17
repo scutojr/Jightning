@@ -3,13 +3,17 @@ package lnj.utils;
 import clightning.LightningDaemon;
 import clightning.apis.LightningClient;
 import clightning.apis.response.Funds;
+import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.googlecode.jsonrpc4j.JsonRpcClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
-import lnj.integration.TestPayment;
+import lnj.Configuration;
+import lnj.integration.TestBasedPayment;
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +25,7 @@ import java.util.Objects;
 
 public class LightningUtils {
     private static Map<String, String> idToHost;
+    private static final Logger logger = LoggerFactory.getLogger(LightningUtils.class);
 
     static {
         String file = "nodeIdToHost.json";
@@ -29,7 +34,7 @@ public class LightningUtils {
             idToHost = new ObjectMapper().readValue(is, new TypeReference<Map<String, String>>() {
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("", e);
             System.exit(1);
         }
     }
@@ -51,7 +56,7 @@ public class LightningUtils {
         JsonRpcClient rpcClient = new JsonRpcClient();
         rpcClient.getObjectMapper().registerModule(new Jdk8Module());
         return ProxyUtil.createClientProxy(
-                TestPayment.class.getClassLoader(),
+                TestBasedPayment.class.getClassLoader(),
                 LightningClient.class,
                 rpcClient,
                 s
@@ -61,10 +66,11 @@ public class LightningUtils {
     public static boolean waitForFundConfirmed() throws IOException {
         LightningClient client = new LightningDaemon().getLightningClient();
         boolean isConfirmed = false;
+        ObjectMapper mapper = JsonUtil.getMapper();
         for (int i = 0; i < 32; i++) {
             Funds funds = client.listFunds();
-            isConfirmed = Arrays.stream(funds.getOutputs()).anyMatch((output)->{
-                return output.getStatus().equals("confirmed");
+            isConfirmed = Arrays.stream(funds.getOutputs()).anyMatch((output) -> {
+                return output.getStatus().get().equals("confirmed");
             });
             if (isConfirmed) {
                 break;
@@ -72,7 +78,7 @@ public class LightningUtils {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             }
         }
@@ -82,6 +88,9 @@ public class LightningUtils {
     public static void forEachPeer(Handler handler) {
         Socket s = null;
         try {
+            Configuration conf = new Configuration();
+
+            int port = conf.getInt(Configuration.LIGHTNING_PROXY_PORT, 5556);
             String hostname = CommonUtils.getHostname();
             String[] hosts = LightningUtils.getHosts();
             Assert.assertTrue(hosts.length > 0);
@@ -90,8 +99,7 @@ public class LightningUtils {
                 if (hostname.equals(host)) {
                     continue;
                 }
-                // TODO: get the host and port from the properties
-                s = new Socket(host, 5556);
+                s = new Socket(host, port);
                 handler.handle(getPeer(s));
             }
         } catch (IOException e) {

@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-public class TestChannel {
+public class TestBasedChannel {
     private LightningClient client;
 
     private void sleep(long milliSec) {
@@ -38,7 +38,7 @@ public class TestChannel {
     @Test
     @Ignore
     public void testListForwards() {
-        // TODO: call the method will cause the lightning daemon exit unexpectedly
+        // ERROR: call the method will cause the lightning daemon exit unexpectedly
     }
 
     @Test
@@ -82,7 +82,7 @@ public class TestChannel {
 
     @Test
     public void testChannel() throws IOException {
-        String srcNodeId = client.getInfo().getId();
+        int port = 9735;
         String destNodeId = null;
         String channelId = null;
 
@@ -101,7 +101,7 @@ public class TestChannel {
         // try to create a channel and then cancel it
         long amountSatoshi = 15 * 1000 * 1000;
         String host = LightningUtils.getHost(destNodeId);
-        client.connect(destNodeId, host);
+        client.connect(destNodeId, host, port);
         client.fundChannelStart(destNodeId, amountSatoshi);
         sleep(5 * 1000);
         client.fundChannelCancel(destNodeId);

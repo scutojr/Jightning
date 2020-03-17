@@ -1,13 +1,19 @@
 package clightning.apis.response;
 
+import clightning.utils.BitcoinUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.Transaction;
 
-// TODO: merge common implementation as one
 @Data
 public class WithdrawResutlt {
-    private String tx; // TODO: decode it into transaction instance
+    private String tx;
 
     @JsonProperty("txid")
     private String txId;
+
+    public Transaction decode(NetworkParameters networkParameters) {
+        return BitcoinUtil.decodeTransaction(networkParameters, tx);
+    }
 }

@@ -21,8 +21,6 @@ public class FundChannelParams extends OptionalParams {
     }
 
     /**
-     * TODO: ensure the array format is acceptable to the lightning feerate rpc
-     *
      * @param uTxO
      * @return
      */
@@ -31,7 +29,7 @@ public class FundChannelParams extends OptionalParams {
                 .stream()
                 .map(t -> t.toString())
                 .collect(Collectors.toList())
-                .toArray();
+                .toArray(new String[]{});
         params.put("utxos", uTxOs);
         return this;
     }

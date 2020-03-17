@@ -8,9 +8,8 @@ import clightning.apis.response.Peer;
 
 import java.io.IOException;
 
-public interface Network {
+public interface BasedNetwork {
     /**
-     * TODO: make sure the type of port, string or int?
      * connect id [host] [port]
      * Connect to {id} at {host} (which can end in ':port' if not default). {id} can also be of the form id@host
      */

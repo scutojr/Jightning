@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class TestNetwork {
+public class TestBasedNetwork {
     private LightningClient client;
 
     @Before

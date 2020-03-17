@@ -10,9 +10,8 @@ public class SimpleInvoice {
       @JsonProperty("payment_hash")
       private String paymentHash;
 
-      // TODO: unify the type of timestamp value
       @JsonProperty("expires_at")
-      private long expiresAt;
+      private int expiresAt; // seconds
 
       private String bolt11;
 

@@ -21,7 +21,6 @@ public class InvoiceParams extends OptionalParams {
     }
 
     /**
-     * TODO: ensure the type of exposePrivateChannels
      * @param exposePrivateChannels
      * @return
      */

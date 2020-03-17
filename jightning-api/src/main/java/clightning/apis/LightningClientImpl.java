@@ -23,7 +23,7 @@ public class LightningClientImpl implements LightningClient {
 
     public LightningClientImpl(AbstractLightningDaemon lnd) {
         this.lnd = lnd;
-        this.mapper = new ObjectMapper().registerModule(new Jdk8Module());
+        this.mapper = JsonUtil.getMapper();
     }
 
     private HashMap createParam() {
@@ -79,8 +79,6 @@ public class LightningClientImpl implements LightningClient {
     }
 
     /**
-     * TODO: add the following data to testing program
-     *
      * @param outputs
      * @return
      * @
@@ -220,17 +218,15 @@ public class LightningClientImpl implements LightningClient {
     }
 
     /**
-     * TODO: rename response.Channel to avoid conflict with apis.Channel interface
-     *
      * @return
      */
     @Override
-    public clightning.apis.response.Channel[] listChannels() {
+    public Channel[] listChannels() {
         return listChannels(null);
     }
 
     @Override
-    public clightning.apis.response.Channel[] listChannels(ListChannelsParams optionalParams) {
+    public Channel[] listChannels(ListChannelsParams optionalParams) {
         JsonNode response;
         if (Objects.isNull(optionalParams)) {
             response = lnd.execute("listchannels", JsonNode.class);
@@ -238,7 +234,7 @@ public class LightningClientImpl implements LightningClient {
             response = lnd.execute("listchannels", optionalParams.dump(), JsonNode.class);
         }
         JsonNode channels = response.get("channels");
-        return JsonUtil.convert(channels, clightning.apis.response.Channel[].class);
+        return JsonUtil.convert(channels, Channel[].class);
     }
 
     @Override
@@ -282,8 +278,6 @@ public class LightningClientImpl implements LightningClient {
     }
 
     /**
-     * TODO: ensure whether there are quotes in the return result of JsonNode.asText()
-     *
      * @param id
      * @param host
      * @param port

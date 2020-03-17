@@ -3,6 +3,8 @@ package clightning.apis.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.Optional;
+
 /**
  * "created_at": "1577091960.690291352",
  * "bytes_used": 1154310,
@@ -18,10 +20,10 @@ public class LogResult {
         private String source;
         private String log;
 
-        // TODO: data and numSkipped is not always existed. redesign it.
-        private String data = "";
+        private Optional<String> data = Optional.of("");
+
         @JsonProperty("num_skipped")
-        private int numSkipped = 0;
+        private Optional<Integer> numSkipped = Optional.of(0);
     }
 
     @JsonProperty("created_at")

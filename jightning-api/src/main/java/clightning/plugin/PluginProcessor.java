@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.google.auto.service.AutoService;
 import lombok.Data;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -155,6 +157,8 @@ public class PluginProcessor extends AbstractProcessor {
     }
 
     public static class MetaStore {
+        private static final Logger logger = LoggerFactory.getLogger(MetaStore.class);
+
         static final String metaStoreFile = "pluginMetaInfos.json";
         static ObjectMapper mapper = new ObjectMapper();
 
@@ -164,13 +168,11 @@ public class PluginProcessor extends AbstractProcessor {
             MetaStore metaStore = new MetaStore();
             InputStream in = null;
             try {
-                // TODO: what if the file does not exist?
                 in = MetaStore.class.getClassLoader().getResourceAsStream(metaStoreFile);
                 metaStore.plugins = mapper.readValue(in, new TypeReference<Map<String, PluginMetaInfo>>() {
                 });
             } catch (MismatchedInputException e) {
-                e.printStackTrace();
-                // TODO: log here
+                logger.warn(metaStoreFile + " file not found while trying to load it", e);
                 metaStore.plugins = new HashMap<>();
             } finally {
                 if (Objects.nonNull(in)) {
@@ -202,7 +204,6 @@ public class PluginProcessor extends AbstractProcessor {
         }
 
         public void store(Filer filer) throws IOException {
-            // TODO: what if the file already exists?
             JavaFileManager.Location location = StandardLocation.CLASS_OUTPUT;
             OutputStream out = null;
             try {

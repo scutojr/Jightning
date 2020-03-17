@@ -1,6 +1,7 @@
 package lnj.unit;
 
 import clightning.plugin.*;
+import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +15,7 @@ import org.junit.Test;
 
 import java.io.*;
 
-public class TestPluginModule {
+public class TestBasedPluginModule {
     private ObjectMapper mapper;
     private Thread thread;
     private ChannelMgr channelMgr;
@@ -26,9 +27,7 @@ public class TestPluginModule {
 
     @Before
     public void setUp() throws IOException {
-        mapper = new ObjectMapper();
-        mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
-        mapper.configure(JsonGenerator.Feature.FLUSH_PASSED_TO_STREAM, true);
+        mapper = JsonUtil.getMapper();
 
         forwardIn = new PipedInputStream();
         forwardOut = new PipedOutputStream(forwardIn);
