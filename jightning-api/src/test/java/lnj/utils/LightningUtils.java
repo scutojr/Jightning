@@ -1,7 +1,9 @@
 package lnj.utils;
 
 import clightning.LightningDaemon;
+import clightning.Network;
 import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
 import clightning.apis.response.Funds;
 import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -64,13 +66,13 @@ public class LightningUtils {
     }
 
     public static boolean waitForFundConfirmed() throws IOException {
-        LightningClient client = new LightningDaemon().getLightningClient();
+        LightningClient client = new LightningClientImpl(getLnd(false));
         boolean isConfirmed = false;
         ObjectMapper mapper = JsonUtil.getMapper();
         for (int i = 0; i < 32; i++) {
             Funds funds = client.listFunds();
-            isConfirmed = Arrays.stream(funds.getOutputs()).anyMatch((output) -> {
-                return output.getStatus().get().equals("confirmed");
+            isConfirmed = Arrays.stream(funds.getOutputs()).allMatch((output) -> {
+                return output.getStatus().get() == Funds.TxOutputStatus.confirmed;
             });
             if (isConfirmed) {
                 break;
@@ -114,5 +116,12 @@ public class LightningUtils {
                 }
             }
         }
+    }
+
+    public static LightningDaemon getLnd(boolean startLnd) {
+        LightningDaemon lnd = new LightningDaemon(Network.regtest, startLnd);
+        lnd.startAsync();
+        lnd.awaitRunning();
+        return lnd;
     }
 }

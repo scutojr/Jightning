@@ -54,6 +54,12 @@ public class Funds {
         private String fundingOutput;
     }
 
+    public enum TxOutputStatus {
+        spent,
+        confirmed,
+        unconfirmed;
+    }
+
     @Data
     public static class TxOutput {
 
@@ -67,7 +73,7 @@ public class Funds {
         private String amountMsat;
 
         private Optional<String> address;
-        private Optional<String> status;
+        private Optional<TxOutputStatus> status;
 
         @JsonProperty("blockheight")
         private Optional<Integer> blockHeight;

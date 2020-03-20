@@ -1,15 +1,19 @@
 package lnj.integration;
 
 import clightning.LightningDaemon;
+import clightning.Network;
 import clightning.apis.InvoiceStatus;
 import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
 import clightning.apis.optional.ExpiryUnit;
 import clightning.apis.optional.InvoiceParams;
 import clightning.apis.response.*;
+import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.util.concurrent.SettableFuture;
+import lnj.utils.LightningUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -34,13 +38,9 @@ public class TestBasedPayment {
 
     @Before
     public void setUp() {
-        try {
-            mapper = new ObjectMapper().registerModule(new Jdk8Module());
-            client = new LightningDaemon().getLightningClient();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
-        }
+        mapper = JsonUtil.getMapper();
+        LightningDaemon lnd = LightningUtils.getLnd(false);
+        client = new LightningClientImpl(lnd);
     }
 
     @Test

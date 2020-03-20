@@ -1,8 +1,10 @@
 package lnj.integration;
 
 import clightning.LightningDaemon;
+import clightning.Network;
 import clightning.apis.ChannelState;
 import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
 import clightning.apis.optional.*;
 import clightning.apis.response.Funds;
 import clightning.apis.response.SimpleInvoice;
@@ -25,7 +27,8 @@ public class TestBasedPluginApi {
 
     @Before
     public void setUp() throws IOException {
-        client = new LightningDaemon().getLightningClient();
+        LightningDaemon lnd = LightningUtils.getLnd(false);
+        client = new LightningClientImpl(lnd);
     }
 
     private String createLabel() {

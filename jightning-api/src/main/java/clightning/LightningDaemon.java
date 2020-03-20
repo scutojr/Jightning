@@ -2,6 +2,7 @@ package clightning;
 
 import clightning.apis.LightningClient;
 import clightning.apis.LightningClientImpl;
+import clightning.apis.response.LightningDaemonInfo;
 import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static com.google.common.base.Preconditions.*;
 
+import com.google.common.util.concurrent.AbstractIdleService;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -17,6 +19,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollDomainSocketChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.unix.DomainSocketAddress;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.SocketAddress;
@@ -24,26 +29,50 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class LightningDaemon implements AbstractLightningDaemon {
+public class LightningDaemon extends AbstractIdleService implements AbstractLightningDaemon {
+    private Logger logger = LoggerFactory.getLogger(LightningDaemon.class);
+
     private static Map EMPTY_PARAMS = new HashMap();
     private AtomicInteger id = new AtomicInteger();
     private ObjectMapper mapper;
 
+    private Network net;
+    private boolean tryStart;
     private String udsPath;
     private EventLoopGroup group;
     private SocketAddress address;
     private Bootstrap bootstrap;
 
-    public LightningDaemon() throws IOException {
-        mapper = JsonUtil.mapper;
+    public LightningDaemon() {
+        this(Network.testnet);
+    }
+
+    public LightningDaemon(Network network) {
+        this(network, false);
+    }
+
+    public LightningDaemon(Network network, boolean tryStart) {
+        net = network;
+        this.tryStart = tryStart;
+    }
+
+    @Override
+    protected void startUp() throws Exception {
+        startLightningDaemon();
+
+        mapper = JsonUtil.getMapper();
         udsPath = getUnixDomainPath();
         group = new EpollEventLoopGroup();
         address = new DomainSocketAddress(udsPath);
         bootstrap = new Bootstrap();
-
         bootstrap.group(group)
                 .channel(EpollDomainSocketChannel.class)
                 .remoteAddress(address);
+    }
+
+    @Override
+    protected void shutDown() throws Exception {
+
     }
 
     private String getUnixDomainPath() throws IOException {
@@ -60,9 +89,51 @@ public class LightningDaemon implements AbstractLightningDaemon {
         JsonNodeFactory nodeFactory = mapper.getNodeFactory();
         ObjectNode request = nodeFactory.objectNode();
         request.put("method", method);
-        request.put("params", mapper.convertValue(params, JsonNode.class));
+        request.replace("params", mapper.convertValue(params, JsonNode.class));
         request.put("id", id.incrementAndGet());
         return request;
+    }
+
+    boolean isLndRunning() {
+        LightningClient client = new LightningClientImpl(this);
+        try {
+            LightningDaemonInfo info = client.getInfo();
+            if (!info.getNetwork().equals(net.name())) {
+                String msg = String.format(
+                        "inconsistent network type: expected %s, but get %s",
+                        net.name(),
+                        info.getNetwork()
+                );
+                logger.warn(msg);
+            }
+            return true;
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
+    void startLightningDaemon() {
+        if (!tryStart || isLndRunning()) {
+            return;
+        }
+        String cmd = "lightningd --daemon --network=" + net;
+        try {
+            logger.info("starting lightning daemon: " + cmd);
+            Process proc = Runtime.getRuntime().exec(cmd);
+            proc.waitFor();
+            if (proc.exitValue() == 0) {
+                String stdout = IOUtils.toString(proc.getInputStream(), "utf-8");
+                logger.info(stdout);
+            } else {
+                String errOut = IOUtils.toString(proc.getErrorStream(), "utf-8");
+                logger.error(errOut);
+            }
+        } catch (IOException e) {
+            logger.error("failed to execute command: " + cmd, e);
+        } catch (InterruptedException e) {
+            String msg = String.format("unexpected interruption from waiting for command \"%s\"to finish", cmd);
+            logger.error(msg, e);
+        }
     }
 
     /**
@@ -103,9 +174,5 @@ public class LightningDaemon implements AbstractLightningDaemon {
     @Override
     public synchronized <T> T execute(String method, Class<T> valueType) {
         return execute(method, EMPTY_PARAMS, valueType);
-    }
-
-    public LightningClient getLightningClient() {
-        return new LightningClientImpl(this);
     }
 }

@@ -1,8 +1,11 @@
 package lnj.integration;
 
 import clightning.LightningDaemon;
+import clightning.Network;
 import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
 import clightning.apis.response.Node;
+import lnj.utils.LightningUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,8 +17,8 @@ public class TestBasedNetwork {
 
     @Before
     public void setUp() throws IOException {
-        LightningDaemon lnd = new LightningDaemon();
-        client = lnd.getLightningClient();
+        LightningDaemon lnd = LightningUtils.getLnd(false);
+        client = new LightningClientImpl(lnd);
     }
     @Test
     public void testListNodes() {

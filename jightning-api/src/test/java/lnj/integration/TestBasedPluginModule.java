@@ -2,6 +2,7 @@ package lnj.integration;
 
 import clightning.AbstractLightningDaemon;
 import clightning.LightningDaemon;
+import clightning.Network;
 import clightning.apis.LightningClientImpl;
 import clightning.apis.PluginCommand;
 import clightning.apis.response.Peer;
@@ -95,7 +96,8 @@ public class TestBasedPluginModule {
         startPlugin();
 
         URL url = TestBasedPluginModule.class.getClassLoader().getResource(DELEGATOR);
-        pluginClient = new PluginClient(new LightningDaemon());
+        LightningDaemon lnd = LightningUtils.getLnd(false);
+        pluginClient = new PluginClient(lnd);
         pluginClient.plugin(PluginCommand.start(url.getPath()));
     }
 

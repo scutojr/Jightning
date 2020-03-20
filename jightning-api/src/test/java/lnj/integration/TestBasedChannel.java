@@ -1,8 +1,10 @@
 package lnj.integration;
 
 import clightning.LightningDaemon;
+import clightning.Network;
 import clightning.apis.ChannelState;
 import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
 import clightning.apis.Output;
 import clightning.apis.optional.ListChannelsParams;
 import clightning.apis.optional.SetChannelFeeParams;
@@ -31,8 +33,8 @@ public class TestBasedChannel {
 
     @Before
     public void setUp() throws IOException {
-        LightningDaemon lnd = new LightningDaemon();
-        client = lnd.getLightningClient();
+        LightningDaemon lnd = LightningUtils.getLnd(false);
+        client = new LightningClientImpl(lnd);
     }
 
     @Test

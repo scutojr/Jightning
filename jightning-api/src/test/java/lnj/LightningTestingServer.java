@@ -1,10 +1,13 @@
 package lnj;
 
 import clightning.LightningDaemon;
+import clightning.Network;
 import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
+import lnj.utils.LightningUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -22,8 +25,8 @@ public class LightningTestingServer {
             Configuration conf = new Configuration();
             port = conf.getInt(Configuration.LIGHTNING_PROXY_PORT, 5556);
 
-            LightningDaemon lightningDaemon = new LightningDaemon();
-            LightningClient client = lightningDaemon.getLightningClient();
+            LightningDaemon lightningDaemon = LightningUtils.getLnd(false);
+            LightningClient client = new LightningClientImpl(lightningDaemon);
             rpcServer = new JsonRpcServer(
                     new ObjectMapper().registerModule(new Jdk8Module()),
                     client

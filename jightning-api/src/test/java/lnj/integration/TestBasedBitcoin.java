@@ -1,11 +1,13 @@
 package lnj.integration;
 
-import clightning.LightningDaemon;
+import clightning.LightningAppKit;
+import clightning.Network;
 import clightning.apis.LightningClient;
+import clightning.apis.LightningClientImpl;
 import clightning.apis.Output;
 import clightning.apis.response.TxPrepareResult;
+import clightning.apis.response.WithdrawResutlt;
 import lnj.utils.BitcoinUtils;
-import lnj.utils.LightningUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,16 +15,16 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class TestBasedBitcoin {
+    private LightningAppKit appKit;
     private LightningClient client;
 
     @Before
     public void setUp() {
-        try {
-            client = new LightningDaemon().getLightningClient();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
+        appKit = new LightningAppKit(Network.regtest, true);
+        appKit.startAsync();
+        appKit.awaitRunning();
+
+        client = new LightningClientImpl(appKit.lightningDaemon());
     }
 
     @Test
@@ -44,8 +46,8 @@ public class TestBasedBitcoin {
             res = client.txPrepare(outputs);
             client.txSend(res.getTxId());
             BitcoinUtils.confirm();
-            Assert.assertTrue(LightningUtils.waitForFundConfirmed());
-        } catch (IOException e) {
+            Assert.assertTrue(appKit.waitForConfirmed(res.getTxId()));
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             Assert.fail();
         }
@@ -55,10 +57,10 @@ public class TestBasedBitcoin {
     public void testWithdraw() {
         try {
             String addr = BitcoinUtils.getNewAddress();
-            client.withDraw(addr, 1000 * 1000);
+            WithdrawResutlt res = client.withDraw(addr, 1000 * 1000);
             BitcoinUtils.confirm();
-            Assert.assertTrue(LightningUtils.waitForFundConfirmed());
-        } catch (IOException e) {
+            Assert.assertTrue(appKit.waitForConfirmed(res.getTxId()));
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             Assert.fail();
         }
