@@ -1,6 +1,9 @@
 package clightning.apis;
 
 import clightning.AbstractLightningDaemon;
+import clightning.CheckModeDaemon;
+import clightning.LightningDaemon;
+import clightning.ShortOutException;
 import clightning.apis.optional.*;
 import clightning.apis.response.*;
 import clightning.apis.response.FeeRate;
@@ -12,9 +15,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.base.Preconditions;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class LightningClientImpl implements LightningClient {
 
@@ -165,8 +172,16 @@ public class LightningClientImpl implements LightningClient {
      */
     @Override
     public String fundChannelCancel(String id) {
+        return fundChannelCancel(id, null);
+    }
+
+    @Override
+    public String fundChannelCancel(String id, String channelId) {
         Map<String, Object> params = createParam();
         params.put("id", id);
+        if (Objects.nonNull(channelId)) {
+            params.put("channel_id", channelId);
+        }
         return lnd.execute("fundchannel_cancel", params, JsonNode.class).get("cancelled").asText();
     }
 
@@ -259,17 +274,28 @@ public class LightningClientImpl implements LightningClient {
     }
 
     @Override
+    public DevAddress[] devListAddrs() {
+        JsonNode node = lnd.execute("dev-listaddrs", JsonNode.class);
+        return mapper.convertValue(node.get("addresses"), DevAddress[].class);
+    }
+
+    @Override
     public DevAddress[] devListAddrs(int bip32MaxIndex) {
         Map<String, Object> params = createParam();
         params.put("bip32_max_index", bip32MaxIndex);
-        JsonNode rsp = lnd.execute("dev-listaddrs", params, JsonNode.class);
-        return JsonUtil.convert(rsp.get("addresses"), DevAddress[].class);
+        JsonNode node = lnd.execute("dev-listaddrs", params, JsonNode.class);
+        return mapper.convertValue(node.get("addresses"), DevAddress[].class);
     }
 
     @Override
     public DevRescanOutput[] devRescanOutputs() {
         JsonNode rsp = lnd.execute("dev-rescan-outputs", JsonNode.class);
         return JsonUtil.convert(rsp.get("outputs"), DevRescanOutput[].class);
+    }
+
+    @Override
+    public String connect(String id) {
+        return connect(id, null, null);
     }
 
     @Override
@@ -288,6 +314,9 @@ public class LightningClientImpl implements LightningClient {
     public String connect(String id, String host, Integer port) {
         Map<String, Object> params = createParam();
         params.put("id", id);
+        if (Objects.nonNull(host)) {
+            params.put("host", host);
+        }
         params.put("host", host);
         if (Objects.nonNull(port)) {
             params.put("port", port);
@@ -599,8 +628,28 @@ public class LightningClientImpl implements LightningClient {
     }
 
     @Override
-    public void check() {
+    public CheckResult check(String methodName, Object... args) {
+        CheckModeDaemon checkLnd = new CheckModeDaemon();
+        LightningClient client = new LightningClientImpl(checkLnd);
 
+        try {
+            Class[] paramTypes = Arrays.stream(args).map((a) -> a.getClass()).collect(Collectors.toList()).toArray(new Class[]{});
+            Method m = LightningClientImpl.class.getMethod(methodName, paramTypes);
+            m.invoke(client, args);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof ShortOutException) {
+                ObjectNode req = checkLnd.lastRequest();
+                ObjectNode params = (ObjectNode) req.get("params");
+                params.replace("command_to_check", req.get("method"));
+                return lnd.execute("check", mapper.convertValue(params, Map.class), CheckResult.class);
+            }
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("Normally, shortOutException should be raised!");
     }
 
     @Override
@@ -676,5 +725,10 @@ public class LightningClientImpl implements LightningClient {
         Map<String, Object> params = createParam();
         params.put("message", message);
         return lnd.execute("signmessage", params, SignResult.class);
+    }
+
+    @Override
+    public String stop() {
+        return lnd.execute("stop", String.class);
     }
 }

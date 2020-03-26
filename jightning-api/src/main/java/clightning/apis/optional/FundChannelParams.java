@@ -1,5 +1,7 @@
 package clightning.apis.optional;
 
+import clightning.apis.UTxO;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 

@@ -1,16 +1,20 @@
 package clightning.apis;
 
+import clightning.apis.annotations.ImplFor;
+import clightning.apis.annotations.ParamTag;
 import clightning.apis.optional.LogLevel;
 import clightning.apis.response.*;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 public interface BasedUtility {
     /**
      * check command_to_check
      * Don't run {command_to_check}, just verify parameters.
      */
-    void check();
+    @ImplFor("check commandtocheck")
+    CheckResult check(String methodName, Object... args);
 
     /**
      * https://lightning.readthedocs.io/lightning-checkmessage.7.html
@@ -20,7 +24,7 @@ public interface BasedUtility {
      */
     CheckMessageResult checkMessage(String message, String zbase);
 
-    CheckMessageResult checkMessage(String message, String zbase, String pubKey);
+    CheckMessageResult checkMessage(String message, String zbase, @ParamTag(optional = true) String pubKey);
 
     /**
      * getinfo
@@ -34,7 +38,7 @@ public interface BasedUtility {
      */
     LogResult getLog();
 
-    LogResult getLog(LogLevel level);
+    LogResult getLog(@ParamTag(optional = true) LogLevel level);
 
     /**
      * help [command]
@@ -42,12 +46,13 @@ public interface BasedUtility {
      */
     CommandUsage[] help();
 
-    CommandUsage help(String command);
+    CommandUsage help(@ParamTag(optional = true) String command);
 
     /**
      * listconfigs [config]
      * List all configuration options, or with [config], just that one.
      */
+    @ImplFor("listconfigs [config]")
     Configuration listConfigs();
 
     /**
@@ -63,4 +68,6 @@ public interface BasedUtility {
      * Create a digital signature of {message}
      */
     SignResult signMessage(String message);
+
+    String stop();
 }

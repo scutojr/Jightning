@@ -1,5 +1,6 @@
 package clightning.apis;
 
+import clightning.apis.annotations.ParamTag;
 import clightning.apis.optional.ListPeersParams;
 import clightning.apis.optional.PingParams;
 import clightning.apis.response.LightningDaemonInfo;
@@ -13,9 +14,11 @@ public interface BasedNetwork {
      * connect id [host] [port]
      * Connect to {id} at {host} (which can end in ':port' if not default). {id} can also be of the form id@host
      */
+    String connect(String id);
+
     String connect(String id, String host);
 
-    String connect(String id, String host, Integer port);
+    String connect(String id, @ParamTag(optional = true) String host, @ParamTag(optional = true) Integer port);
 
     /**
      * disconnect id [force]
@@ -26,7 +29,7 @@ public interface BasedNetwork {
      */
     void disconnect(String id);
 
-    void disconnect(String id, boolean force);
+    void disconnect(String id, @ParamTag(optional = true) boolean force);
 
     /**
      * listnodes [id]
@@ -34,7 +37,7 @@ public interface BasedNetwork {
      */
     Node[] listNodes();
 
-    Node[] listNodes(String id);
+    Node[] listNodes(@ParamTag(optional = true) String id);
 
     /**
      * listpeers [id] [level]

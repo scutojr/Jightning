@@ -1,5 +1,7 @@
 package clightning.apis;
 
+import clightning.apis.annotations.ImplFor;
+import clightning.apis.annotations.ParamTag;
 import clightning.apis.optional.AutoCleanInvoiceParams;
 import clightning.apis.optional.FundChannelParams;
 import clightning.apis.optional.PayParams;
@@ -36,7 +38,7 @@ public interface BasedPlugin {
      */
     FundChannel fundChannel(String id, long amountSato);
 
-    FundChannel fundChannel(String id, long amountSato, FundChannelParams params);
+    FundChannel fundChannel(String id, @ParamTag(alias = "amount") long amountSato, FundChannelParams params);
 
     /**
      * listpays [bolt11]
@@ -44,7 +46,7 @@ public interface BasedPlugin {
      */
     PayInfo[] listPays();
 
-    PayInfo listPays(String bolt11);
+    PayInfo listPays(@ParamTag(optional = true) String bolt11);
 
     /**
      * https://lightning.readthedocs.io/lightning-pay.7.html
@@ -62,8 +64,6 @@ public interface BasedPlugin {
      * maxdelay: a payment may be delayed for up to maxdelay blocks by another node
      * <p>
      * exemptfee: The `exemptfee option can be used for tiny payments which would be dominated by
-     * the fee leveraged by forwarding nodes. Setting exemptfee allows the maxfeepercent check
-     * to be skipped on fees that are smaller than exemptfee (default: 5000 millisatoshi).
      */
     PayResult pay(String bolt11);
 
@@ -75,11 +75,12 @@ public interface BasedPlugin {
      */
     PayStatus[] payStatus();
 
-    PayStatus payStatus(String bolt11);
+    PayStatus payStatus(@ParamTag(optional = true) String bolt11);
 
     /**
      * plugin subcommand=start|stop|startdir|rescan|list
      * Control plugins (start, stop, startdir, rescan, list)
      */
+    @ImplFor("plugin subcommand=start|stop|startdir|rescan|list")
     PluginStatus plugin(PluginCommand command);
 }

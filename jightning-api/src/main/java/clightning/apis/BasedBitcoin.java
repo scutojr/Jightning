@@ -1,5 +1,6 @@
 package clightning.apis;
 
+import clightning.apis.annotations.ImplFor;
 import clightning.apis.optional.TxPrepareParams;
 import clightning.apis.optional.WithdrawParams;
 import clightning.apis.response.*;
@@ -11,16 +12,20 @@ public interface BasedBitcoin {
      * feerates style
      * Return feerate estimates, either satoshi-per-kw ({style} perkw) or satoshi-per-kb ({style} perkb).
      */
+    @ImplFor("feerates style")
     FeeRate feeRates();
 
     /**
      * newaddr [addresstype]
      * Get a new {bech32, p2sh-segwit} (or all) address to fund a channel (default is bech32)
      */
+    @ImplFor("newaddr [addresstype]")
     LightningAddress newAddr();
 
+    @ImplFor("newaddr [addresstype]")
     String newBench32Addr();
 
+    @ImplFor("newaddr [addresstype]")
     String newP2shSegwitAddr();
 
     /**

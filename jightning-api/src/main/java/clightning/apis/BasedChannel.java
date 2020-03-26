@@ -1,5 +1,6 @@
 package clightning.apis;
 
+import clightning.apis.annotations.ParamTag;
 import clightning.apis.optional.*;
 import clightning.apis.response.*;
 
@@ -16,13 +17,15 @@ public interface BasedChannel {
      */
     CloseResult close(String channelId);
 
-    CloseResult close(String channelId, CloseParams optionalParams);
+    CloseResult close(@ParamTag(alias = "id") String channelId, CloseParams optionalParams);
 
     /**
      * fundchannel_cancel id [channel_id]
      * Cancel inflight channel establishment with peer {id}.
      */
     String fundChannelCancel(String id);
+
+    String fundChannelCancel(String id, @ParamTag(optional = true) String channelId);
 
     /**
      * https://lightning.readthedocs.io/lightning-fundchannel_complete.7.html
@@ -112,5 +115,5 @@ public interface BasedChannel {
      */
     SetChannelFeeResult setChannelFee(String channelIdOrPeerId);
 
-    SetChannelFeeResult setChannelFee(String channelIdOrPeerId, SetChannelFeeParams optionalParams);
+    SetChannelFeeResult setChannelFee(@ParamTag(alias = "id") String channelIdOrPeerId, SetChannelFeeParams optionalParams);
 }

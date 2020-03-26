@@ -6,7 +6,6 @@ import clightning.apis.response.LightningDaemonInfo;
 import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static com.google.common.base.Preconditions.*;
@@ -85,9 +84,8 @@ public class LightningDaemon extends AbstractIdleService implements AbstractLigh
         return String.format("%s/%s", lightningDir.asText(), rpcFile.asText());
     }
 
-    private JsonNode createRequest(String method, Map params) {
-        JsonNodeFactory nodeFactory = mapper.getNodeFactory();
-        ObjectNode request = nodeFactory.objectNode();
+    protected ObjectNode createRequest(String method, Map params) {
+        ObjectNode request = mapper.createObjectNode();
         request.put("method", method);
         request.replace("params", mapper.convertValue(params, JsonNode.class));
         request.put("id", id.incrementAndGet());

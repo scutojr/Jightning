@@ -1,10 +1,10 @@
 package lnj.integration;
 
 import clightning.LightningDaemon;
-import clightning.Network;
 import clightning.apis.ChannelState;
 import clightning.apis.LightningClient;
 import clightning.apis.LightningClientImpl;
+import clightning.apis.UTxO;
 import clightning.apis.optional.*;
 import clightning.apis.response.Funds;
 import clightning.apis.response.SimpleInvoice;

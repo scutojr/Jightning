@@ -1,5 +1,6 @@
 package clightning.apis;
 
+import clightning.apis.annotations.ParamTag;
 import clightning.apis.optional.InvoiceParams;
 import clightning.apis.optional.ListSendPaysParams;
 import clightning.apis.optional.SendPayParams;
@@ -12,7 +13,7 @@ public interface BasedPayment {
      */
     Bolt11 decodePay(String bolt11);
 
-    Bolt11 decodePay(String bolt11, String description);
+    Bolt11 decodePay(String bolt11, @ParamTag(optional = true) String description);
 
     /**
      * https://lightning.readthedocs.io/lightning-delexpiredinvoice.7.html
@@ -22,7 +23,7 @@ public interface BasedPayment {
      */
     void delExpiredInvoice();
 
-    void delExpiredInvoice(int maxExpiryTimeSec);
+    void delExpiredInvoice(@ParamTag(optional = true, alias = "maxexpirytime") int maxExpiryTimeSec);
 
     /**
      * delinvoice label status
@@ -64,7 +65,7 @@ public interface BasedPayment {
      */
     DetailedInvoice[] listInvoices();
 
-    DetailedInvoice[] listInvoices(String label);
+    DetailedInvoice[] listInvoices(@ParamTag(optional = true) String label);
 
     /**
      * listsendpays [bolt11] [payment_hash]
@@ -94,7 +95,7 @@ public interface BasedPayment {
      * waitanyinvoice [lastpay_index]
      * Wait for the next invoice to be paid, after {lastpay_index} (if supplied)
      */
-    DetailedInvoice waitAnyInvoice(int lastPayIndex);
+    DetailedInvoice waitAnyInvoice(@ParamTag(optional = true) int lastPayIndex);
 
     /**
      * https://lightning.readthedocs.io/lightning-waitanyinvoice.7.html
@@ -110,5 +111,5 @@ public interface BasedPayment {
      */
     PayResult waitSendPay(String paymentHash);
 
-    PayResult waitSendPay(String paymentHash, long timeout);
+    PayResult waitSendPay(String paymentHash, @ParamTag(optional = true) long timeout);
 }

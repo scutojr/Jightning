@@ -1,5 +1,7 @@
 package clightning.apis.optional;
 
+import clightning.apis.UTxO;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -9,13 +11,13 @@ public class TxPrepareParams extends OptionalParams {
         return this;
     }
 
-    public TxPrepareParams setMinConfirmation(int minConf) {
-        params.put("minconf", minConf);
+    public TxPrepareParams setMinConf(int minConfirmation) {
+        params.put("minconf", minConfirmation);
         return this;
     }
 
-    public TxPrepareParams setUTxO(UTxO... uTxO) {
-        String[] uTxOs = (String[]) Arrays.asList(uTxO)
+    public TxPrepareParams setUtxos(UTxO... utxos) {
+        String[] uTxOs = (String[]) Arrays.asList(utxos)
                 .stream()
                 .map(t -> t.toString())
                 .collect(Collectors.toList())

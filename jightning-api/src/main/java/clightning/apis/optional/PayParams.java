@@ -16,7 +16,7 @@ package clightning.apis.optional;
  * /
  */
 public class PayParams extends OptionalParams {
-    public PayParams setSatoshi(long msatoshi) {
+    public PayParams setMsatoshi(long msatoshi) {
         params.put("msatoshi", msatoshi);
         return this;
     }

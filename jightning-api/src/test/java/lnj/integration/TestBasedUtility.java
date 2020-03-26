@@ -5,6 +5,7 @@ import clightning.Network;
 import clightning.apis.LightningClient;
 import clightning.apis.LightningClientImpl;
 import clightning.apis.optional.LogLevel;
+import clightning.apis.response.CheckResult;
 import clightning.apis.response.Funds;
 import lnj.utils.LightningUtils;
 import org.junit.Assert;
@@ -36,5 +37,11 @@ public class TestBasedUtility {
         Assert.assertNotNull(client.help("listfunds"));
         Assert.assertNotNull(client.listConfigs());
         Assert.assertNotNull(client.signMessage("message to be signed"));
+    }
+
+    @Test
+    public void testCheck() {
+        CheckResult res = client.check("getInfo");
+        Assert.assertNotNull(res);
     }
 }

@@ -1,4 +1,4 @@
-package clightning.apis.optional;
+package clightning.apis;
 
 public class UTxO {
     private String txId;
