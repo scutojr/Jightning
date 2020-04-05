@@ -521,7 +521,7 @@ public class LightningClientImpl implements LightningClient {
     }
 
     @Override
-    public PayResult waitSendPay(String paymentHash, long timeout) {
+    public PayResult waitSendPay(String paymentHash, int timeout) {
         Map<String, Object> params = createParam();
         params.put("payment_hash", paymentHash);
         params.put("timeout", timeout);
