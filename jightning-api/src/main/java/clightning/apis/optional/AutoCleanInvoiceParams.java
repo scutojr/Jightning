@@ -2,6 +2,7 @@ package clightning.apis.optional;
 
 public class AutoCleanInvoiceParams extends OptionalParams {
     /**
+     * Set auto clean cycle
      *
      * @param cycleSeconds default to 3600, one hour
      * @return
@@ -12,6 +13,7 @@ public class AutoCleanInvoiceParams extends OptionalParams {
     }
 
     /**
+     * Set the expired second for which the invoice has been expired
      *
      * @param expiredBy default to 86400, one day
      * @return
