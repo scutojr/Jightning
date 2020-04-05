@@ -4,10 +4,10 @@ import com.google.common.base.Preconditions;
 
 public class GetRouteParams extends OptionalParams {
     /**
-     * The getroute RPC command attempts to find the best route for the payment of msatoshi to
-     * lightning node id, such that the payment will arrive at id with cltv-blocks to spare (default 9).
-     * @param cltv maximum number of block to spare for payment to arrive the destination
-     * @return
+     * set the cltv
+     *
+     * @param cltv cltv-blocks to spare
+     * @return object being called
      */
     public GetRouteParams setCltv(int cltv) {
         params.put("cltv", cltv);
@@ -15,8 +15,10 @@ public class GetRouteParams extends OptionalParams {
     }
 
     /**
-     * @param fromId  the node to start the route from: default is this node
-     * @return
+     * set from id
+     *
+     * @param fromId the node to start the route from: default is this node
+     * @return object being called
      */
     public GetRouteParams setFromId(String fromId) {
         params.put("fromid", fromId);
@@ -29,7 +31,7 @@ public class GetRouteParams extends OptionalParams {
      * used might be from 0 to twice the actual fee. The default is 5.0, or up to 5% fee distortion.
      *
      * @param fuzzPercent a positive floating-point number, representing a percentage of the actual fee
-     * @return
+     * @return object being called
      */
     public GetRouteParams setFuzzPercent(double fuzzPercent) {
         Preconditions.checkState(fuzzPercent > 0);
@@ -38,14 +40,12 @@ public class GetRouteParams extends OptionalParams {
     }
 
     /**
-     * exclude is a JSON array of short-channel-id/direction (e.g. ["564334x877x1/0", "564195x1292x0/1"]) or
+     * exclude is an array of short-channel-id/direction (e.g. ["564334x877x1/0", "564195x1292x0/1"]) or
      * node-id which should be excluded from consideration for routing. The default is not to exclude any channels
      * or nodes. Note if the source or destination is excluded, the command result is undefined.
      *
-     * 0 == from lesser id node, 1 == to lesser id node
-     *
-     * @param exclude
-     * @return
+     * @param exclude an array of short-channel-id/direction
+     * @return object being called
      */
     public GetRouteParams setExclude(String[] exclude) {
         params.put("exclude", exclude);
@@ -53,8 +53,10 @@ public class GetRouteParams extends OptionalParams {
     }
 
     /**
+     * set maxhops
+     *
      * @param maxHops maxhops is the maximum number of channels to return; default is 20
-     * @return
+     * @return object being called
      */
     public GetRouteParams setMaxHops(int maxHops) {
         params.put("maxhops", maxHops);

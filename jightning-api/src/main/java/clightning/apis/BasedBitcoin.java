@@ -69,7 +69,7 @@ public interface BasedBitcoin {
      *
      * @param outputs        array of {@link Output} that include destination and amount.
      *                       It supports the any number of outputs
-     * @param optionalParams extra optional input parameter
+     * @param optionalParams extra optional input parameters
      * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-txdiscard.7.md>lightning-txdiscard</a>
      */
     TxPrepareResult txPrepare(Output[] outputs, TxPrepareParams optionalParams);
