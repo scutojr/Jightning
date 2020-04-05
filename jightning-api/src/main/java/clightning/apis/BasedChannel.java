@@ -1,119 +1,179 @@
 package clightning.apis;
 
+import clightning.RemoteException;
 import clightning.apis.annotations.ParamTag;
 import clightning.apis.optional.*;
 import clightning.apis.response.*;
 
 public interface BasedChannel {
     /**
-     * https://lightning.readthedocs.io/lightning-close.7.html
-     * <p>
-     * close id [unilateraltimeout] [destination]
-     * Close the channel with {id} (either peer ID, channel ID, or short channel ID). Force a unilateral close after {unilateraltimeout} seconds (default 48h). If {destination} address is provided, will be used as output address.
-     * <p>
-     * id: then it applies to the active channel of the direct peer corresponding to the given
-     * peer ID. If the given id is a channel ID (64 hex digits as a string, or the short channel
-     * ID blockheight:txindex:outindex form), then it applies to that channel
+     * attempts to close the channel cooperatively with the peer
+     *
+     * @param channelId If the given id is a peer ID (66 hex digits as a string), then it applies to the active channel
+     *                  of the direct peer corresponding to the given peer ID. If the given id is a channel ID (64 hex
+     *                  digits as a string, or the short channel ID blockheight:txindex:outindex form), then it applies
+     *                  to that channel.
+     * @return CloseResult
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-close.7.md>lightning-close</a>
      */
     CloseResult close(String channelId);
 
+    /**
+     * attempts to close the channel cooperatively with the peer, or unilaterally after unilateraltimeout,
+     * and the to-local output will be sent to the address specified in destination.
+     *
+     * @param channelId      If the given id is a peer ID (66 hex digits as a string), then it applies to the active channel
+     *                       of the direct peer corresponding to the given peer ID. If the given id is a channel ID (64 hex
+     *                       digits as a string, or the short channel ID blockheight:txindex:outindex form), then it applies
+     *                       to that channel.
+     * @param optionalParams extra optional input parameters
+     * @return CloseResult
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-close.7.md>lightning-close</a>
+     */
     CloseResult close(@ParamTag(alias = "id") String channelId, CloseParams optionalParams);
 
     /**
-     * fundchannel_cancel id [channel_id]
-     * Cancel inflight channel establishment with peer {id}.
+     * It is a lower level RPC command. It allows channel funder to cancel a channel before funding broadcast with
+     * a connected peer.
+     *
+     * @param id the node id of the remote peer with which to cancel
+     * @return message about canceling operation
+     * @throws RemoteException on failure, an error will be thrown
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-fundchannel_cancel.7.md>lightning-fundchannel_cancel</a>
      */
     String fundChannelCancel(String id);
 
+    /**
+     * It is a lower level RPC command. It allows channel funder to cancel a channel before funding broadcast with
+     * a connected peer.
+     *
+     * @param id        the node id of the remote peer with which to cancel
+     * @param channelId corresponding channel id
+     * @return message about canceling operation
+     * @throws RemoteException on failure, an error will be thrown
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-fundchannel_cancel.7.md>lightning-fundchannel_cancel</a>
+     */
     String fundChannelCancel(String id, @ParamTag(optional = true) String channelId);
 
     /**
-     * https://lightning.readthedocs.io/lightning-fundchannel_complete.7.html
-     * <p>
-     * fundchannel_complete id txid txout
-     * Complete channel establishment with peer {id} for funding transactionwith {txid}. Returns true on success, false otherwise.
-     * <p>
-     * id is the node id of the remote peer.
-     * <p>
-     * txid is the hex string of the funding transaction id.
-     * <p>
-     * txout is the integer outpoint of the funding output for this channel.
+     * It is a lower level RPC command. It allows a user to complete an initiated channel establishment with a connected peer.
+     *
+     * @param id    the node id of the remote peer
+     * @param txId  the hex string of the funding transaction id
+     * @param txOut the integer outpoint of the funding output for this channel
+     * @return FundChannelCompleteResult
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-fundchannel_complete.7.md>lightning-fundchannel_complete</a>
      */
     FundChannelCompleteResult fundChannelComplete(String id, String txId, int txOut);
 
     /**
-     * https://lightning.readthedocs.io/lightning-fundchannel_start.7.html
-     * <p>
-     * fundchannel_start id amount [feerate] [announce] [close_to]
-     * Start fund channel with {id} using {amount} satoshis. Returns a bech32 address to use as an output for a funding transaction.
+     * It is a lower level RPC command. It allows a user to initiate channel establishment with a connected peer.
+     *
+     * @param id     the node id of the remote peer
+     * @param amount the satoshi value that the channel will be funded at. This value MUST be accurate, otherwise
+     *               the negotiated commitment transactions will not encompass the correct channel value
+     * @return FundChannelStartResult
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-fundchannel_start.7.md>lightning-fundchannel_start</a>
      */
     FundChannelStartResult fundChannelStart(String id, long amount);
 
+    /**
+     * It is a lower level RPC command. It allows a user to initiate channel establishment with a connected peer.
+     *
+     * @param id             the node id of the remote peer
+     * @param amount         the satoshi value that the channel will be funded at. This value MUST be accurate, otherwise
+     *                       the negotiated commitment transactions will not encompass the correct channel value
+     * @param optionalParams extra optional parameters
+     * @return FundChannelStartResult
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-fundchannel_start.7.md>lightning-fundchannel_start</a>
+     */
     FundChannelStartResult fundChannelStart(String id, long amount, FundChannelStartParams optionalParams);
 
+
     /**
-     * getroute id msatoshi riskfactor [cltv] [fromid] [fuzzpercent] [exclude] [maxhops]
-     * Show route to {id} for {msatoshi}, using {riskfactor} and optional {cltv} (default 9). If specified search from {fromid} otherwise use this node as source. Randomize the route with up to {fuzzpercent} (default 5.0). {exclude} an array of short-channel-id/direction (e.g. [ '564334x877x1/0', '564195x1292x0/1' ]) or node-id from consideration. Set the {maxhops} the route can take (default 20).
+     * Attempts to find the best route for the payment of msatoshi to lightning node id, such that the payment will
+     * arrive at id with cltv-blocks to spare (default 9)
+     * <p>
+     * There are two considerations for how good a route is: how low the fees are, and how long your payment will
+     * get stuck in a delayed output if a node goes down during the process. The {@code riskFactor} floating-point
+     * field controls this trade off; it is the annual cost of your funds being stuck (as a percentage).
+     *
+     * @param id         lightning node id
+     * @param msatoshi   amount of satoshi in millisatoshi precision
+     * @param riskFactor control how good a route is
+     * @return
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-getroute.7.md>lightning-getroute</a>
      */
     Route[] getRoute(String id, long msatoshi, double riskFactor);
 
+    /**
+     * Attempts to find the best route for the payment of msatoshi to lightning node id, such that the payment will
+     * arrive at id with cltv-blocks to spare (default 9)
+     * <p>
+     * There are two considerations for how good a route is: how low the fees are, and how long your payment will
+     * get stuck in a delayed output if a node goes down during the process. The {@code riskFactor} floating-point
+     * field controls this trade off; it is the annual cost of your funds being stuck (as a percentage).
+     *
+     * @param id             lightning node id
+     * @param msatoshi       amount of satoshi in millisatoshi precision
+     * @param riskFactor     control how good a route is
+     * @param optionalParams extra optional parameters
+     * @return
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-getroute.7.md>lightning-getroute</a>
+     */
     Route[] getRoute(String id, long msatoshi, double riskFactor, GetRouteParams optionalParams);
 
     /**
-     * https://lightning.readthedocs.io/lightning-listchannels.7.html
-     * <p>
-     * listchannels [short_channel_id] [source]
-     * Show channel {short_channel_id} or {source} (or all known channels, if not specified)
-     * <p>
-     * short_channel_id: If short_channel_id is supplied, then only known channels with a
-     * matching short_channel_id are returned.
-     * source: If source is supplied, then only channels leading from that node id are returned.
+     * Returns data on channels that are known to the node. Because channels may be bidirectional, up to 2 objects
+     * will be returned for each channel (one for each direction).
+     *
+     * @return an array of {@link Channel}
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-listchannels.7.md>lightning-listchannels</a>
      */
     Channel[] listChannels();
 
+    /**
+     * Returns data on channels that are known to the node. Because channels may be bidirectional, up to 2 objects
+     * will be returned for each channel (one for each direction).
+     *
+     * @param optionalParams extra optional parameters
+     * @return an array of {@link Channel}
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-listchannels.7.md>lightning-listchannels</a>
+     */
     Channel[] listChannels(ListChannelsParams optionalParams);
 
     /**
-     * listforwards
-     * List all forwarded payments and their information
-     * <p>
-     * <p>
-     * {
-     * "forwards": [
-     * {
-     * "payment_hash": <sha256>, // optional
-     * "in_channel": <short channel id>,
-     * "out_channel": <short channel id>, // optional
-     * "in_msatoshi": <long>,
-     * "in_msat": <String>,
-     * optional{
-     * "out_msatoshi": long,
-     * "out_msat": String
-     * "fee": long,
-     * "fee_msat": String
-     * }
-     * "status": String,
-     * "failcode": int  // optional
-     * "failreason", string  // optional
-     * "received_time":  double,  // optional
-     * "resolved_time":  double,  // optional
-     * }
-     * ]
-     * }
+     * Displays all htlcs that have been attempted to be forwarded by the c-lightning node
+     *
+     * @return an array of {@code Forward}
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-listforwards.7.md>lightning-listforwards</a>
      */
     Forward[] listForwards();
 
     /**
-     * https://lightning.readthedocs.io/lightning-setchannelfee.7.html
-     * <p>
-     * setchannelfee id [base] [ppm]
-     * Sets specific routing fees for channel with {id} (either peer ID, channel ID, short channel ID or 'all'). Routing fees are defined by a fixed {base} (msat) and a {ppm} (proportional per millionth) value. If values for {base} or {ppm} are left out, defaults will be used. {base} can also be defined in other units, for example '1sat'. If {id} is 'all', the fees will be applied for all channels.
-     * <p>
-     * id is required and should contain a scid (short channel ID), channel id or peerid (pubkey) of the channel
-     * to be modified. If id is set to "all", the fees for all channels are updated that are in state CHANNELD_NORMAL
-     * or CHANNELD_AWAITING_LOCKIN.
+     * Set channel specific routing fees as defined in BOLT #7. The channel has to be in normal or awaiting state.
+     * This can be checked by {@link BasedNetwork#listPeers} reporting a state of CHANNELD_NORMAL or
+     * CHANNELD_AWAITING_LOCKIN for the channel.
+     *
+     * @param channelIdOrPeerId a scid (short channel ID), channel id or peerid (pubkey) of the channel to be modified.
+     *                          If id is set to "all", the fees for all channels are updated that are in state
+     *                          CHANNELD_NORMAL or CHANNELD_AWAITING_LOCKIN.
+     * @return SetChannelFeeResult
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-setchannelfee.7.md>lightning-setchannelfee</a>
      */
     SetChannelFeeResult setChannelFee(String channelIdOrPeerId);
 
+    /**
+     * Set channel specific routing fees as defined in BOLT #7. The channel has to be in normal or awaiting state.
+     * This can be checked by {@link BasedNetwork#listPeers} reporting a state of CHANNELD_NORMAL or
+     * CHANNELD_AWAITING_LOCKIN for the channel.
+     *
+     * @param channelIdOrPeerId a scid (short channel ID), channel id or peerid (pubkey) of the channel to be modified.
+     *                          If id is set to "all", the fees for all channels are updated that are in state
+     *                          CHANNELD_NORMAL or CHANNELD_AWAITING_LOCKIN.
+     * @param optionalParams    extra optional parameters
+     * @return SetChannelFeeResult
+     * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-setchannelfee.7.md>lightning-setchannelfee</a>
+     */
     SetChannelFeeResult setChannelFee(@ParamTag(alias = "id") String channelIdOrPeerId, SetChannelFeeParams optionalParams);
 }
