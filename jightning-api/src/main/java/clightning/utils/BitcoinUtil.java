@@ -5,6 +5,9 @@ import org.bitcoinj.core.Transaction;
 
 import java.math.BigInteger;
 
+/**
+ * Utility for bitcoin related operation
+ */
 public class BitcoinUtil {
     public static Transaction decodeTransaction(NetworkParameters networkParameters, String tx) {
         byte[] data = new BigInteger(tx, 16).toByteArray();
