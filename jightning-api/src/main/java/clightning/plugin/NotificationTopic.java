@@ -1,5 +1,8 @@
 package clightning.plugin;
 
+/**
+ * Event topic
+ */
 public enum NotificationTopic {
     warning,
     connect,

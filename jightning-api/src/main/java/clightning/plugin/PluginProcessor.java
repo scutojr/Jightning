@@ -21,6 +21,11 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This is an annotation processor to handle annotation at source processing phase.
+ * It will generate necessary information for plugin method signature. This information
+ * whill help map from json request to the specific plugin method.
+ */
 @SupportedAnnotationTypes({
         "clightning.plugin.Command",
         "clightning.plugin.Subscribe",
