@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Represent an lightning daemon for executing command.
+ */
 public class LightningDaemon extends AbstractIdleService implements AbstractLightningDaemon {
     private Logger logger = LoggerFactory.getLogger(LightningDaemon.class);
 
@@ -42,14 +45,29 @@ public class LightningDaemon extends AbstractIdleService implements AbstractLigh
     private SocketAddress address;
     private Bootstrap bootstrap;
 
+    /**
+     * Create an lightning daemon of test network
+     */
     public LightningDaemon() {
         this(Network.testnet);
     }
 
+    /**
+     * Create an lightning daemon for @{code network}
+     *
+     * @param network network where lightning daemon will run
+     */
     public LightningDaemon(Network network) {
         this(network, false);
     }
 
+    /**
+     * Create an lightning daemon for @{code network}. {@code tryStart} will determine whether start
+     * the lightning daemon backend or not.
+     *
+     * @param network
+     * @param tryStart
+     */
     public LightningDaemon(Network network, boolean tryStart) {
         net = network;
         this.tryStart = tryStart;
@@ -135,13 +153,13 @@ public class LightningDaemon extends AbstractIdleService implements AbstractLigh
     }
 
     /**
-     * TODO: handle the RemoteException
+     * Execute lightning daemon command
      *
-     * @param method
-     * @param params
-     * @param valueType
-     * @param <T>
-     * @return
+     * @param method    command name
+     * @param params    params required to execute the command
+     * @param valueType the return value type
+     * @param <T>       the return value type
+     * @return command response
      */
     @Override
     public synchronized <T> T execute(String method, Map params, Class<T> valueType) {
@@ -169,6 +187,14 @@ public class LightningDaemon extends AbstractIdleService implements AbstractLigh
         }
     }
 
+    /**
+     * Execute lightning daemon command
+     *
+     * @param method    command name
+     * @param valueType the return value type
+     * @param <T>       the return value type
+     * @return command response
+     */
     @Override
     public synchronized <T> T execute(String method, Class<T> valueType) {
         return execute(method, EMPTY_PARAMS, valueType);

@@ -1,5 +1,8 @@
 package clightning;
 
+/**
+ * Enumeration for network type
+ */
 public enum Network {
     bitcoin,
     testnet,

@@ -1,5 +1,8 @@
 package clightning;
 
+/**
+ * Exception thrown while there is an error executing the lightning daemon command
+ */
 public class RemoteException extends RuntimeException {
     private int code;
 

@@ -9,6 +9,9 @@ import io.netty.util.ReferenceCountUtil;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Netty based unix domain socket connection.
+ */
 public class UdsConnection extends ChannelInboundHandlerAdapter {
     private static byte[] EOR = "\n\n".getBytes();
 
