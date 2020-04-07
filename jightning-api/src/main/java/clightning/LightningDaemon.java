@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Represent an lightning daemon for executing command.
  */
-public class LightningDaemon extends AbstractIdleService implements AbstractLightningDaemon {
+public class LightningDaemon extends AbstractIdleService implements Lnd {
     private Logger logger = LoggerFactory.getLogger(LightningDaemon.class);
 
     private static Map EMPTY_PARAMS = new HashMap();

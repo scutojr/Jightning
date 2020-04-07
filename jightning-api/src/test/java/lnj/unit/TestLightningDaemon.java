@@ -1,6 +1,6 @@
 package lnj.unit;
 
-import clightning.AbstractLightningDaemon;
+import clightning.Lnd;
 import clightning.apis.InvoiceStatus;
 import clightning.apis.LightningClient;
 import clightning.apis.LightningClientImpl;
@@ -22,7 +22,7 @@ import static clightning.apis.response.LightningDaemonInfo.*;
 import static clightning.apis.response.LightningDaemonInfo.BindingWrapper.*;
 
 public class TestLightningDaemon {
-    private AbstractLightningDaemon lnd;
+    private Lnd lnd;
     private LightningClient client;
 
     public TestLightningDaemon() {

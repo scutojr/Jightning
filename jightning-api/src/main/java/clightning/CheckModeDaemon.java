@@ -12,7 +12,7 @@ import java.util.Map;
  * {@code CheckModeDaemon} is used to support {@link clightning.apis.BasedUtility#check}.
  * It's a hacking implementation to the normal lightning daemon command execution procedure.
  */
-public class CheckModeDaemon implements AbstractLightningDaemon {
+public class CheckModeDaemon implements Lnd {
 
     private ObjectMapper mapper;
     private ObjectNode req;

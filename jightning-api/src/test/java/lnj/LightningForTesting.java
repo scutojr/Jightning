@@ -1,6 +1,6 @@
 package lnj;
 
-import clightning.AbstractLightningDaemon;
+import clightning.Lnd;
 import clightning.utils.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LightningForTesting implements AbstractLightningDaemon {
+public class LightningForTesting implements Lnd {
 
     private HashMap<String, String> jsonFiles = new HashMap();
     private ObjectMapper mapper = new ObjectMapper().registerModule(new Jdk8Module());

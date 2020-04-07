@@ -1,8 +1,7 @@
 package clightning.apis;
 
-import clightning.AbstractLightningDaemon;
+import clightning.Lnd;
 import clightning.CheckModeDaemon;
-import clightning.LightningDaemon;
 import clightning.ShortOutException;
 import clightning.apis.optional.*;
 import clightning.apis.response.*;
@@ -12,7 +11,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.base.Preconditions;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,10 +23,10 @@ import java.util.stream.Collectors;
 
 public class LightningClientImpl implements LightningClient {
 
-    protected AbstractLightningDaemon lnd;
+    protected Lnd lnd;
     protected ObjectMapper mapper;
 
-    public LightningClientImpl(AbstractLightningDaemon lnd) {
+    public LightningClientImpl(Lnd lnd) {
         this.lnd = lnd;
         this.mapper = JsonUtil.getMapper();
     }

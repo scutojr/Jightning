@@ -1,12 +1,10 @@
 package lnj.integration;
 
-import clightning.AbstractLightningDaemon;
+import clightning.Lnd;
 import clightning.LightningDaemon;
-import clightning.Network;
 import clightning.apis.LightningClientImpl;
 import clightning.apis.PluginCommand;
 import clightning.apis.response.Peer;
-import com.google.common.primitives.UnsignedInteger;
 import lnj.Configuration;
 import lnj.plugins.CustomPlugin;
 import lnj.plugins.LightningPluginApi;
@@ -28,7 +26,7 @@ public class TestBasedPluginModule {
     private PluginClient pluginClient;
 
     public static class PluginClient extends LightningClientImpl implements LightningPluginApi {
-        public PluginClient(AbstractLightningDaemon lnd) {
+        public PluginClient(Lnd lnd) {
             super(lnd);
         }
 
