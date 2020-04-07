@@ -1,10 +1,14 @@
 package clightning.apis.response;
 
+import clightning.apis.BasedPayment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
 
+/**
+ * Response of {@link BasedPayment#listTransactions}
+ */
 @Data
 public class Transaction {
     private String hash;

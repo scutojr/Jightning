@@ -5,6 +5,9 @@ import lombok.Getter;
 import java.io.File;
 import java.util.*;
 
+/**
+ * Response of {@link clightning.apis.BasedPlugin#plugin}
+ */
 public class PluginStatus {
 
     private Map<String, Plugin> plugins = new HashMap<>();

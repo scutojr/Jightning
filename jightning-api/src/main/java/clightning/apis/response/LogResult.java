@@ -6,10 +6,7 @@ import lombok.Data;
 import java.util.Optional;
 
 /**
- * "created_at": "1577091960.690291352",
- * "bytes_used": 1154310,
- * "bytes_max": 20971520,
- * "log": [
+ * Response of {@link clightning.apis.BasedUtility#getLog}
  */
 @Data
 public class LogResult {

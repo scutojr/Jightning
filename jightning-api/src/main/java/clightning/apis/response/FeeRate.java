@@ -1,8 +1,12 @@
 package clightning.apis.response;
 
+import clightning.apis.BasedBitcoin;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Response of {@link BasedBitcoin#feeRates()}
+ */
 @Data
 public class FeeRate {
 

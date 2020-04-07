@@ -1,10 +1,14 @@
 package clightning.apis.response;
 
+import clightning.apis.BasedChannel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
 
+/**
+ * Response of {@link BasedChannel#listForwards()}
+ */
 @Data
 public class Forward {
     @JsonProperty("payment_hash")

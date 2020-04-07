@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.util.Optional;
 
+/**
+ * Response of {@link clightning.apis.BasedPlugin#payStatus}
+ */
 @Data
 public class PayStatus {
     private String bolt11;

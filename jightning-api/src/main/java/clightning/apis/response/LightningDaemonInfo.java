@@ -1,6 +1,6 @@
 package clightning.apis.response;
 
-
+import clightning.apis.BasedUtility;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import lombok.Data;
@@ -10,6 +10,9 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Response of {@link BasedUtility#getInfo}
+ */
 @Data
 public class LightningDaemonInfo {
     private String id;
@@ -42,24 +45,6 @@ public class LightningDaemonInfo {
 
     @JsonProperty("warning_bitcoind_sync")
     private String warningBitcoindSync;
-
-    /**
-     * {
-     * "address": [],
-     * "binding": [
-     * {
-     * "type": "ipv6",
-     * "address": "::",
-     * "port": 9735
-     * },
-     * {
-     * "type": "ipv4",
-     * "address": "0.0.0.0",
-     * "port": 9735
-     * }
-     * ],
-     * }
-     */
 
     @Data
     public static class Address {
@@ -206,7 +191,6 @@ public class LightningDaemonInfo {
             }
 
             /**
-             *
              * @param type
              * @return Type or null if no Type is not found for type
              */

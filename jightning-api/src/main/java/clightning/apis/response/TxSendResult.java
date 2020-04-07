@@ -6,6 +6,9 @@ import lombok.Data;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 
+/**
+ * Response of {@link clightning.apis.BasedBitcoin#txSend}
+ */
 @Data
 public class TxSendResult {
     private String tx;

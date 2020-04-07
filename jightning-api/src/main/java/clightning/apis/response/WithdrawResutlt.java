@@ -6,6 +6,9 @@ import lombok.Data;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 
+/**
+ * Response of {@link clightning.apis.BasedBitcoin#withDraw}
+ */
 @Data
 public class WithdrawResutlt {
     private String tx;

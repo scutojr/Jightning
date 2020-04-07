@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.Optional;
 
+/**
+ * Response of {@link clightning.apis.BasedPayment#decodePay}
+ */
 @Data
 public class Bolt11 {
     private String currency;
@@ -66,31 +69,4 @@ public class Bolt11 {
         @JsonProperty("cltv_expiry_delta")
         private int cltvExpiryDelta;
     }
-
-    /**
-     * The following fields are optional:
-     *
-     * fallbacks: array of fallback address object containing a hex string, and both type and addr if it is recognized
-     *            as one of P2PKH, P2SH, P2WPKH, or P2WSH.
-     * routes: an array of routes. Each route is an arrays of objects, each containing pubkey, short_channel_id,
-     *         fee_base_msat, fee_proportional_millionths and cltv_expiry_delta.
-     *         [
-     *           [
-     *             {
-     *               pubkey: xxxyy // the node id
-     *               "short_channel_id"; // String
-     *               "fee_base_msat": <u64>,
-     *               "fee_proportional_millionths": <u64>,
-     *               "cltv_expiry_delta": <num> // int?
-     *             }
-     *           ]
-     *         ]
-     * extra: an array of objects representing unknown fields, each with one-character tag and a data bech32 string.
-     *     [
-     *         {
-     *             tag: <String>,
-     *             data: <String>
-     *         }
-     *     ]
-     */
 }

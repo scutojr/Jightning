@@ -1,7 +1,11 @@
 package clightning.apis.response;
 
+import clightning.apis.BasedBitcoin;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Response of {@link BasedBitcoin#newAddr}
+ */
 public class LightningAddress {
     private String bech32;
 

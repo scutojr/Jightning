@@ -3,6 +3,9 @@ package clightning.apis.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Response of {@link clightning.apis.BasedChannel#getRoute}
+ */
 @Data
 public class Route {
     private String id;

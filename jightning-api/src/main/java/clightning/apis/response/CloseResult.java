@@ -3,6 +3,9 @@ package clightning.apis.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Response of {@link clightning.apis.BasedChannel#close}
+ */
 @Data
 public class CloseResult {
       public enum Type {

@@ -1,11 +1,16 @@
 package clightning.apis.response;
 
+import clightning.apis.BasedPayment;
 import clightning.apis.InvoiceStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
 
+/**
+ * Response of {@link clightning.apis.BasedPayment#delInvoice}, {@link BasedPayment#listInvoices},
+ * {@link BasedPayment#waitInvoice}, {@link BasedPayment#waitAnyInvoice}
+ */
 @Data
 public class DetailedInvoice {
     private String label;

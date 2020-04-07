@@ -1,10 +1,14 @@
 package clightning.apis.response;
 
+import clightning.apis.BasedNetwork;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
 
+/**
+ * Response of {@link BasedNetwork#listNodes}
+ */
 @Data
 public class Node {
     @JsonProperty("nodeid")

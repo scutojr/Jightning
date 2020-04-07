@@ -1,11 +1,15 @@
 package clightning.apis.response;
 
+import clightning.apis.BasedUtility;
 import clightning.apis.ChannelState;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Optional;
 
+/**
+ * Response of {@link BasedUtility#listFunds()}
+ */
 @Data
 public class Funds {
     private TxOutput[] outputs;

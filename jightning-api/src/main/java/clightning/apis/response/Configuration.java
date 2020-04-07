@@ -1,9 +1,13 @@
 package clightning.apis.response;
 
+import clightning.apis.BasedUtility;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Iterator;
 
+/**
+ * Response of {@link BasedUtility#listConfigs()}
+ */
 public class Configuration {
     private JsonNode props;
 
@@ -16,7 +20,6 @@ public class Configuration {
     }
 
     /**
-     *
      * @param configName
      * @return the config value as String, null if not found
      */

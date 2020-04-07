@@ -5,16 +5,19 @@ import lombok.Data;
 
 import java.util.Optional;
 
+/**
+ * Response of {@link clightning.apis.BasedPayment#invoice}
+ */
 @Data
 public class SimpleInvoice {
-      @JsonProperty("payment_hash")
-      private String paymentHash;
+    @JsonProperty("payment_hash")
+    private String paymentHash;
 
-      @JsonProperty("expires_at")
-      private int expiresAt; // seconds
+    @JsonProperty("expires_at")
+    private int expiresAt; // seconds
 
-      private String bolt11;
+    private String bolt11;
 
-      @JsonProperty("warning_capacity")
-      private Optional<String> warningCapacity;
+    @JsonProperty("warning_capacity")
+    private Optional<String> warningCapacity;
 }
