@@ -1,5 +1,10 @@
 package clightning.apis.optional;
 
+import clightning.apis.BasedPlugin;
+
+/**
+ * Extra optional parameters for {@link clightning.apis.BasedChannel#close}
+ */
 public class CloseParams extends OptionalParams {
     /**
      * set the unilateraltimeout.If unilateraltimeout is not zero, the close command will unilaterally close the

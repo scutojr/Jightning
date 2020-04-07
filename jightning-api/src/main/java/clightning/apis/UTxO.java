@@ -1,5 +1,8 @@
 package clightning.apis;
 
+/**
+ * Unspent transaction output.
+ */
 public class UTxO {
     private String txId;
     private int vOut;

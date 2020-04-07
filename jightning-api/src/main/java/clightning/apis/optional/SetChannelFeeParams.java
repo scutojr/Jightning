@@ -1,5 +1,8 @@
 package clightning.apis.optional;
 
+/**
+ * Extra optional parameters for {@link clightning.apis.BasedChannel#setChannelFee(String, SetChannelFeeParams)}
+ */
 public class SetChannelFeeParams extends OptionalParams {
     /**
      * @param base is an optional value in millisatoshi that is added as base fee to any routed payment. If the parameter

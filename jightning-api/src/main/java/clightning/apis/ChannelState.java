@@ -1,5 +1,8 @@
 package clightning.apis;
 
+/**
+ * State of the channel
+ */
 public enum ChannelState {
     OPENINGD,
     CHANNELD_AWAITING_LOCKIN,

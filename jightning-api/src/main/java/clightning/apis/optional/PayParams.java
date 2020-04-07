@@ -1,19 +1,7 @@
 package clightning.apis.optional;
 
 /**
- *  riskfactor: default to 10, https://lightning.readthedocs.io/lightning-getroute.7.html
- *
- *  maxfeepercent: limits the money paid in fees, and defaults to 0.5
- *
- *  retry_for: Until retry_for seconds passes (default: 60), the command will keep finding
- *      routes and retrying the payment.
- *
- *  maxdelay: a payment may be delayed for up to maxdelay blocks by another node
- *
- *  exemptfee: The `exemptfee option can be used for tiny payments which would be dominated by
- *      the fee leveraged by forwarding nodes. Setting exemptfee allows the maxfeepercent check
- *      to be skipped on fees that are smaller than exemptfee (default: 5000 millisatoshi).
- * /
+ * Extra optional parameters for {@link clightning.apis.BasedPlugin#pay(String, PayParams)}
  */
 public class PayParams extends OptionalParams {
     public PayParams setMsatoshi(long msatoshi) {

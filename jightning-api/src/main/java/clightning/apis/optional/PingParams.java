@@ -1,5 +1,8 @@
 package clightning.apis.optional;
 
+/**
+ * Extra optional parameters for {@link clightning.apis.BasedNetwork#ping(String, PingParams)}
+ */
 public class PingParams extends OptionalParams {
     /**
      * set the length of data sent

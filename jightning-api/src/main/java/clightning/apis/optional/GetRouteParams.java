@@ -2,6 +2,9 @@ package clightning.apis.optional;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Extra optional parameters for {@link clightning.apis.BasedChannel#getRoute(String, long, double, GetRouteParams)}
+ */
 public class GetRouteParams extends OptionalParams {
     /**
      * set the cltv

@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Based class for api optional parameters
+ */
 @JsonSerialize(using = OptionalParams.Serializer.class)
 @JsonDeserialize(using = OptionalParams.Deserializer.class)
 public class OptionalParams {

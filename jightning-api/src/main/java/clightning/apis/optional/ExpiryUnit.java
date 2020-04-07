@@ -1,8 +1,8 @@
 package clightning.apis.optional;
 
 /**
- *      * expiry: <numeric value>[s|m|h|d|w], indicate seconds,
- *      *     minutes, hours, days and weeks respectively, s by
+ * expiry: <numeric value>[s|m|h|d|w], indicate seconds, minutes, hours, days
+ * and weeks respectively, s by
  */
 public enum ExpiryUnit {
     second("s"),

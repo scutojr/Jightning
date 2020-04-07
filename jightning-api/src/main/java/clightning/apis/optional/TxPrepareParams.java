@@ -1,10 +1,14 @@
 package clightning.apis.optional;
 
+import clightning.apis.Output;
 import clightning.apis.UTxO;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * Extra optional parameters for {@link clightning.apis.BasedBitcoin#txPrepare(Output[], TxPrepareParams)}
+ */
 public class TxPrepareParams extends OptionalParams {
     /**
      * set the feerate

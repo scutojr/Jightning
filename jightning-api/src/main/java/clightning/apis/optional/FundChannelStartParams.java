@@ -1,5 +1,8 @@
 package clightning.apis.optional;
 
+/**
+ * Extra optional parameters for {@link clightning.apis.BasedChannel#fundChannelStart(String, long, FundChannelStartParams)}
+ */
 public class FundChannelStartParams extends OptionalParams {
     /**
      * Sets the feerate for subsequent commitment transactions

@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Plugin command builder.
+ */
 public class PluginCommand {
     private String command;
     private String parameter;

@@ -5,6 +5,10 @@ import clightning.apis.UTxO;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ *
+ * Extra optional parameters for {@link clightning.apis.BasedBitcoin#withDraw(String, long, WithdrawParams)}
+ */
 public class WithdrawParams extends OptionalParams {
     /**
      * set the fee rate

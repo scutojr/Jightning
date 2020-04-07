@@ -1,5 +1,10 @@
 package clightning.apis.optional;
 
+import clightning.apis.BasedPlugin;
+
+/**
+ * Extra optional parameters for {@link BasedPlugin#autoCleanInvoice()}
+ */
 public class AutoCleanInvoiceParams extends OptionalParams {
     /**
      * Set auto clean cycle

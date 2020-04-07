@@ -1,5 +1,8 @@
 package clightning.apis.optional;
 
+/**
+ * Extra optional parameters for {@link clightning.apis.BasedPayment#invoice(long, String, String, InvoiceParams)}
+ */
 public class InvoiceParams extends OptionalParams {
     public InvoiceParams setExpiry(int expiry, ExpiryUnit unit) {
         params.put("expiry", expiry + unit.getSign());

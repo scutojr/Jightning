@@ -5,6 +5,9 @@ import clightning.apis.UTxO;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * Extra optional parameters for {@link clightning.apis.BasedPlugin#fundChannel(String, long, FundChannelParams)}
+ */
 public class FundChannelParams extends OptionalParams {
 
     /**
