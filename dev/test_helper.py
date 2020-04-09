@@ -30,21 +30,13 @@ class Proxy(Thread):
         self.name = name
         self.cmd = cmd
         self.root_dir = root_dir
-        self.proc = None
 
     def run(self):
         log('start proxy:', self.cmd)
-        self.proc = Popen(self.cmd, stdout=PIPE, shell=True)
-        src = self.proc.stdout
 
         log_file = op.join('jightning-api', 'target', 'proxy-%s.log' % self.name)
         with open(log_file, 'a') as sink:
-            while True:
-                line = src.readline(1024)
-                if not line:
-                    break
-                sink.write(line)
-                sink.flush()
+            _command(self.cmd, sink, sink)
         if not _is_test_finished:
             log('ERROR: proxy exit before test is finished!')
 
@@ -109,7 +101,7 @@ def stop_proxys():
         log('proxy %s is stopped' % node)
 
 
-def run_test(props):
+def run_test(props=[]):
     global _is_test_finished
 
     if PHASES & RUN_TEST != RUN_TEST:
@@ -159,11 +151,11 @@ def handle_test(props):
 
 
 def handle_network(to_close):
-    if to_restart:
+    if to_close:
+        close_ln_network()
+    else:
         close_ln_network()
         create_ln_network()
-    elif to_close:
-        close_ln_network()
 
 
 def handle_clean(target_dir, network, proxy):
@@ -186,7 +178,7 @@ def parse_args():
             description='subcommand for network management, restart the lightning network by default')
     parser_clean = subparsers.add_parser('clean', description='subcommand for clean environment')
 
-    parser_test.add_argument('-D', dest='props', action='append',
+    parser_test.add_argument('-D', dest='props', action='append', default=[],
             help='specify the maven property such as -Dtest=xx.yy#zz')
 
     parser_network.add_argument('-c', dest='to_close', action='store_true',
@@ -209,7 +201,7 @@ def main(args):
     if command == 'test':
         handle_test(args.props)
     elif command == 'network':
-        handle_network(args.to_close, args.to_restart)
+        handle_network(args.to_close)
     elif command == 'clean':
         handle_clean(args.target_dir, args.network, args.proxy)
 

@@ -55,7 +55,7 @@ public interface BasedBitcoin {
     TxDiscardResult txDiscard(String txId);
 
     /**
-     * creates an unsigned transaction which spends funds from c-lightning’s internal
+     * creates an unsigned transaction which spends funds from c-lightning's internal
      * wallet to the outputsspecified in outputs.
      *
      * @param outputs array of {@link Output} that include destination and amount.
@@ -64,7 +64,7 @@ public interface BasedBitcoin {
     TxPrepareResult txPrepare(Output[] outputs);
 
     /**
-     * creates an unsigned transaction which spends funds from c-lightning’s internal
+     * creates an unsigned transaction which spends funds from c-lightning's internal
      * wallet to the outputsspecified in outputs.
      *
      * @param outputs        array of {@link Output} that include destination and amount.
@@ -83,7 +83,7 @@ public interface BasedBitcoin {
     TxSendResult txSend(String txId);
 
     /**
-     * sends funds from c-lightning’s internal wallet to the address specified in destination.
+     * sends funds from c-lightning's internal wallet to the address specified in destination.
      *
      * @param destination the address where the funds to be sent
      * @return an object with attributes tx and txid
@@ -92,7 +92,7 @@ public interface BasedBitcoin {
     WithdrawResutlt withDraw(String destination);
 
     /**
-     * sends funds from c-lightning’s internal wallet to the address specified in destination.
+     * sends funds from c-lightning's internal wallet to the address specified in destination.
      *
      * @param destination the address where the funds to be sent
      * @param optionalParams extra optional parameters
@@ -102,7 +102,7 @@ public interface BasedBitcoin {
     WithdrawResutlt withDraw(String destination, WithdrawParams optionalParams);
 
     /**
-     * sends funds from c-lightning’s internal wallet to the address specified in destination.
+     * sends funds from c-lightning's internal wallet to the address specified in destination.
      *
      * @param destination the address where the funds to be sent
      * @param satoshi the amount to be withdrawn from the internal wallet
@@ -112,7 +112,7 @@ public interface BasedBitcoin {
     WithdrawResutlt withDraw(String destination, long satoshi);
 
     /**
-     * sends funds from c-lightning’s internal wallet to the address specified in destination.
+     * sends funds from c-lightning's internal wallet to the address specified in destination.
      *
      * @param destination the address where the funds to be sent
      * @param satoshi the amount to be withdrawn from the internal wallet

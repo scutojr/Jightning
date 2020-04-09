@@ -14,7 +14,7 @@ public interface BasedNetwork {
     /**
      * Establishes a new connection with another node in the Lightning Network
      *
-     * @param id represents the target node’s public key. As a convenience, id may be of the form id@host or
+     * @param id represents the target node's public key. As a convenience, id may be of the form id@host or
      *           id@host:port. In this case, the host and port parameters must be omitted.
      * @return the peer id
      * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-connect.7.md>lightning-connect</a>
@@ -24,9 +24,9 @@ public interface BasedNetwork {
     /**
      * Establishes a new connection with another node in the Lightning Network
      *
-     * @param id   represents the target node’s public key. As a convenience, id may be of the form id@host or
+     * @param id   represents the target node's public key. As a convenience, id may be of the form id@host or
      *             id@host:port. In this case, the host and port parameters must be omitted.
-     * @param host the peer’s hostname or IP address
+     * @param host the peer's hostname or IP address
      * @return the peer id
      * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-connect.7.md>lightning-connect</a>
      */
@@ -35,9 +35,9 @@ public interface BasedNetwork {
     /**
      * Establishes a new connection with another node in the Lightning Network
      *
-     * @param id   represents the target node’s public key. As a convenience, id may be of the form id@host or
+     * @param id   represents the target node's public key. As a convenience, id may be of the form id@host or
      *             id@host:port. In this case, the host and port parameters must be omitted.
-     * @param host the peer’s hostname or IP address
+     * @param host the peer's hostname or IP address
      * @param port the peer's port, default to 9735
      * @return the peer id
      * @see <a href=https://github.com/ElementsProject/lightning/blob/v0.7.3/doc/lightning-connect.7.md>lightning-connect</a>
@@ -45,7 +45,7 @@ public interface BasedNetwork {
     String connect(String id, @ParamTag(optional = true) String host, @ParamTag(optional = true) Integer port);
 
     /**
-     * Closes an existing connection to a peer, identified by id, in the Lightning Network, as long as it doesn’t have
+     * Closes an existing connection to a peer, identified by id, in the Lightning Network, as long as it doesn't have
      * an active channel.
      *
      * @param id the peer id
@@ -54,7 +54,7 @@ public interface BasedNetwork {
     void disconnect(String id);
 
     /**
-     * Closes an existing connection to a peer, identified by id, in the Lightning Network, as long as it doesn’t have
+     * Closes an existing connection to a peer, identified by id, in the Lightning Network, as long as it doesn't have
      * an active channel. If force is set then it will disconnect even with an active channel.
      *
      * @param id    the peer id
